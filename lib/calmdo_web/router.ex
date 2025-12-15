@@ -16,8 +16,6 @@ defmodule CalmdoWeb.Router do
 
   scope "/", CalmdoWeb do
     pipe_through :browser
-
-    get "/", PageController, :home
   end
 
   # Other scopes may use custom stacks.
