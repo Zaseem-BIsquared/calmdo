@@ -41,6 +41,12 @@ defmodule Calmdo.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:mix_test_interactive, "~> 5.0", only: :dev, runtime: false},
+      {:phoenix_test,
+       git: "https://github.com/siraj-samsudeen/phoenix_test.git",
+       branch: "assert_text",
+       only: :test,
+       runtime: false},
       {:sourceror, "~> 1.8", only: [:dev, :test]},
       {:live_debugger, "~> 0.5", only: [:dev]},
       {:ash_postgres, "~> 2.0"},
