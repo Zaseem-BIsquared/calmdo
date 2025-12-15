@@ -46,7 +46,8 @@ config :spark,
 
 config :calmdo,
   ecto_repos: [Calmdo.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime],
+  ash_domains: [Calmdo.Work]
 
 # Configure the endpoint
 config :calmdo, CalmdoWeb.Endpoint,
