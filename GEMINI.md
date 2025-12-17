@@ -58,6 +58,21 @@ The application uses the Ash framework for data modeling and business logic. Res
 
 When styling components, prioritize using daisyUI components and classes. If a suitable daisyUI component is not available, fall back to using Tailwind CSS utility classes to create custom styles.
 
+#### Conditional Classes in HEEx
+
+To conditionally apply a class to an element in a HEEx template, use a list for the `class` attribute. The `if/2` helper can be used inside the list to conditionally add a class name. This is the preferred and correct syntax.
+
+*Example:*
+```html
+<div class={[
+  "modal",
+  "modal-bottom",
+  if(@show_modal, do: "modal-open", else: "")
+]}>
+  ...
+</div>
+```
+
 ### Code Formatting
 
 The project uses the standard Elixir formatter. To format the code, run:

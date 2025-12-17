@@ -4,6 +4,7 @@ defmodule CalmdoWeb.NavLive.SidebarComponent do
   alias AshPhoenix.Form
 
   def update(assigns, socket) do
+    projects = Work.read_projects!()
     form = Work.form_to_create_project()
 
     socket =
@@ -11,35 +12,9 @@ defmodule CalmdoWeb.NavLive.SidebarComponent do
       |> assign(assigns)
       |> assign(form: to_form(form))
       |> assign(show_modal: false)
+      |> assign(projects: projects)
 
     {:ok, socket}
-  end
-
-  def render(assigns) do
-    ~H"""
-    <div>
-      <h1>Projects</h1>
-      <.link class="btn" phx-click="show_modal" phx-target={@myself}>Create Project</.link>
-
-      <div class={"modal modal-bottom sm:modal-middle" <> if @show_modal, do: " modal-open", else: ""}>
-        <div class="modal-box">
-          <h3 class="font-bold text-lg">Create Project</h3>
-          <.form for={@form} phx-change="validate" phx-submit="save" phx-target={@myself}>
-            <.input field={@form[:name]} type="text" label="Name" />
-            <div class="modal-action">
-              <button type="button" class="btn" phx-click="hide_modal" phx-target={@myself}>
-                Cancel
-              </button>
-              <.button phx-disable-with="Saving..." variant="primary">Save</.button>
-            </div>
-          </.form>
-        </div>
-        <div class="modal-backdrop" phx-click="hide_modal" phx-target={@myself}>
-          <button>close</button>
-        </div>
-      </div>
-    </div>
-    """
   end
 
   def handle_event("show_modal", _, socket) do
