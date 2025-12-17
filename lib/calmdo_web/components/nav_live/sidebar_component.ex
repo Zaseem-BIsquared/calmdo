@@ -1,12 +1,14 @@
-defmodule CalmdoWeb.ProjectLive.Index do
-  use CalmdoWeb, :live_view
+defmodule CalmdoWeb.NavLive.SidebarComponent do
+  use CalmdoWeb, :live_component
   alias Calmdo.Work
+  alias AshPhoenix.Form
 
-  def mount(_params, _session, socket) do
+  def update(assigns, socket) do
     form = Work.form_to_create_project()
 
     socket =
       socket
+      |> assign(assigns)
       |> assign(form: to_form(form))
       |> assign(show_modal: false)
 
@@ -15,26 +17,28 @@ defmodule CalmdoWeb.ProjectLive.Index do
 
   def render(assigns) do
     ~H"""
-    <Layouts.app {assigns}>
+    <div>
       <h1>Projects</h1>
-      <.link class="btn" phx-click="show_modal">Create Project</.link>
+      <.link class="btn" phx-click="show_modal" phx-target={@myself}>Create Project</.link>
 
       <div class={"modal modal-bottom sm:modal-middle" <> if @show_modal, do: " modal-open", else: ""}>
         <div class="modal-box">
           <h3 class="font-bold text-lg">Create Project</h3>
-          <.form for={@form} phx-change="validate" phx-submit="save">
+          <.form for={@form} phx-change="validate" phx-submit="save" phx-target={@myself}>
             <.input field={@form[:name]} type="text" label="Name" />
             <div class="modal-action">
-              <button type="button" class="btn" phx-click="hide_modal">Cancel</button>
+              <button type="button" class="btn" phx-click="hide_modal" phx-target={@myself}>
+                Cancel
+              </button>
               <.button phx-disable-with="Saving..." variant="primary">Save</.button>
             </div>
           </.form>
         </div>
-        <div class="modal-backdrop" phx-click="hide_modal">
+        <div class="modal-backdrop" phx-click="hide_modal" phx-target={@myself}>
           <button>close</button>
         </div>
       </div>
-    </Layouts.app>
+    </div>
     """
   end
 
@@ -50,14 +54,14 @@ defmodule CalmdoWeb.ProjectLive.Index do
     socket =
       socket
       |> update(:form, fn form ->
-        AshPhoenix.Form.validate(form, form_params)
+        Form.validate(form, form_params)
       end)
 
     {:noreply, socket}
   end
 
   def handle_event("save", %{"form" => form_params}, socket) do
-    case AshPhoenix.Form.submit(socket.assigns.form, params: form_params) do
+    case Form.submit(socket.assigns.form, params: form_params) do
       {:ok, _project} ->
         socket =
           socket

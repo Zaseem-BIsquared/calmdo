@@ -54,6 +54,10 @@ The `test` alias is configured to set up the test database correctly before runn
 
 The application uses the Ash framework for data modeling and business logic. Resources are defined in the `lib/calmdo` directory. The main resource is `Calmdo.Work.Project`.
 
+### Styling
+
+When styling components, prioritize using daisyUI components and classes. If a suitable daisyUI component is not available, fall back to using Tailwind CSS utility classes to create custom styles.
+
 ### Code Formatting
 
 The project uses the standard Elixir formatter. To format the code, run:

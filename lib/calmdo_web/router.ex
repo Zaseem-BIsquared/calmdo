@@ -17,7 +17,7 @@ defmodule CalmdoWeb.Router do
   scope "/", CalmdoWeb do
     pipe_through :browser
 
-    live "/", ProjectLive.Index, :index
+    live "/", HomeLive.Index, :index
   end
 
   # Other scopes may use custom stacks.
