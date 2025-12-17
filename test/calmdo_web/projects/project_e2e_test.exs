@@ -6,7 +6,7 @@ defmodule CalmdoWeb.Projects.ProjectE2eTest do
       conn
       |> visit(~p"/")
       # create a project
-      |> click_link("Create Project")
+      |> click_link("Create")
       |> fill_in("Name", with: "Test Project 1")
       |> submit()
       |> assert_text("Test Project 1")

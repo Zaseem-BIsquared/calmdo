@@ -1,58 +1,49 @@
 defmodule CalmdoWeb.NavLive.SidebarComponent do
   use CalmdoWeb, :live_component
-  alias Calmdo.Work
-  alias AshPhoenix.Form
 
+  alias Calmdo.Work
+
+  import CalmdoWeb.Components.Modal, only: [show_modal: 1]
+
+  @impl true
   def update(assigns, socket) do
     projects = Work.read_projects!()
-    form = Work.form_to_create_project()
 
     socket =
       socket
       |> assign(assigns)
-      |> assign(form: to_form(form))
-      |> assign(show_modal: false)
       |> assign(projects: projects)
 
     {:ok, socket}
   end
 
-  def handle_event("show_modal", _, socket) do
-    {:noreply, assign(socket, show_modal: true)}
-  end
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div>
+      <div class="flex justify-between items-center mb-4">
+        <h1 class="text-xl font-bold">Projects</h1>
+        <button class="btn btn-sm" phx-click={show_modal("project-create-form")}>Create</button>
+      </div>
 
-  def handle_event("hide_modal", _, socket) do
-    {:noreply, assign(socket, show_modal: false)}
-  end
+      <%!-- create form for new project --%>
+      <.live_component
+        module={CalmdoWeb.ProjectLive.FormComponent}
+        id="project-create-form"
+        action={:create}
+      />
 
-  def handle_event("validate", %{"form" => form_params}, socket) do
-    socket =
-      socket
-      |> update(:form, fn form ->
-        Form.validate(form, form_params)
-      end)
-
-    {:noreply, socket}
-  end
-
-  def handle_event("save", %{"form" => form_params}, socket) do
-    case Form.submit(socket.assigns.form, params: form_params) do
-      {:ok, _project} ->
-        socket =
-          socket
-          |> put_flash(:info, "Project created successfully.")
-          |> push_navigate(to: ~p"/")
-
-        IO.inspect("test")
-        {:noreply, socket}
-
-      {:error, form} ->
-        socket =
-          socket
-          |> put_flash(:error, "Could not create project.")
-          |> assign(:form, form)
-
-        {:noreply, socket}
-    end
+      <ul class="space-y-2">
+        <li :for={project <- @projects}>
+          <.link
+            navigate={~p"/projects/#{project.id}"}
+            class="block w-full text-left p-2 rounded-md hover:bg-base-200"
+          >
+            {project.name}
+          </.link>
+        </li>
+      </ul>
+    </div>
+    """
   end
 end
