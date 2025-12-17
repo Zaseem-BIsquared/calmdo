@@ -1,6 +1,7 @@
 defmodule Calmdo.Work do
   use Ash.Domain,
-    otp_app: :calmdo
+    otp_app: :calmdo,
+    extensions: [AshPhoenix]
 
   resources do
     resource Calmdo.Work.Project do
