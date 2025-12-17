@@ -2,6 +2,7 @@ defmodule CalmdoWeb.Projects.ProjectE2eTest do
   use CalmdoWeb.ConnCase, async: true
 
   describe "project e2e" do
+    # TODO: the basic e2e flow should be tested via wallaby, as it uses modal windows, which can't be tested with PhoenixTest
     test "project CRUD", %{conn: conn} do
       conn
       |> visit(~p"/")
