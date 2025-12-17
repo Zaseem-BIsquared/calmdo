@@ -41,6 +41,7 @@ defmodule Calmdo.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:mishka_chelekom, "~> 0.0.8", only: :dev},
       {:mix_test_interactive, "~> 5.0", only: :dev, runtime: false},
       {:phoenix_test,
        git: "https://github.com/siraj-samsudeen/phoenix_test.git",

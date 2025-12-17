@@ -54,6 +54,19 @@ The `test` alias is configured to set up the test database correctly before runn
 
 The application uses the Ash framework for data modeling and business logic. Resources are defined in the `lib/calmdo` directory. The main resource is `Calmdo.Work.Project`.
 
+### Ash Phoenix Forms
+
+The `AshPhoenix` extension automatically generates helper functions on the domain for creating and updating forms. For example, for the `Project` resource, the following functions are available:
+
+-   `Work.form_to_create_project/1`
+-   `Work.form_to_update_project/1`
+
+These functions should be used in LiveViews and components to ensure consistency and simplify form generation.
+
+### Templating
+
+HEEx templates should be implemented directly inside the `render/1` function of a LiveView or LiveComponent using the `~H` sigil. Separate `.html.heex` files should only be created when explicitly requested.
+
 ### Styling
 
 When styling components, prioritize using daisyUI components and classes. If a suitable daisyUI component is not available, fall back to using Tailwind CSS utility classes to create custom styles.
