@@ -22,11 +22,14 @@ defmodule CalmdoWeb.ProjectLive.Show do
       <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-bold">{@project.name}</h1>
         <div class="flex-none space-x-2">
-          <.link phx-click={show_modal("project-form")} class="btn btn-sm">Edit</.link>
+          <.link phx-click={show_modal("project-form")} class="btn btn-soft btn-warning">
+            <.icon name="hero-pencil-square" />
+            <span class="sr-only">Edit</span>
+          </.link>
           <.link
             phx-click="destroy-project"
             data-confirm={"Are you sure you want to delete '#{@project.name}'?"}
-            class="btn btn-sm btn-error"
+            class="btn btn-soft btn-error"
           >
             <.icon name="hero-trash" />
             <span class="sr-only">Delete</span>

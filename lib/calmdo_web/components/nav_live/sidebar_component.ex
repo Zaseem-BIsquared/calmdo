@@ -23,7 +23,10 @@ defmodule CalmdoWeb.NavLive.SidebarComponent do
     <div>
       <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-bold">Projects</h1>
-        <button class="btn btn-sm" phx-click={show_modal("project-create-form")}>Create</button>
+        <.link class="btn btn-soft" phx-click={show_modal("project-create-form")}>
+          <.icon name="hero-plus" />
+          <span class="sr-only">Create</span>
+        </.link>
       </div>
 
       <%!-- create form for new project --%>

@@ -9,7 +9,7 @@ defmodule CalmdoWeb.Projects.ProjectE2eTest do
       session
       |> visit("/")
       # create a project
-      |> click(button("Create"))
+      |> click(link("Create"))
       |> fill_in(text_field("Name"), with: "Test Project 1")
       |> click(button("Save"))
       |> assert_text("Test Project 1")
