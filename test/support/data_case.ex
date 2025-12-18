@@ -23,6 +23,8 @@ defmodule Calmdo.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+      import Calmdo.Generator
+      import Ash.Test
       import Calmdo.DataCase
     end
   end

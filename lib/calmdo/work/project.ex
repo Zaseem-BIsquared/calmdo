@@ -32,4 +32,8 @@ defmodule Calmdo.Work.Project do
     create_timestamp :inserted_at
     update_timestamp :updated_at
   end
+
+  identities do
+    identity :unique_name, [:name]
+  end
 end
