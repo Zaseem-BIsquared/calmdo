@@ -20,10 +20,12 @@ if System.get_env("PHX_SERVER") do
   config :calmdo, CalmdoWeb.Endpoint, server: true
 end
 
-config :calmdo, CalmdoWeb.Endpoint,
-  http: [port: String.to_integer(System.get_env("PORT", "4000"))]
-
 if config_env() == :prod do
+  # Only production should read PORT at runtime.
+  # Dev and test ports are defined in dev.exs and test.exs
+  config :calmdo, CalmdoWeb.Endpoint,
+    http: [port: String.to_integer(System.get_env("PORT", "4000"))]
+
   database_url =
     System.get_env("DATABASE_URL") ||
       raise """

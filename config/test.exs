@@ -17,9 +17,11 @@ config :calmdo, Calmdo.Repo,
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :calmdo, CalmdoWeb.Endpoint,
+  # Wallaby requires a real HTTP server in test
   http: [ip: {127, 0, 0, 1}, port: 4002],
+  url: [host: "127.0.0.1"],
   secret_key_base: "YFWX/DQJSQ7aRb6Trv3zy9DM5Ay+sua0Teydso9F0aLbBBepZcwT3Pdeu0ox6b4b",
-  server: false
+  server: true
 
 # In test we don't send emails
 config :calmdo, Calmdo.Mailer, adapter: Swoosh.Adapters.Test
@@ -43,3 +45,6 @@ config :phoenix,
 
 # Config the endpoints for the routing request
 config :phoenix_test, :endpoint, CalmdoWeb.Endpoint
+
+# Wallaby configuration
+config :wallaby, driver: Wallaby.Chrome
