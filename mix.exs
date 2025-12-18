@@ -28,7 +28,10 @@ defmodule Calmdo.MixProject do
 
   def cli do
     [
-      preferred_envs: [precommit: :test]
+      preferred_envs: [
+        precommit: :test,
+        "test.no-e2e": :test
+      ]
     ]
   end
 
@@ -96,6 +99,7 @@ defmodule Calmdo.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ash.setup --quiet", "test"],
+      "test.no-e2e": ["ash.setup --quiet", "test --exclude e2e"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["compile", "tailwind calmdo", "esbuild calmdo"],
       "assets.deploy": [

@@ -1,18 +1,23 @@
 # Calmdo
 
-To start your Phoenix server:
+Calmdo is a project management tool built with the PETAL (Phoenix, Elixir, TailwindCSS, Alpine.js, LiveView) stack. It leverages the [Ash framework](https://ash-hq.org/) for powerful and flexible resource-oriented development.
 
-* Run `mix setup` to install and setup dependencies
-* Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+## Getting Started
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+To get the application running on your local machine, follow these steps:
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+1.  **Install Dependencies:**
+    ```bash
+    mix setup
+    ```
 
-## Learn more
+2.  **Start the Phoenix Server:**
+    ```bash
+    mix phx.server
+    ```
 
-* Official website: https://www.phoenixframework.org/
-* Guides: https://hexdocs.pm/phoenix/overview.html
-* Docs: https://hexdocs.pm/phoenix
-* Forum: https://elixirforum.com/c/phoenix-forum
-* Source: https://github.com/phoenixframework/phoenix
+You can now access the application at [`localhost:4000`](http://localhost:4000).
+
+## Testing
+
+The E2E tests require `chromedriver` to be installed and accessible, and its version should match your installed Chrome browser.

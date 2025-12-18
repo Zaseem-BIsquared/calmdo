@@ -4,6 +4,7 @@ defmodule CalmdoWeb.Projects.ProjectE2eTest do
   import Wallaby.Query
 
   describe "project e2e" do
+    @tag :e2e
     test "project CRUD", %{session: session} do
       session
       |> visit("/")
