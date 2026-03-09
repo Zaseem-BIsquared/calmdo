@@ -1,6 +1,5 @@
 import Stripe from "stripe";
 import {
-  action,
   internalAction,
   internalMutation,
   internalQuery,
@@ -10,7 +9,7 @@ import { ERRORS } from "~/errors";
 import { auth } from "@cvx/auth";
 import { currencyValidator, intervalValidator, PLANS } from "@cvx/schema";
 import { api, internal } from "~/convex/_generated/api";
-import { SITE_URL, STRIPE_SECRET_KEY } from "@cvx/env";
+import { STRIPE_SECRET_KEY } from "@cvx/env";
 import { asyncMap } from "convex-helpers";
 
 /**
@@ -69,9 +68,12 @@ export const PREAUTH_createStripeCustomer = internalAction({
     userId: v.id("users"),
   },
   handler: async (ctx, args) => {
-    const user = await ctx.runQuery(internal.stripe.PREAUTH_getUserById, {
-      userId: args.userId,
-    });
+    const user = await ctx.runQuery(
+      internal.billing.stripe.PREAUTH_getUserById,
+      {
+        userId: args.userId,
+      },
+    );
     if (!user || user.customerId)
       throw new Error(ERRORS.STRIPE_CUSTOMER_NOT_CREATED);
 
@@ -80,11 +82,14 @@ export const PREAUTH_createStripeCustomer = internalAction({
       .catch((err) => console.error(err));
     if (!customer) throw new Error(ERRORS.STRIPE_CUSTOMER_NOT_CREATED);
 
-    await ctx.runAction(internal.stripe.PREAUTH_createFreeStripeSubscription, {
-      userId: args.userId,
-      customerId: customer.id,
-      currency: args.currency,
-    });
+    await ctx.runAction(
+      internal.billing.stripe.PREAUTH_createFreeStripeSubscription,
+      {
+        userId: args.userId,
+        customerId: customer.id,
+        currency: args.currency,
+      },
+    );
   },
 });
 /* v8 ignore stop */
@@ -240,7 +245,9 @@ export const PREAUTH_createFreeStripeSubscription = internalAction({
     currency: currencyValidator,
   },
   handler: async (ctx, args) => {
-    const plan = await ctx.runQuery(internal.stripe.UNAUTH_getDefaultPlan);
+    const plan = await ctx.runQuery(
+      internal.billing.stripe.UNAUTH_getDefaultPlan,
+    );
     if (!plan) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
     }
@@ -254,23 +261,29 @@ export const PREAUTH_createFreeStripeSubscription = internalAction({
     if (!stripeSubscription) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
     }
-    await ctx.runMutation(internal.stripe.PREAUTH_createSubscription, {
-      userId: args.userId,
-      planId: plan._id,
-      currency: args.currency,
-      priceStripeId: stripeSubscription.items.data[0].price.id,
-      stripeSubscriptionId: stripeSubscription.id,
-      status: stripeSubscription.status,
-      interval: "year",
-      currentPeriodStart: stripeSubscription.current_period_start,
-      currentPeriodEnd: stripeSubscription.current_period_end,
-      cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
-    });
+    await ctx.runMutation(
+      internal.billing.stripe.PREAUTH_createSubscription,
+      {
+        userId: args.userId,
+        planId: plan._id,
+        currency: args.currency,
+        priceStripeId: stripeSubscription.items.data[0].price.id,
+        stripeSubscriptionId: stripeSubscription.id,
+        status: stripeSubscription.status,
+        interval: "year",
+        currentPeriodStart: stripeSubscription.current_period_start,
+        currentPeriodEnd: stripeSubscription.current_period_end,
+        cancelAtPeriodEnd: stripeSubscription.cancel_at_period_end,
+      },
+    );
 
-    await ctx.runMutation(internal.stripe.PREAUTH_updateCustomerId, {
-      userId: args.userId,
-      customerId: args.customerId,
-    });
+    await ctx.runMutation(
+      internal.billing.stripe.PREAUTH_updateCustomerId,
+      {
+        userId: args.userId,
+        customerId: args.customerId,
+      },
+    );
   },
 });
 /* v8 ignore stop */
@@ -305,83 +318,13 @@ export const getCurrentUserSubscription = internalQuery({
   },
 });
 
-/**
- * Creates a Stripe checkout session for a user.
- */
 /* v8 ignore start -- remaining functions call Stripe SDK */
-export const createSubscriptionCheckout = action({
-  args: {
-    userId: v.id("users"),
-    planId: v.id("plans"),
-    planInterval: intervalValidator,
-    currency: currencyValidator,
-  },
-  handler: async (ctx, args): Promise<string | undefined> => {
-    const user = await ctx.runQuery(api.app.getCurrentUser);
-    if (!user || !user.customerId) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
-    }
-
-    const { currentSubscription, newPlan } = await ctx.runQuery(
-      internal.stripe.getCurrentUserSubscription,
-      { planId: args.planId },
-    );
-    if (!currentSubscription?.plan) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
-    }
-    if (currentSubscription.plan.key !== PLANS.FREE) {
-      return;
-    }
-
-    const price = newPlan?.prices[args.planInterval][args.currency];
-
-    const checkout = await stripe.checkout.sessions.create({
-      customer: user.customerId,
-      line_items: [{ price: price?.stripeId, quantity: 1 }],
-      mode: "subscription",
-      payment_method_types: ["card"],
-      success_url: `${SITE_URL}/dashboard/checkout`,
-      cancel_url: `${SITE_URL}/dashboard/settings/billing`,
-    });
-    if (!checkout) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
-    }
-    return checkout.url || undefined;
-  },
-});
-
-/**
- * Creates a Stripe customer portal for a user.
- */
-export const createCustomerPortal = action({
-  args: {
-    userId: v.id("users"),
-  },
-  handler: async (ctx) => {
-    const userId = await auth.getUserId(ctx);
-    if (!userId) {
-      return;
-    }
-    const user = await ctx.runQuery(api.app.getCurrentUser);
-    if (!user || !user.customerId) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
-    }
-
-    const customerPortal = await stripe.billingPortal.sessions.create({
-      customer: user.customerId,
-      return_url: `${SITE_URL}/dashboard/settings/billing`,
-    });
-    if (!customerPortal) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
-    }
-    return customerPortal.url;
-  },
-});
-
 export const cancelCurrentUserSubscriptions = internalAction({
   args: {},
   handler: async (ctx) => {
-    const user = await ctx.runQuery(api.app.getCurrentUser);
+    const user = await ctx.runQuery(
+      api.users.queries.getCurrentUser,
+    );
     if (!user) {
       throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
     }

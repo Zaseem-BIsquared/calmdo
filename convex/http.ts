@@ -2,7 +2,7 @@ import { httpRouter } from "convex/server";
 import { auth } from "./auth";
 import { ActionCtx, httpAction } from "@cvx/_generated/server";
 import { ERRORS } from "~/errors";
-import { stripe } from "@cvx/stripe";
+import { stripe } from "@cvx/billing/stripe";
 import { STRIPE_WEBHOOK_SECRET } from "@cvx/env";
 import { z } from "zod";
 import { internal } from "@cvx/_generated/api";
@@ -49,7 +49,7 @@ const handleUpdateSubscription = async (
   subscription: Stripe.Subscription,
 ) => {
   const subscriptionItem = subscription.items.data[0];
-  await ctx.runMutation(internal.stripe.PREAUTH_replaceSubscription, {
+  await ctx.runMutation(internal.billing.stripe.PREAUTH_replaceSubscription, {
     userId: user._id,
     subscriptionStripeId: subscription.id,
     input: {
@@ -75,7 +75,7 @@ const handleCheckoutSessionCompleted = async (
     .object({ customer: z.string(), subscription: z.string() })
     .parse(session);
 
-  const user = await ctx.runQuery(internal.stripe.PREAUTH_getUserByCustomerId, {
+  const user = await ctx.runQuery(internal.billing.stripe.PREAUTH_getUserByCustomerId, {
     customerId,
   });
   if (!user?.email) {
@@ -126,7 +126,7 @@ const handleCheckoutSessionCompletedError = async (
     .object({ customer: z.string(), subscription: z.string() })
     .parse(session);
 
-  const user = await ctx.runQuery(internal.stripe.PREAUTH_getUserByCustomerId, {
+  const user = await ctx.runQuery(internal.billing.stripe.PREAUTH_getUserByCustomerId, {
     customerId,
   });
   if (!user?.email) throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
@@ -147,7 +147,7 @@ const handleCustomerSubscriptionUpdated = async (
     .object({ customer: z.string() })
     .parse(subscription);
 
-  const user = await ctx.runQuery(internal.stripe.PREAUTH_getUserByCustomerId, {
+  const user = await ctx.runQuery(internal.billing.stripe.PREAUTH_getUserByCustomerId, {
     customerId,
   });
   if (!user) throw new Error(ERRORS.SOMETHING_WENT_WRONG);
@@ -167,7 +167,7 @@ const handleCustomerSubscriptionUpdatedError = async (
     .object({ id: z.string(), customer: z.string() })
     .parse(subscription);
 
-  const user = await ctx.runQuery(internal.stripe.PREAUTH_getUserByCustomerId, {
+  const user = await ctx.runQuery(internal.billing.stripe.PREAUTH_getUserByCustomerId, {
     customerId,
   });
   if (!user?.email) throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
@@ -184,7 +184,7 @@ const handleCustomerSubscriptionDeleted = async (
   event: Stripe.CustomerSubscriptionDeletedEvent,
 ) => {
   const subscription = event.data.object;
-  await ctx.runMutation(internal.stripe.PREAUTH_deleteSubscription, {
+  await ctx.runMutation(internal.billing.stripe.PREAUTH_deleteSubscription, {
     subscriptionStripeId: subscription.id,
   });
   return new Response(null);
