@@ -2,7 +2,7 @@
 
 ## Overview
 
-Transform a flat-structured SaaS starter kit into a feature-folder architecture with shared Zod validation, git-based plugins, and CLI generators. All work is consolidated into a single phase with six plans that execute in dependency order: shared infra first, then backend, frontend, plugin-ready files, plugin system, and finally generators/docs.
+Transform a flat-structured SaaS starter kit into a feature-folder architecture with shared Zod validation, git-based plugins, and CLI generators. All work is consolidated into a single phase with seven plans that execute in dependency order: shared infra first, then backend, frontend extraction (two plans), plugin-ready files, plugin system, and finally generators/docs.
 
 ## Phases
 
@@ -32,12 +32,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [ ] 01-01: Shared infrastructure and vitest glob fix
 - [ ] 01-02: Convex backend restructure and Zod validation wiring
-- [ ] 01-03: Frontend feature folder extraction and thin routes
-- [ ] 01-04: Plugin-friendly shared files (nav, i18n namespaces, error groups)
-- [ ] 01-05: Plugin infrastructure and plugin branches
-- [ ] 01-06: CLI generators and architecture documentation
+- [ ] 01-03: Frontend feature extraction (dashboard, billing, settings)
+- [ ] 01-04: Frontend feature extraction (remaining) and thin routes
+- [ ] 01-05: Plugin-friendly shared files (nav, i18n namespaces, error groups)
+- [ ] 01-06: Plugin infrastructure and plugin branches
+- [ ] 01-07: CLI generators and architecture documentation
 
-**Plan dependency order:** 01-01 -> 01-02 -> 01-03 -> 01-04 -> 01-05 -> 01-06
+**Plan dependency order:** 01-01 -> 01-02 -> 01-03 -> 01-04 -> 01-05 -> 01-06 -> 01-07
 
 **Plan-to-requirement mapping:**
 
@@ -45,16 +46,17 @@ Plans:
 |------|-------------|
 | 01-01 | STRUCT-03, STRUCT-07 |
 | 01-02 | STRUCT-02, STRUCT-06, STRUCT-08, VAL-01, VAL-02, VAL-03, VAL-04 |
-| 01-03 | STRUCT-01, STRUCT-04, STRUCT-05 |
-| 01-04 | PLUG-01, PLUG-02, PLUG-03 |
-| 01-05 | PLUG-04, PLUG-05, PLUG-06, PLUG-07, PLUG-08, PLUG-09, PLUG-10 |
-| 01-06 | GEN-01, GEN-02, GEN-03, GEN-04, DOC-01, DOC-02, DOC-03 |
+| 01-03 | STRUCT-01, STRUCT-04 |
+| 01-04 | STRUCT-04, STRUCT-05 |
+| 01-05 | PLUG-01, PLUG-02, PLUG-03 |
+| 01-06 | PLUG-04, PLUG-05, PLUG-06, PLUG-07, PLUG-08, PLUG-09, PLUG-10 |
+| 01-07 | GEN-01, GEN-02, GEN-03, GEN-04, DOC-01, DOC-02, DOC-03 |
 
 ## Progress
 
 **Execution Order:**
-Plans execute sequentially: 01-01 -> 01-02 -> 01-03 -> 01-04 -> 01-05 -> 01-06
+Plans execute sequentially: 01-01 -> 01-02 -> 01-03 -> 01-04 -> 01-05 -> 01-06 -> 01-07
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Architecture Modernization | 0/6 | Not started | - |
+| 1. Architecture Modernization | 0/7 | Not started | - |
