@@ -23,13 +23,13 @@ Requirements for this milestone. Each maps to roadmap phases.
 - [x] **PLUG-01**: Navigation is data-driven (array of nav items) so plugins can add entries without editing component JSX
 - [x] **PLUG-02**: i18n uses namespace-based loading so plugins add separate JSON files instead of editing `translation.json`
 - [x] **PLUG-03**: Error constants are grouped by feature with clear sections for plugin additions
-- [ ] **PLUG-04**: A shell script (`scripts/plugin.sh`) can list, preview, and install plugin branches
-- [ ] **PLUG-05**: GitHub Actions auto-rebase all `plugin/*` branches when `main` is pushed and create issues on conflicts
-- [ ] **PLUG-06**: GitHub Actions run typecheck + lint + tests on every push to `plugin/*` branches
-- [ ] **PLUG-07**: `plugin/infra-ci-github-actions` branch exists with CI workflow files
-- [ ] **PLUG-08**: `plugin/ui-command-palette` branch exists with a working command palette component
-- [ ] **PLUG-09**: `plugin/feature-admin-panel` branch exists with routes, Convex functions, schema table, and nav item
-- [ ] **PLUG-10**: Multi-plugin merge tested and compatibility matrix documented
+- [x] **PLUG-04**: A shell script (`scripts/plugin.sh`) can list, preview, and install plugin branches
+- [x] **PLUG-05**: GitHub Actions auto-rebase all `plugin/*` branches when `main` is pushed and create issues on conflicts
+- [x] **PLUG-06**: GitHub Actions run typecheck + lint + tests on every push to `plugin/*` branches
+- [x] **PLUG-07**: `plugin/infra-ci-github-actions` branch exists with CI workflow files
+- [x] **PLUG-08**: `plugin/ui-command-palette` branch exists with a working command palette component
+- [x] **PLUG-09**: `plugin/feature-admin-panel` branch exists with routes, Convex functions, schema table, and nav item
+- [x] **PLUG-10**: Multi-plugin merge tested and compatibility matrix documented
 
 ### CLI Generators
 
