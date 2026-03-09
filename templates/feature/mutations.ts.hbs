@@ -1,0 +1,25 @@
+import { mutation } from "@cvx/_generated/server";
+import { auth } from "@cvx/auth";
+import { v } from "convex/values";
+
+/**
+ * {{pascalCase name}} mutations.
+ *
+ * Customize: Add your mutation functions here.
+ * Use Zod validation via zCustomMutation for complex inputs.
+ */
+export const create = mutation({
+  args: {
+    // TODO: Define your mutation arguments
+    // name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      throw new Error("Not authenticated");
+    }
+
+    // TODO: Implement your mutation
+    // return await ctx.db.insert("{{name}}", { ...args, userId });
+  },
+});

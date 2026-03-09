@@ -1,0 +1,23 @@
+import { action } from "@cvx/_generated/server";
+import { auth } from "@cvx/auth";
+import { v } from "convex/values";
+
+/**
+ * {{name}} action in the {{domain}} domain.
+ *
+ * Actions can call external APIs and run side effects.
+ * Customize: Add your external API calls here.
+ */
+export const {{name}} = action({
+  args: {
+    // TODO: Define action arguments
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      throw new Error("Not authenticated");
+    }
+
+    // TODO: Implement action logic (e.g., call external API)
+  },
+});

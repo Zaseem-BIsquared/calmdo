@@ -14,7 +14,11 @@
     "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.node.json && tsc -p convex/tsconfig.json",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "gen:feature": "plop feature",
+    "gen:route": "plop route",
+    "gen:convex-function": "plop convex-function",
+    "gen:form": "plop form"
   },
   "dependencies": {
     "@auth/core": "^0.37.0",
@@ -72,6 +76,7 @@
     "feather-testing-convex": "^0.5.0",
     "jsdom": "^28.1.0",
     "npm-run-all": "^4.1.5",
+    "plop": "^4.0.5",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",

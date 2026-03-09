@@ -1,0 +1,20 @@
+import { useQuery } from "@tanstack/react-query";
+import { convexQuery } from "@convex-dev/react-query";
+import { api } from "~/convex/_generated/api";
+
+/**
+ * Custom hook for the {{name}} feature.
+ *
+ * Customize: Add queries, mutations, and derived state for your feature.
+ */
+export function use{{pascalCase name}}() {
+  // Example: fetch data from your convex query
+  // const { data, isLoading } = useQuery(
+  //   convexQuery(api.{{name}}.queries.list, {})
+  // );
+
+  return {
+    // data,
+    // isLoading,
+  };
+}

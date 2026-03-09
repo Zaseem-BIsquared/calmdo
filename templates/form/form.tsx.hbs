@@ -1,0 +1,67 @@
+import { useForm } from "@tanstack/react-form";
+import { {{camelCase name}}Schema, type {{pascalCase name}}FormData } from "@/shared/schemas/{{name}}";
+import { Input } from "@/ui/input";
+import { Button } from "@/ui/button";
+
+/**
+ * {{pascalCase name}} form component.
+ *
+ * Uses TanStack Form with Zod validation.
+ * Customize: Add form fields matching your schema, wire up onSubmit.
+ */
+export function {{pascalCase name}}Form() {
+  const form = useForm({
+    defaultValues: {
+      // TODO: Match your schema fields
+    } as {{pascalCase name}}FormData,
+    onSubmit: async ({ value }) => {
+      const result = {{camelCase name}}Schema.safeParse(value);
+      if (!result.success) {
+        console.error("Validation failed:", result.error);
+        return;
+      }
+      // TODO: Call your Convex mutation here
+      console.log("Form submitted:", result.data);
+    },
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        form.handleSubmit();
+      }}
+      className="flex flex-col gap-4"
+    >
+      {/* TODO: Add form fields matching your schema */}
+      {/*
+      <form.Field
+        name="name"
+        children={(field) => (
+          <div className="flex flex-col gap-1">
+            <label htmlFor={field.name} className="text-sm font-medium">
+              Name
+            </label>
+            <Input
+              id={field.name}
+              value={field.state.value}
+              onChange={(e) => field.handleChange(e.target.value)}
+              onBlur={field.handleBlur}
+            />
+            {field.state.meta.errors.length > 0 && (
+              <p className="text-sm text-red-500">
+                {field.state.meta.errors[0]}
+              </p>
+            )}
+          </div>
+        )}
+      />
+      */}
+
+      <Button type="submit" disabled={form.state.isSubmitting}>
+        {form.state.isSubmitting ? "Submitting..." : "Submit"}
+      </Button>
+    </form>
+  );
+}

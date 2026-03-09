@@ -1,0 +1,29 @@
+# {{pascalCase name}}
+
+## Purpose
+
+TODO: Describe what this feature does.
+
+## Backend Counterpart
+
+`convex/{{name}}/` -- contains queries and mutations for this feature.
+
+- `convex/{{name}}/queries.ts` -- read operations
+- `convex/{{name}}/mutations.ts` -- write operations
+
+## Key Files
+
+- `src/features/{{name}}/components/{{pascalCase name}}Page.tsx` -- main page component
+- `src/features/{{name}}/hooks/use{{pascalCase name}}.ts` -- data fetching hook
+- `src/features/{{name}}/index.ts` -- barrel export
+
+## Dependencies
+
+- `react-i18next` for translations
+- `@tanstack/react-query` + `@convex-dev/react-query` for data fetching
+
+## Extension Points
+
+- Add new components in `components/`
+- Add new hooks in `hooks/`
+- Extend Convex functions in `convex/{{name}}/`

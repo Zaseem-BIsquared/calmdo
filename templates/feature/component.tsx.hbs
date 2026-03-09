@@ -1,0 +1,26 @@
+import { useTranslation } from "react-i18next";
+
+/**
+ * {{pascalCase name}} page component.
+ *
+ * Customize: Replace placeholder content with your feature UI.
+ * This component is imported by its route file as a thin wrapper.
+ */
+export function {{pascalCase name}}Page() {
+  const { t } = useTranslation("{{name}}");
+
+  return (
+    <div className="flex h-full w-full bg-secondary px-6 py-8 dark:bg-black">
+      <div className="z-10 mx-auto flex h-full w-full max-w-screen-xl gap-12">
+        <div className="flex w-full flex-col rounded-lg border border-border bg-card p-6 dark:bg-black">
+          <h2 className="text-xl font-medium text-primary">
+            {t("title", "{{pascalCase name}}")}
+          </h2>
+          <p className="mt-2 text-sm text-primary/60">
+            {t("description", "This is the {{name}} feature.")}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,23 @@
+import { mutation } from "@cvx/_generated/server";
+import { auth } from "@cvx/auth";
+import { v } from "convex/values";
+
+/**
+ * {{name}} mutation in the {{domain}} domain.
+ *
+ * Customize: Update args, add Zod validation if needed.
+ * For Zod validation, use zCustomMutation from convex-helpers/server/zod4.
+ */
+export const {{name}} = mutation({
+  args: {
+    // TODO: Define mutation arguments
+  },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) {
+      throw new Error("Not authenticated");
+    }
+
+    // TODO: Implement mutation logic
+  },
+});

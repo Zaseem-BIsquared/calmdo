@@ -1,0 +1,12 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { {{pascalCase name}}Page } from "@/features/{{name}}";
+
+/**
+ * Public route for {{name}}.
+ *
+ * This is a thin wrapper -- all UI logic lives in the feature component.
+ * No auth guard; accessible to all users.
+ */
+export const Route = createFileRoute("/_app/{{name}}")({
+  component: {{pascalCase name}}Page,
+});

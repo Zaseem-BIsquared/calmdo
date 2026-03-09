@@ -1,0 +1,15 @@
+import { z } from "zod";
+
+/**
+ * Zod schema for the {{name}} form.
+ *
+ * Customize: Add your form fields and validation rules.
+ * This schema is shared between the form component and Convex mutations.
+ */
+export const {{camelCase name}}Schema = z.object({
+  // TODO: Define your form fields
+  // name: z.string().min(1, "Name is required").max(100),
+  // email: z.email("Invalid email address"),
+});
+
+export type {{pascalCase name}}FormData = z.infer<typeof {{camelCase name}}Schema>;
