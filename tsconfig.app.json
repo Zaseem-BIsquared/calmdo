@@ -26,7 +26,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@cvx/*": ["./convex/*"],
-      "~/*": ["./*"]
+      "~/*": ["./*"],
+      "@xixixao/uploadstuff/react": ["./src/types/uploadstuff.d.ts"]
     }
   },
   "include": [
@@ -36,5 +37,8 @@
     "convex",
     "site.config.ts",
     "errors.ts"
+  ],
+  "exclude": [
+    "node_modules/@xixixao/uploadstuff/**/*"
   ]
 }
