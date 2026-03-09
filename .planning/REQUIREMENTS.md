@@ -9,10 +9,10 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Codebase Structure
 
-- [ ] **STRUCT-01**: Frontend code is organized into feature folders (`src/features/auth/`, `src/features/billing/`, etc.) with components, hooks, and barrel exports
+- [x] **STRUCT-01**: Frontend code is organized into feature folders (`src/features/auth/`, `src/features/billing/`, etc.) with components, hooks, and barrel exports
 - [x] **STRUCT-02**: Convex backend is organized by domain (`convex/users/`, `convex/billing/`, `convex/uploads/`) with queries, mutations, and actions in separate files
 - [x] **STRUCT-03**: Cross-feature code lives in `src/shared/` (hooks, utils, schemas) with clear promotion rules (3+ features = shared)
-- [ ] **STRUCT-04**: Route files are thin wrappers that import page components from feature folders
+- [x] **STRUCT-04**: Route files are thin wrappers that import page components from feature folders
 - [ ] **STRUCT-05**: Tests are co-located with their source in feature folders
 - [x] **STRUCT-06**: All `api.*` import paths are updated to reflect new Convex file structure
 - [x] **STRUCT-07**: vitest coverage config uses globs instead of hardcoded file paths
