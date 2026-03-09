@@ -31,7 +31,7 @@ export const Route = createRootRouteWithContext<{
     const title =
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (matchWithTitle?.context as Record<string, any>)?.title ||
-      "Convex SaaS";
+      "Feather Starter";
 
     return (
       <>

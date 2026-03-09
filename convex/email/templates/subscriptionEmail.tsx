@@ -50,11 +50,11 @@ export function SubscriptionSuccessEmail({ email }: SubscriptionEmailOptions) {
             We hope you enjoy the new features!
           </Text>
           <Text style={{ fontSize: "16px", lineHeight: "26px" }}>
-            The <Link href="http://localhost:3000">domain-name.com</Link> team.
+            The <Link href={SITE_URL}>Feather Starter</Link> team.
           </Text>
           <Hr style={{ borderColor: "#cccccc", margin: "20px 0" }} />
           <Text style={{ color: "#8898aa", fontSize: "12px" }}>
-            200 domain-name.com
+            Feather Starter
           </Text>
         </Container>
       </Body>
@@ -90,11 +90,11 @@ export function SubscriptionErrorEmail({ email }: SubscriptionEmailOptions) {
             But don't worry, we'll not charge you anything.
           </Text>
           <Text style={{ fontSize: "16px", lineHeight: "26px" }}>
-            The <Link href="http://localhost:3000">domain-name.com</Link> team.
+            The <Link href={SITE_URL}>Feather Starter</Link> team.
           </Text>
           <Hr style={{ borderColor: "#cccccc", margin: "20px 0" }} />
           <Text style={{ color: "#8898aa", fontSize: "12px" }}>
-            200 domain-name.com
+            Feather Starter
           </Text>
         </Container>
       </Body>

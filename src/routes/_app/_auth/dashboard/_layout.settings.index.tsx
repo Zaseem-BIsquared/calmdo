@@ -196,7 +196,7 @@ export default function DashboardSettings() {
         <div className="flex flex-col gap-2 p-6">
           <h2 className="text-xl font-medium text-primary">Delete Account</h2>
           <p className="text-sm font-normal text-primary/60">
-            Permanently delete your Convex SaaS account, all of your projects,
+            Permanently delete your account, all of your projects,
             links and their respective stats.
           </p>
         </div>
