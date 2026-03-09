@@ -109,7 +109,7 @@ export default internalAction(async (ctx) => {
           price.currency === currency && price.recurring?.interval === interval,
       );
       if (!price) {
-        throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+        throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
       }
       return { stripeId: price.id, amount: price.unit_amount || 0 };
     };

@@ -18,7 +18,7 @@ import { asyncMap } from "convex-helpers";
  */
 /*
 if (!STRIPE_SECRET_KEY) {
-  throw new Error(`Stripe - ${ERRORS.ENVS_NOT_INITIALIZED})`)
+  throw new Error(`Stripe - ${ERRORS.common.ENVS_NOT_INITIALIZED})`)
 }
 */
 
@@ -75,12 +75,12 @@ export const PREAUTH_createStripeCustomer = internalAction({
       },
     );
     if (!user || user.customerId)
-      throw new Error(ERRORS.STRIPE_CUSTOMER_NOT_CREATED);
+      throw new Error(ERRORS.billing.CUSTOMER_NOT_CREATED);
 
     const customer = await stripe.customers
       .create({ email: user.email, name: user.username })
       .catch((err) => console.error(err));
-    if (!customer) throw new Error(ERRORS.STRIPE_CUSTOMER_NOT_CREATED);
+    if (!customer) throw new Error(ERRORS.billing.CUSTOMER_NOT_CREATED);
 
     await ctx.runAction(
       internal.billing.stripe.PREAUTH_createFreeStripeSubscription,
@@ -113,18 +113,18 @@ export const PREAUTH_getUserByCustomerId = internalQuery({
       .withIndex("customerId", (q) => q.eq("customerId", args.customerId))
       .unique();
     if (!user) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     const subscription = await ctx.db
       .query("subscriptions")
       .withIndex("userId", (q) => q.eq("userId", user._id))
       .unique();
     if (!subscription) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     const plan = await ctx.db.get(subscription.planId);
     if (!plan) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     return {
       ...user,
@@ -193,7 +193,7 @@ export const PREAUTH_replaceSubscription = internalMutation({
       .withIndex("userId", (q) => q.eq("userId", args.userId))
       .unique();
     if (!subscription) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     await ctx.db.delete(subscription._id);
     const plan = await ctx.db
@@ -201,7 +201,7 @@ export const PREAUTH_replaceSubscription = internalMutation({
       .withIndex("stripeId", (q) => q.eq("stripeId", args.input.planStripeId))
       .unique();
     if (!plan) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     await ctx.db.insert("subscriptions", {
       userId: args.userId,
@@ -228,7 +228,7 @@ export const PREAUTH_deleteSubscription = internalMutation({
       .withIndex("stripeId", (q) => q.eq("stripeId", args.subscriptionStripeId))
       .unique();
     if (!subscription) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     await ctx.db.delete(subscription._id);
   },
@@ -249,7 +249,7 @@ export const PREAUTH_createFreeStripeSubscription = internalAction({
       internal.billing.stripe.UNAUTH_getDefaultPlan,
     );
     if (!plan) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
 
     const yearlyPrice = plan.prices.year[args.currency];
@@ -259,7 +259,7 @@ export const PREAUTH_createFreeStripeSubscription = internalAction({
       items: [{ price: yearlyPrice?.stripeId }],
     });
     if (!stripeSubscription) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     await ctx.runMutation(
       internal.billing.stripe.PREAUTH_createSubscription,
@@ -295,7 +295,7 @@ export const getCurrentUserSubscription = internalQuery({
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     if (!userId) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     const [currentSubscription, newPlan] = await Promise.all([
       ctx.db
@@ -305,7 +305,7 @@ export const getCurrentUserSubscription = internalQuery({
       ctx.db.get(args.planId),
     ]);
     if (!currentSubscription) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     const currentPlan = await ctx.db.get(currentSubscription.planId);
     return {
@@ -326,7 +326,7 @@ export const cancelCurrentUserSubscriptions = internalAction({
       api.users.queries.getCurrentUser,
     );
     if (!user) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     const subscriptions = (
       await stripe.subscriptions.list({ customer: user.customerId })

@@ -21,7 +21,7 @@ export const createSubscriptionCheckout = action({
   handler: async (ctx, args): Promise<string | undefined> => {
     const user = await ctx.runQuery(api.users.queries.getCurrentUser);
     if (!user || !user.customerId) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
 
     const { currentSubscription, newPlan } = await ctx.runQuery(
@@ -29,7 +29,7 @@ export const createSubscriptionCheckout = action({
       { planId: args.planId },
     );
     if (!currentSubscription?.plan) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     if (currentSubscription.plan.key !== PLANS.FREE) {
       return;
@@ -46,7 +46,7 @@ export const createSubscriptionCheckout = action({
       cancel_url: `${SITE_URL}/dashboard/settings/billing`,
     });
     if (!checkout) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     return checkout.url || undefined;
   },
@@ -66,7 +66,7 @@ export const createCustomerPortal = action({
     }
     const user = await ctx.runQuery(api.users.queries.getCurrentUser);
     if (!user || !user.customerId) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
 
     const customerPortal = await stripe.billingPortal.sessions.create({
@@ -74,7 +74,7 @@ export const createCustomerPortal = action({
       return_url: `${SITE_URL}/dashboard/settings/billing`,
     });
     if (!customerPortal) {
-      throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+      throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
     }
     return customerPortal.url;
   },

@@ -24,12 +24,12 @@ const http = httpRouter();
  */
 async function getStripeEvent(request: Request) {
   if (!STRIPE_WEBHOOK_SECRET) {
-    throw new Error(`Stripe - ${ERRORS.ENVS_NOT_INITIALIZED}`);
+    throw new Error(`Stripe - ${ERRORS.common.ENVS_NOT_INITIALIZED}`);
   }
 
   try {
     const signature = request.headers.get("Stripe-Signature");
-    if (!signature) throw new Error(ERRORS.STRIPE_MISSING_SIGNATURE);
+    if (!signature) throw new Error(ERRORS.billing.MISSING_SIGNATURE);
     const payload = await request.text();
     const event = await stripe.webhooks.constructEventAsync(
       payload,
@@ -39,7 +39,7 @@ async function getStripeEvent(request: Request) {
     return event;
   } catch (err: unknown) {
     console.log(err);
-    throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG, { cause: err });
+    throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG, { cause: err });
   }
 }
 
@@ -79,7 +79,7 @@ const handleCheckoutSessionCompleted = async (
     customerId,
   });
   if (!user?.email) {
-    throw new Error(ERRORS.SOMETHING_WENT_WRONG);
+    throw new Error(ERRORS.common.SOMETHING_WENT_WRONG);
   }
 
   const freeSubscriptionStripeId =
@@ -129,7 +129,7 @@ const handleCheckoutSessionCompletedError = async (
   const user = await ctx.runQuery(internal.billing.stripe.PREAUTH_getUserByCustomerId, {
     customerId,
   });
-  if (!user?.email) throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+  if (!user?.email) throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
 
   await sendSubscriptionErrorEmail({
     email: user.email,
@@ -150,7 +150,7 @@ const handleCustomerSubscriptionUpdated = async (
   const user = await ctx.runQuery(internal.billing.stripe.PREAUTH_getUserByCustomerId, {
     customerId,
   });
-  if (!user) throw new Error(ERRORS.SOMETHING_WENT_WRONG);
+  if (!user) throw new Error(ERRORS.common.SOMETHING_WENT_WRONG);
 
   await handleUpdateSubscription(ctx, user, subscription);
 
@@ -170,7 +170,7 @@ const handleCustomerSubscriptionUpdatedError = async (
   const user = await ctx.runQuery(internal.billing.stripe.PREAUTH_getUserByCustomerId, {
     customerId,
   });
-  if (!user?.email) throw new Error(ERRORS.STRIPE_SOMETHING_WENT_WRONG);
+  if (!user?.email) throw new Error(ERRORS.billing.SOMETHING_WENT_WRONG);
 
   await sendSubscriptionErrorEmail({
     email: user.email,

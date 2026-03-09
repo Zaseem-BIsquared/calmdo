@@ -23,6 +23,7 @@ import { Logo } from "@/ui/logo";
 import { Link, useMatchRoute, useNavigate } from "@tanstack/react-router";
 import { User } from "~/types";
 import { PLANS } from "@cvx/schema";
+import { navItems } from "@/shared/nav";
 
 const DASHBOARD_PATH = "/dashboard" as const;
 const SETTINGS_PATH = "/dashboard/settings" as const;
@@ -32,10 +33,6 @@ export function Navigation({ user }: { user: User }) {
   const signOut = useSignOut();
   const matchRoute = useMatchRoute();
   const navigate = useNavigate();
-  const isDashboardPath = matchRoute({ to: DASHBOARD_PATH });
-  const isSettingsPath = matchRoute({ to: SETTINGS_PATH });
-  const isBillingPath = matchRoute({ to: BILLING_PATH });
-
   if (!user) {
     return null;
   }
@@ -215,51 +212,26 @@ export function Navigation({ user }: { user: User }) {
       </div>
 
       <div className="mx-auto flex w-full max-w-screen-xl items-center gap-3">
-        <div
-          className={cn(
-            `flex h-12 items-center border-b-2`,
-            isDashboardPath ? "border-primary" : "border-transparent",
-          )}
-        >
-          <Link
-            to={DASHBOARD_PATH}
+        {navItems.map((item) => (
+          <div
+            key={item.to}
             className={cn(
-              `${buttonVariants({ variant: "ghost", size: "sm" })} text-primary/80`,
+              `flex h-12 items-center border-b-2`,
+              matchRoute({ to: item.to })
+                ? "border-primary"
+                : "border-transparent",
             )}
           >
-            Dashboard
-          </Link>
-        </div>
-        <div
-          className={cn(
-            `flex h-12 items-center border-b-2`,
-            isSettingsPath ? "border-primary" : "border-transparent",
-          )}
-        >
-          <Link
-            to={SETTINGS_PATH}
-            className={cn(
-              `${buttonVariants({ variant: "ghost", size: "sm" })} text-primary/80`,
-            )}
-          >
-            Settings
-          </Link>
-        </div>
-        <div
-          className={cn(
-            `flex h-12 items-center border-b-2`,
-            isBillingPath ? "border-primary" : "border-transparent",
-          )}
-        >
-          <Link
-            to={BILLING_PATH}
-            className={cn(
-              `${buttonVariants({ variant: "ghost", size: "sm" })} text-primary/80`,
-            )}
-          >
-            Billing
-          </Link>
-        </div>
+            <Link
+              to={item.to}
+              className={cn(
+                `${buttonVariants({ variant: "ghost", size: "sm" })} text-primary/80`,
+              )}
+            >
+              {item.label}
+            </Link>
+          </div>
+        ))}
       </div>
     </nav>
   );
