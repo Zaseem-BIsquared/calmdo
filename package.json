@@ -63,6 +63,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
+    "@vitest/coverage-v8": "^4.0.18",
     "convex-test": "^0.0.41",
     "eslint": "^10.0.3",
     "eslint-config-prettier": "^9.1.0",
