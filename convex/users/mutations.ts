@@ -2,12 +2,15 @@ import { mutation } from "@cvx/_generated/server";
 import { auth } from "@cvx/auth";
 import { v } from "convex/values";
 import { asyncMap } from "convex-helpers";
+import { zCustomMutation } from "convex-helpers/server/zod4";
+import { NoOp } from "convex-helpers/server/customFunctions";
 import { internal } from "@cvx/_generated/api";
+import { username } from "../../src/shared/schemas/username";
 
-export const updateUsername = mutation({
-  args: {
-    username: v.string(),
-  },
+const zMutation = zCustomMutation(mutation, NoOp);
+
+export const updateUsername = zMutation({
+  args: { username },
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     if (!userId) {

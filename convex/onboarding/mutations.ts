@@ -1,14 +1,15 @@
 import { internal } from "@cvx/_generated/api";
 import { mutation } from "@cvx/_generated/server";
 import { auth } from "@cvx/auth";
-import { currencyValidator } from "@cvx/schema";
-import { v } from "convex/values";
+import { zCustomMutation } from "convex-helpers/server/zod4";
+import { NoOp } from "convex-helpers/server/customFunctions";
+import { username } from "../../src/shared/schemas/username";
+import { currency as currencyZod } from "../../src/shared/schemas/billing";
 
-export const completeOnboarding = mutation({
-  args: {
-    username: v.string(),
-    currency: currencyValidator,
-  },
+const zMutation = zCustomMutation(mutation, NoOp);
+
+export const completeOnboarding = zMutation({
+  args: { username, currency: currencyZod },
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     if (!userId) {
