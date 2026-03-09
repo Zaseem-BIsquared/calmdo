@@ -9,7 +9,7 @@ import { api } from "~/convex/_generated/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
+
 import * as validators from "@/utils/validators";
 import { useSignOut } from "@/utils/misc";
 
@@ -55,7 +55,6 @@ export default function DashboardSettings() {
   const { doubleCheck, getButtonProps } = useDoubleCheck();
 
   const usernameForm = useForm({
-    validatorAdapter: zodValidator(),
     defaultValues: {
       username: user?.username,
     },
@@ -170,13 +169,13 @@ export default function DashboardSettings() {
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={`w-80 bg-transparent ${
-                  field.state.meta?.errors.length > 0 &&
+                  (field.state.meta?.errors?.length ?? 0) > 0 &&
                   "border-destructive focus-visible:ring-destructive"
                 }`}
               />
             )}
           />
-          {usernameForm.state.fieldMeta.username?.errors.length > 0 && (
+          {(usernameForm.state.fieldMeta.username?.errors?.length ?? 0) > 0 && (
             <p className="text-sm text-destructive dark:text-destructive-foreground">
               {usernameForm.state.fieldMeta.username?.errors.join(" ")}
             </p>

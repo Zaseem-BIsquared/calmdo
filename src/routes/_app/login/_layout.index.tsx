@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import { Input } from "@/ui/input";
 import { Button } from "@/ui/button";
 import { useForm } from "@tanstack/react-form";
-import { zodValidator } from "@tanstack/zod-form-adapter";
+
 import { useEffect, useState } from "react";
 import { Route as OnboardingUsernameRoute } from "@/routes/_app/_auth/onboarding/_layout.username";
 import { Route as DashboardRoute } from "@/routes/_app/_auth/dashboard/_layout.index";
@@ -47,7 +47,6 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm({
-    validatorAdapter: zodValidator(),
     defaultValues: {
       email: "",
     },
@@ -95,7 +94,7 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
                 onBlur={field.handleBlur}
                 onChange={(e) => field.handleChange(e.target.value)}
                 className={`bg-transparent ${
-                  field.state.meta?.errors.length > 0 &&
+                  (field.state.meta?.errors?.length ?? 0) > 0 &&
                   "border-destructive focus-visible:ring-destructive"
                 }`}
               />
@@ -104,7 +103,7 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
         </div>
 
         <div className="flex flex-col">
-          {form.state.fieldMeta.email?.errors.length > 0 && (
+          {(form.state.fieldMeta.email?.errors?.length ?? 0) > 0 && (
             <span className="mb-2 text-sm text-destructive dark:text-destructive-foreground">
               {form.state.fieldMeta.email?.errors.join(" ")}
             </span>
@@ -167,7 +166,6 @@ function LoginForm({ onSubmit }: { onSubmit: (email: string) => void }) {
 function VerifyForm({ email }: { email: string }) {
   const { signIn } = useAuthActions();
   const form = useForm({
-    validatorAdapter: zodValidator(),
     defaultValues: {
       code: "",
     },
@@ -212,7 +210,7 @@ function VerifyForm({ email }: { email: string }) {
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                   className={`bg-transparent ${
-                    field.state.meta?.errors.length > 0 &&
+                    (field.state.meta?.errors?.length ?? 0) > 0 &&
                     "border-destructive focus-visible:ring-destructive"
                   }`}
                 />
@@ -222,7 +220,7 @@ function VerifyForm({ email }: { email: string }) {
         </div>
 
         <div className="flex flex-col">
-          {form.state.fieldMeta.code?.errors.length > 0 && (
+          {(form.state.fieldMeta.code?.errors?.length ?? 0) > 0 && (
             <span className="mb-2 text-sm text-destructive dark:text-destructive-foreground">
               {form.state.fieldMeta.code?.errors.join(" ")}
             </span>
