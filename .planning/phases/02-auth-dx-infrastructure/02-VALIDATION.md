@@ -40,11 +40,10 @@ created: 2026-03-10
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
 | 02-01-01 | 01 | 1 | AUTH-01 | unit | `npx vitest run src/features/auth/` | ❌ W0 | ⬜ pending |
 | 02-01-02 | 01 | 1 | AUTH-01 | E2E | `npx playwright test e2e/auth.spec.ts` | ❌ W0 | ⬜ pending |
-| 02-01-03 | 01 | 1 | AUTH-02 | E2E | `npx playwright test e2e/auth.spec.ts` | ❌ W0 | ⬜ pending |
-| 02-02-01 | 02 | 1 | DX-01 | unit | `npx vitest run convex/devEmails/` | ❌ W0 | ⬜ pending |
-| 02-02-02 | 02 | 1 | DX-01 | E2E | `npx playwright test e2e/dev-mailbox.spec.ts` | ❌ W0 | ⬜ pending |
-| 02-02-03 | 02 | 2 | DX-02 | manual-only | `git commit` triggers Lefthook | N/A | ⬜ pending |
-| 02-02-04 | 02 | 2 | DX-03 | E2E | `npx playwright test` | ❌ W0 | ⬜ pending |
+| 02-02-01 | 02 | 1 | DX-02 | manual-only | `git commit` triggers Lefthook | N/A | ⬜ pending |
+| 02-03-01 | 03 | 2 | DX-01 | unit | `npx vitest run convex/devEmails/` | ❌ W0 | ⬜ pending |
+| 02-03-02 | 03 | 2 | AUTH-02 | unit | `npx vitest run src/features/auth/` | ❌ W0 | ⬜ pending |
+| 02-04-01 | 04 | 3 | DX-03 | E2E | `npx playwright test` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -55,9 +54,10 @@ created: 2026-03-10
 - [ ] `playwright.config.ts` — Playwright configuration
 - [ ] `e2e/fixtures.ts` — Convex Playwright test setup with `createConvexTest()`
 - [ ] `e2e/auth.spec.ts` — Auth flow E2E test stubs
-- [ ] `e2e/dev-mailbox.spec.ts` — Dev mailbox E2E test stubs
 - [ ] `convex/testing/clearAll.ts` — Mutation to clear all test data
 - [ ] Framework install: `npm install -D @playwright/test lefthook && npx playwright install chromium`
+
+*Note: DX-01 (dev mailbox) is verified by unit tests in Plan 03 (`convex/devEmails/*.test.ts`). No separate E2E spec needed — the dev mailbox route is exercised indirectly by the password reset E2E test in `e2e/auth.spec.ts` (which reads the reset code from the dev mailbox).*
 
 ---
 
