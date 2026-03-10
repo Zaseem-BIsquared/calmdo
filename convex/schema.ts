@@ -66,6 +66,13 @@ const schema = defineSchema({
   })
     .index("key", ["key"])
     .index("stripeId", ["stripeId"]),
+  devEmails: defineTable({
+    to: v.array(v.string()),
+    subject: v.string(),
+    html: v.string(),
+    text: v.optional(v.string()),
+    sentAt: v.number(),
+  }).index("sentAt", ["sentAt"]),
   subscriptions: defineTable({
     userId: v.id("users"),
     planId: v.id("plans"),

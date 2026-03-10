@@ -15,6 +15,8 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as auth from "../auth.js";
+import type * as devEmails_mutations from "../devEmails/mutations.js";
+import type * as devEmails_queries from "../devEmails/queries.js";
 import type * as billing_actions from "../billing/actions.js";
 import type * as billing_queries from "../billing/queries.js";
 import type * as billing_stripe from "../billing/stripe.js";
@@ -26,6 +28,7 @@ import type * as init from "../init.js";
 import type * as onboarding_mutations from "../onboarding/mutations.js";
 import type * as otp_ResendOTP from "../otp/ResendOTP.js";
 import type * as otp_VerificationCodeEmail from "../otp/VerificationCodeEmail.js";
+import type * as password_ResendOTPPasswordReset from "../password/ResendOTPPasswordReset.js";
 import type * as uploads_mutations from "../uploads/mutations.js";
 import type * as users_mutations from "../users/mutations.js";
 import type * as users_queries from "../users/queries.js";
@@ -40,6 +43,8 @@ import type * as users_queries from "../users/queries.js";
  */
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  "devEmails/mutations": typeof devEmails_mutations;
+  "devEmails/queries": typeof devEmails_queries;
   "billing/actions": typeof billing_actions;
   "billing/queries": typeof billing_queries;
   "billing/stripe": typeof billing_stripe;
@@ -51,6 +56,7 @@ declare const fullApi: ApiFromModules<{
   "onboarding/mutations": typeof onboarding_mutations;
   "otp/ResendOTP": typeof otp_ResendOTP;
   "otp/VerificationCodeEmail": typeof otp_VerificationCodeEmail;
+  "password/ResendOTPPasswordReset": typeof password_ResendOTPPasswordReset;
   "uploads/mutations": typeof uploads_mutations;
   "users/mutations": typeof users_mutations;
   "users/queries": typeof users_queries;
