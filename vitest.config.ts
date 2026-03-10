@@ -19,6 +19,7 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
+    exclude: ["e2e/**", "node_modules/**"],
     environmentMatchGlobs: [["convex/**", "edge-runtime"]],
     server: {
       deps: {
@@ -63,6 +64,7 @@ export default defineConfig({
         // Auto-generated
         "convex/_generated/**",
         // Test infrastructure
+        "convex/testing/**",
         "convex/test.setup.ts",
         "src/test-helpers.tsx",
         "src/test-setup.ts",
