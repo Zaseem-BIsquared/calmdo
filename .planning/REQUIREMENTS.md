@@ -12,7 +12,7 @@ Requirements for CalmDo Core milestone. Each maps to roadmap phases.
 - [ ] **AUTH-01**: User can sign up and sign in with email + password (in addition to existing OTP and GitHub OAuth)
 - [ ] **AUTH-02**: User can reset password via email link
 - [ ] **DX-01**: Dev mailbox captures all emails sent during development, viewable at a dev route (like Phoenix's /dev/mailbox)
-- [ ] **DX-02**: Lefthook pre-commit hook enforces 100% test coverage on every commit
+- [x] **DX-02**: Lefthook pre-commit hook enforces 100% test coverage on every commit
 - [ ] **DX-03**: Playwright E2E tests using feather-testing-core and feather-testing-convex cover all user-facing flows
 
 ### Task Core

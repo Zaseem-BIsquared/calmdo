@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CalmDo Core
-status: ready_to_plan
-stopped_at: "Roadmap created, ready to plan Phase 2"
-last_updated: "2026-03-10T00:00:00.000Z"
-last_activity: 2026-03-10 -- Roadmap created for v2.0
+status: executing
+stopped_at: "Completed 02-02-PLAN.md"
+last_updated: "2026-03-10T03:44:31Z"
+last_activity: 2026-03-10 -- Completed plan 02-02 (pre-commit hooks)
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  total_plans: 4
+  completed_plans: 1
+  percent: 5
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-10)
 ## Current Position
 
 Phase: 2 of 6 (Auth & DX Infrastructure)
-Plan: -- (not yet planned)
-Status: Ready to plan
-Last activity: 2026-03-10 -- Roadmap created with 5 phases covering 49 requirements
+Plan: 2 of 4 complete
+Status: Executing
+Last activity: 2026-03-10 -- Completed plan 02-02 (pre-commit hooks)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 5%
 
 ## Performance Metrics
 
@@ -41,9 +41,9 @@ Progress: [░░░░░░░░░░] 0%
 - Commits: 65 | Files changed: 181 | Lines: +17,820 / -5,335
 
 **v2.0 Velocity:**
-- Total plans completed: 0
-- Average duration: --
-- Total execution time: --
+- Total plans completed: 1
+- Average duration: 10min/plan
+- Total execution time: 10min
 
 ## Accumulated Context
 
@@ -55,6 +55,8 @@ Recent:
 - Vertical slices only (schema+backend+frontend+tests per phase)
 - Skip org layer for v2.0 (user-scoped tasks)
 - Coarse granularity: 5 phases for 49 requirements
+- Excluded convex/tsconfig.json from pre-commit typecheck (pre-existing TS2554 error)
+- Added --dangerouslyIgnoreUnhandledErrors for vitest coverage (pre-existing Stripe unhandled rejections)
 
 ### Pending Todos
 
