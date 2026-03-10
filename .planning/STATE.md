@@ -1,32 +1,34 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: Architecture Modernization
-status: milestone_complete
-stopped_at: "Milestone v1.0 archived"
-last_updated: "2026-03-09T14:10:00.000Z"
-last_activity: 2026-03-09 -- Milestone v1.0 completed and archived
+milestone: v2.0
+milestone_name: CalmDo Core
+status: defining_requirements
+stopped_at: "Defining requirements"
+last_updated: "2026-03-10T00:00:00.000Z"
+last_activity: 2026-03-10 -- Milestone v2.0 started
 progress:
-  total_phases: 1
-  completed_phases: 1
-  total_plans: 9
-  completed_plans: 9
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-09)
+See: .planning/PROJECT.md (updated 2026-03-10)
 
 **Core value:** Developer velocity -- new features are faster to build because every file has a clear, predictable home
-**Current focus:** Planning next milestone
+**Current focus:** Defining v2.0 CalmDo Core requirements
 
 ## Current Position
 
-Milestone v1.0 Architecture Modernization: SHIPPED 2026-03-09
-Next: `/gsd:new-milestone` to start v2 planning
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-03-10 — Milestone v2.0 started
 
 ## Performance Metrics
 
@@ -40,7 +42,7 @@ Next: `/gsd:new-milestone` to start v2 planning
 
 ### Decisions
 
-See: .planning/PROJECT.md Key Decisions table (updated after v1.0)
+See: .planning/PROJECT.md Key Decisions table (updated after v2.0 start)
 
 ### Pending Todos
 
@@ -48,7 +50,7 @@ None.
 
 ### Blockers/Concerns
 
-None — milestone shipped.
+None.
 
 ### Tech Debt (carried forward)
 

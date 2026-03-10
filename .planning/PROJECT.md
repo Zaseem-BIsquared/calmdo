@@ -36,7 +36,19 @@ Developer velocity — new features are faster to build because every file has a
 
 ### Active
 
-(None yet — define with `/gsd:new-milestone`)
+#### Current Milestone: v2.0 CalmDo Core
+
+**Goal:** Build a task management system for a small team — tasks, projects, subtasks, time logging, and audit trail — as vertical slices showcasing the starter template architecture.
+
+**Target features:**
+- Quick Tasks with private/shared visibility and status workflow
+- Projects with status management (active/on_hold/completed/archived)
+- Subtasks with promotion to full tasks
+- Task Links (spawned_from, blocked_by)
+- Work Logs with optional time tracking
+- Activity Logs (auto-generated audit trail)
+- Filters (status, priority, project)
+- Text search across tasks and projects
 
 ### Out of Scope
 
@@ -45,9 +57,12 @@ Developer velocity — new features are faster to build because every file has a
 - Monorepo tooling — using folders within single package, not Turborepo/Nx
 - Runtime plugin system — git-branch merge is simpler and more transparent
 - Auto-generated CRUD — too opinionated, limits flexibility
+- Organization/multi-org schema — deferred; v2.0 scopes to user-level, no org layer yet
 
 ## Context
 
+- **CalmDo vision:** Consolidated from 7+ attempts across Phoenix, React Native, Convex — see `_calmdo/` for product spec, domain model, roadmap, and lessons learned
+- **Reference artifacts:** Kiro feature specs (7 areas), permission framework, schema design — see `_reference/`
 - **Shipped v1.0** on 2026-03-09: 65 commits, 181 files changed, ~17.8k lines added
 - **Tech stack:** React + TanStack Router, Convex, Stripe, Zod v4, Plop.js, Vitest, i18next
 - **Structure:** 6 frontend feature folders, 4 backend domain folders, shared schemas in `src/shared/schemas/`
@@ -77,5 +92,8 @@ Developer velocity — new features are faster to build because every file has a
 | Namespace-based i18n | Per-feature JSON files instead of monolithic translation.json | ✓ Good — clean plugin extension point |
 | Git-branch plugins over runtime | Simpler, more transparent, full TypeScript support | ✓ Good — 3 demo plugins prove the pattern |
 
+| Skip org layer for v2.0 | User-scoped tasks are simpler; multi-org adds complexity without immediate value for 2-person team | — Pending |
+| Vertical slices over horizontal | Each phase delivers complete feature (schema+backend+frontend+tests); maintains 100% coverage | — Pending |
+
 ---
-*Last updated: 2026-03-09 after v1.0 milestone*
+*Last updated: 2026-03-10 after v2.0 milestone start*
