@@ -431,7 +431,33 @@ describe("assign", () => {
     expect(updated.visibility).toBe("private");
   });
 
-  test("unassigning does not revert visibility", async ({
+  test("unassigning a private task flips visibility to shared", async ({
+    client,
+    testClient,
+  }) => {
+    // Create task (starts private, assigned to creator)
+    await client.mutation(api.tasks.mutations.create, {
+      title: "Private task",
+    });
+    const tasks = await testClient.run(async (ctx: any) =>
+      ctx.db.query("tasks").collect(),
+    );
+    expect(tasks[0].visibility).toBe("private");
+
+    // Unassign (should flip to shared)
+    await client.mutation(api.tasks.mutations.assign, {
+      taskId: tasks[0]._id,
+      assigneeId: undefined,
+    });
+
+    const updated = await testClient.run(async (ctx: any) =>
+      ctx.db.get(tasks[0]._id),
+    );
+    expect(updated.assigneeId).toBeUndefined();
+    expect(updated.visibility).toBe("shared");
+  });
+
+  test("unassigning keeps visibility as shared", async ({
     client,
     testClient,
   }) => {
