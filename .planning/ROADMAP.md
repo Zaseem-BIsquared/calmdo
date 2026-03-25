@@ -27,7 +27,7 @@ See: `.planning/milestones/v1.0-ROADMAP.md` for full details.
 - [x] **Phase 2: Auth & DX Infrastructure** - Password auth, dev mailbox, pre-commit hooks, and E2E test setup (completed 2026-03-10)
 - [x] **Phase 02.1: Stripe Plugin Extraction** (INSERTED) - Extract billing/Stripe to optional plugin branch (completed 2026-03-10)
 - [x] **Phase 3: Tasks** - Complete task management with visibility, assignment, status workflow, and core views (completed 2026-03-25)
-- [ ] **Phase 03.1: Verification Bug Fixes** (INSERTED) - Fix all issues found during Phase 2+3 UAT: auth flow bugs, task unassign visibility, dev mailbox fixes, and UX polish
+- [x] **Phase 03.1: Verification Bug Fixes** (INSERTED) - Fix all issues found during Phase 2+3 UAT: auth flow bugs, task unassign visibility, dev mailbox fixes, and UX polish (completed 2026-03-25)
 - [ ] **Phase 4: Projects** - Project CRUD with status lifecycle and project-task relationship
 - [ ] **Phase 5: Subtasks & Work Logs** - Child-of-task overlays with subtask promotion and time logging
 - [ ] **Phase 6: Activity Logs & Search** - Auto-generated audit trail, text search, and filter controls across all entities
@@ -100,8 +100,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03.1-01-PLAN.md — Backend + infrastructure fixes: task unassign visibility, JWT provisioning, Resend skip, dev mailbox route, provider availability query
-- [ ] 03.1-02-PLAN.md — Frontend/UI fixes: auth error messages, hide unconfigured providers, email persistence, centered login, username hints, settings re-sync
+- [x] 03.1-01-PLAN.md — Backend + infrastructure fixes: task unassign visibility, JWT provisioning, Resend skip, dev mailbox route, provider availability query
+- [x] 03.1-02-PLAN.md — Frontend/UI fixes: auth error messages, hide unconfigured providers, email persistence, centered login, username hints, settings re-sync
 
 **Issues:**
 - P1: Unassign task → limbo (visibility stays private) — `convex/tasks/mutations.ts`
@@ -126,11 +126,11 @@ Plans:
   2. User can view a projects list filtered by status (active/on_hold/completed/archived) with task counts per project
   3. User can assign a task to a project (optional — tasks work fine without a project)
   4. User can view all tasks within a project filtered by status/assignee/priority, with a status summary bar
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md — Project backend: Zod schemas, Convex table, CRUD mutations (cascade delete), queries (list with status filter + task counts, detail with status summary), task mutation extensions (createInProject, assignToProject with visibility auto-flip)
+- [ ] 04-02-PLAN.md — Project frontend: ProjectsPage (card grid, status filter tabs), ProjectDetailPage (task list, filters, summary bar, inline creation), routes, navigation wiring (static + dynamic projects section), i18n, tests
 
 ### Phase 5: Subtasks & Work Logs
 **Goal**: Users can break tasks into subtasks (with promotion) and log work with optional time tracking
@@ -175,8 +175,8 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 4 -> 5 -> 6
 | 2. Auth & DX Infrastructure | v2.0 | 4/4 | Complete | 2026-03-10 |
 | 02.1 Stripe Plugin Extraction | 2/2 | Complete    | 2026-03-10 | - |
 | 3. Tasks | v2.0 | 2/2 | Complete   | 2026-03-25 |
-| 03.1 Verification Bug Fixes | v2.0 | 0/2 | Planned    |  |
-| 4. Projects | v2.0 | 0/? | Not started | - |
+| 03.1 Verification Bug Fixes | v2.0 | 2/2 | Complete    | 2026-03-25 |
+| 4. Projects | v2.0 | 0/2 | Planned | - |
 | 5. Subtasks & Work Logs | v2.0 | 0/? | Not started | - |
 | 6. Activity Logs & Search | v2.0 | 0/? | Not started | - |
 
