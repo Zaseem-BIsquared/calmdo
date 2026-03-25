@@ -2,7 +2,7 @@
 
 **Date:** 2026-03-25
 **Tester:** User (manual)
-**Status:** CONDITIONAL PASS (1 bug)
+**Status:** PASS (bug resolved in Phase 03.1)
 
 ## Test Results
 
@@ -11,18 +11,18 @@
 | 0 | Auth flow | Pre-req | PASS | JWT_PRIVATE_KEY missing on local (todo captured), signup duplicate error UX (todo captured) |
 | 1 | Task CRUD | SC-1 | PASS | Create, inline edit, priority toggle, delete with confirmation all work |
 | 2 | Status workflow | SC-2 | PASS | todo → in_progress → done, stops at done |
-| 3 | Assignment + visibility | SC-3 | BUG | Unassigning own task leaves it invisible (private + no assignee = limbo) |
+| 3 | Assignment + visibility | SC-3 | PASS (fixed in 03.1) | Unassign now auto-flips visibility to "shared" |
 | 4 | My Tasks + Team Pool views | SC-4 | PASS | Both pages load and display correctly |
 | 5 | Navigation | SC-5 | PASS | My Tasks and Team Pool in top nav bar (not sidebar — existing layout pattern) |
 
 ## Bugs Found
 
-### BUG-01: Unassign leaves task in limbo
+### BUG-01: Unassign leaves task in limbo — RESOLVED
 - **Severity:** P1
 - **File:** convex/tasks/mutations.ts (assign handler)
 - **Issue:** Unassigning doesn't flip visibility to "shared", so task is not in My Tasks (no assignee) or Team Pool (still private)
 - **Fix:** Auto-flip visibility to "shared" on unassign
-- **Todo:** .planning/todos/bug-unassign-task-visibility.md
+- **Resolved in:** Phase 03.1, Plan 01 (commit 44717c6)
 
 ## Pre-existing Issues Captured
 
