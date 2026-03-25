@@ -6,11 +6,40 @@ import { useState } from "react";
 import { Button } from "@/ui/button";
 import { Logo } from "@/ui/logo";
 import { Link } from "@tanstack/react-router";
-import { Mail } from "lucide-react";
+import { Mail, Copy, Check } from "lucide-react";
 
 export const Route = createFileRoute("/_app/dev/mailbox")({
   component: DevMailbox,
 });
+
+/** Extract code from email HTML like: <strong>12345678</strong> */
+function extractCode(html: string): string | null {
+  const match = html.match(/<strong>(\d{6,8})<\/strong>/);
+  return match ? match[1] : null;
+}
+
+function CopyCodeButton({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <button
+      type="button"
+      className="inline-flex items-center gap-2 rounded-md border border-border bg-secondary px-3 py-1.5 font-mono text-lg font-bold text-primary hover:bg-secondary/80"
+      onClick={() => {
+        navigator.clipboard.writeText(code);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }}
+    >
+      {code}
+      {copied ? (
+        <Check className="h-4 w-4 text-green-500" />
+      ) : (
+        <Copy className="h-4 w-4 text-primary/40" />
+      )}
+    </button>
+  );
+}
 
 function DevMailbox() {
   const { data: emails } = useQuery(
@@ -74,43 +103,53 @@ function DevMailbox() {
           </div>
         ) : (
           <div className="flex flex-col gap-2">
-            {emails.map((email) => (
-              <div
-                key={email._id}
-                className="rounded-lg border border-border bg-card p-4"
-              >
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-between text-left"
-                  onClick={() =>
-                    setExpandedId(
-                      expandedId === email._id ? null : email._id,
-                    )
-                  }
+            {emails.map((email) => {
+              const code = extractCode(email.html);
+              return (
+                <div
+                  key={email._id}
+                  className="rounded-lg border border-border bg-card p-4"
                 >
-                  <div className="flex flex-col gap-1">
-                    <span className="font-medium text-primary">
-                      {email.subject}
-                    </span>
-                    <span className="text-sm text-primary/60">
-                      To: {email.to.join(", ")}
-                    </span>
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex flex-col gap-1">
+                      <span className="font-medium text-primary">
+                        {email.subject}
+                      </span>
+                      <span className="text-sm text-primary/60">
+                        To: {email.to.join(", ")}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {code && <CopyCodeButton code={code} />}
+                      <span className="text-sm text-primary/60">
+                        {new Date(email.sentAt).toLocaleString()}
+                      </span>
+                    </div>
                   </div>
-                  <span className="text-sm text-primary/60">
-                    {new Date(email.sentAt).toLocaleString()}
-                  </span>
-                </button>
 
-                {expandedId === email._id && (
-                  <div className="mt-4 border-t border-border pt-4">
-                    <div
-                      className="prose prose-sm max-w-none dark:prose-invert"
-                      dangerouslySetInnerHTML={{ __html: email.html }}
-                    />
-                  </div>
-                )}
-              </div>
-            ))}
+                  <button
+                    type="button"
+                    className="mt-2 text-sm text-primary/40 hover:text-primary/60"
+                    onClick={() =>
+                      setExpandedId(
+                        expandedId === email._id ? null : email._id,
+                      )
+                    }
+                  >
+                    {expandedId === email._id ? "Hide details" : "Show details"}
+                  </button>
+
+                  {expandedId === email._id && (
+                    <div className="mt-2 border-t border-border pt-4">
+                      <div
+                        className="prose prose-sm max-w-none dark:prose-invert"
+                        dangerouslySetInnerHTML={{ __html: email.html }}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </main>

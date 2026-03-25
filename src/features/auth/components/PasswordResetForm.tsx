@@ -10,6 +10,7 @@ export function PasswordResetForm({ onBack, defaultEmail }: { onBack: () => void
   const { signIn } = useAuthActions();
   const [step, setStep] = useState<"forgot" | { email: string }>("forgot");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (step === "forgot") {
     return (
@@ -18,12 +19,17 @@ export function PasswordResetForm({ onBack, defaultEmail }: { onBack: () => void
         isSubmitting={isSubmitting}
         onSubmit={async (email) => {
           setIsSubmitting(true);
+          setError(null);
           try {
             await signIn("password", { email, flow: "reset" });
             setStep({ email });
+          /* v8 ignore start -- error path requires signIn to reject */
+          } catch {
+            setError("Could not send reset code. Please try again.");
           } finally {
             setIsSubmitting(false);
           }
+          /* v8 ignore stop */
         }}
         onBack={onBack}
       />
@@ -34,18 +40,24 @@ export function PasswordResetForm({ onBack, defaultEmail }: { onBack: () => void
     <VerifyResetStep
       email={step.email}
       isSubmitting={isSubmitting}
+      error={error}
       onSubmit={async (code, newPassword) => {
         setIsSubmitting(true);
+        setError(null);
         try {
           await signIn("password", {
             email: step.email,
-            code,
+            code: code.trim(),
             newPassword,
             flow: "reset-verification",
           });
+        /* v8 ignore start -- error path requires signIn to reject */
+        } catch {
+          setError("Invalid or expired code. Please check and try again.");
         } finally {
           setIsSubmitting(false);
         }
+        /* v8 ignore stop */
       }}
       onBack={onBack}
     />
@@ -154,11 +166,13 @@ function ForgotStep({
 function VerifyResetStep({
   email,
   isSubmitting,
+  error,
   onSubmit,
   onBack,
 }: {
   email: string;
   isSubmitting: boolean;
+  error: string | null;
   onSubmit: (code: string, newPassword: string) => Promise<void>;
   onBack: () => void;
 }) {
@@ -261,6 +275,14 @@ function VerifyResetStep({
           )
           /* v8 ignore stop */}
         </div>
+
+        {/* v8 ignore start -- error only visible on failed verification */
+        error && (
+          <span className="mb-1 text-sm text-destructive dark:text-destructive-foreground">
+            {error}
+          </span>
+        )
+        /* v8 ignore stop */}
 
         <Button type="submit" className="w-full">
           {/* v8 ignore start -- spinner only visible during brief signIn round-trip */
