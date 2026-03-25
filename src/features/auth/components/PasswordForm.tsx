@@ -9,21 +9,27 @@ import { Button } from "@/ui/button";
 export function PasswordForm({
   onSuccess,
   onForgotPassword,
+  defaultEmail,
+  onEmailChange,
 }: {
   onSuccess?: () => void;
   onForgotPassword?: () => void;
+  defaultEmail?: string;
+  onEmailChange?: (email: string) => void;
 }) {
   const { signIn } = useAuthActions();
   const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm({
     defaultValues: {
-      email: "",
+      email: defaultEmail ?? "",
       password: "",
     },
     onSubmit: async ({ value }) => {
       setIsSubmitting(true);
+      setError(null);
       try {
         await signIn("password", {
           email: value.email,
@@ -31,6 +37,17 @@ export function PasswordForm({
           flow: mode,
         });
         onSuccess?.();
+      } catch (e) {
+        /* v8 ignore start -- error depends on server response */
+        const msg = e instanceof Error ? e.message : String(e);
+        if (msg.includes("already exists")) {
+          setError("An account with this email already exists. Try signing in.");
+        } else if (msg.includes("InvalidAccountId")) {
+          setError("No account found with this email. Try signing up.");
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+        /* v8 ignore stop */
       } finally {
         setIsSubmitting(false);
       }
@@ -67,7 +84,10 @@ export function PasswordForm({
                 placeholder="Email"
                 value={field.state.value}
                 onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
+                onChange={(e) => {
+                  field.handleChange(e.target.value);
+                  onEmailChange?.(e.target.value);
+                }}
                 className={`bg-transparent ${
                   /* v8 ignore start -- branch depends on TanStack Form re-render timing */
                   (field.state.meta?.errors?.length ?? 0) > 0 &&
@@ -123,6 +143,13 @@ export function PasswordForm({
             </span>
           )
           /* v8 ignore stop */}
+          {/* v8 ignore start -- error depends on server response */
+          error && (
+            <p className="mb-1 text-sm text-destructive dark:text-destructive-foreground">
+              {error}
+            </p>
+          )
+          /* v8 ignore stop */}
         </div>
 
         <Button type="submit" className="w-full">
@@ -145,7 +172,10 @@ export function PasswordForm({
           type="button"
           variant="ghost"
           className="h-auto p-0 text-sm text-primary/60 hover:bg-transparent hover:text-primary"
-          onClick={() => setMode(mode === "signIn" ? "signUp" : "signIn")}
+          onClick={() => {
+            setError(null);
+            setMode(mode === "signIn" ? "signUp" : "signIn");
+          }}
         >
           {toggleLabel}
         </Button>

@@ -123,6 +123,96 @@ describe("PasswordForm", () => {
     expect(onForgotPassword).toHaveBeenCalled();
   });
 
+  it("uses defaultEmail when provided", () => {
+    render(<PasswordForm defaultEmail="prefilled@example.com" />);
+    expect(screen.getByPlaceholderText("Email")).toHaveValue("prefilled@example.com");
+  });
+
+  it("calls onEmailChange when email is typed", async () => {
+    const onEmailChange = vi.fn();
+    render(<PasswordForm onEmailChange={onEmailChange} />);
+    const user = userEvent.setup();
+
+    await user.type(screen.getByPlaceholderText("Email"), "a");
+    expect(onEmailChange).toHaveBeenCalledWith("a");
+  });
+
+  it("clears error when toggling mode", async () => {
+    mockSignIn.mockRejectedValue(new Error("already exists"));
+    render(<PasswordForm />);
+    const user = userEvent.setup();
+
+    await user.type(screen.getByPlaceholderText("Email"), "test@example.com");
+    await user.type(screen.getByPlaceholderText("Password"), "password123");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/already exists/i)).toBeInTheDocument();
+    });
+
+    // Toggle mode should clear error
+    await user.click(screen.getByRole("button", { name: /create an account/i }));
+    await waitFor(() => {
+      expect(screen.queryByText(/already exists/i)).not.toBeInTheDocument();
+    });
+  });
+
+  it("shows 'already exists' error on duplicate account", async () => {
+    mockSignIn.mockRejectedValue(new Error("Account already exists"));
+    render(<PasswordForm />);
+    const user = userEvent.setup();
+
+    await user.type(screen.getByPlaceholderText("Email"), "test@example.com");
+    await user.type(screen.getByPlaceholderText("Password"), "password123");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/already exists.*try signing in/i)).toBeInTheDocument();
+    });
+  });
+
+  it("shows 'no account found' error on InvalidAccountId", async () => {
+    mockSignIn.mockRejectedValue(new Error("InvalidAccountId"));
+    render(<PasswordForm />);
+    const user = userEvent.setup();
+
+    await user.type(screen.getByPlaceholderText("Email"), "missing@example.com");
+    await user.type(screen.getByPlaceholderText("Password"), "password123");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/no account found.*try signing up/i)).toBeInTheDocument();
+    });
+  });
+
+  it("shows generic error for unknown errors", async () => {
+    mockSignIn.mockRejectedValue(new Error("Network error"));
+    render(<PasswordForm />);
+    const user = userEvent.setup();
+
+    await user.type(screen.getByPlaceholderText("Email"), "test@example.com");
+    await user.type(screen.getByPlaceholderText("Password"), "password123");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+  });
+
+  it("handles non-Error throwable in catch", async () => {
+    mockSignIn.mockRejectedValue("string error");
+    render(<PasswordForm />);
+    const user = userEvent.setup();
+
+    await user.type(screen.getByPlaceholderText("Email"), "test@example.com");
+    await user.type(screen.getByPlaceholderText("Password"), "password123");
+    await user.click(screen.getByRole("button", { name: /sign in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/something went wrong/i)).toBeInTheDocument();
+    });
+  });
+
   it("calls onSuccess after successful signIn", async () => {
     const onSuccess = vi.fn();
     render(<PasswordForm onSuccess={onSuccess} />);

@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { Input } from "@/ui/input";
 import { Button } from "@/ui/button";
 
-export function PasswordResetForm({ onBack }: { onBack: () => void }) {
+export function PasswordResetForm({ onBack, defaultEmail }: { onBack: () => void; defaultEmail?: string }) {
   const { signIn } = useAuthActions();
   const [step, setStep] = useState<"forgot" | { email: string }>("forgot");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,6 +14,7 @@ export function PasswordResetForm({ onBack }: { onBack: () => void }) {
   if (step === "forgot") {
     return (
       <ForgotStep
+        defaultEmail={defaultEmail}
         isSubmitting={isSubmitting}
         onSubmit={async (email) => {
           setIsSubmitting(true);
@@ -52,16 +53,18 @@ export function PasswordResetForm({ onBack }: { onBack: () => void }) {
 }
 
 function ForgotStep({
+  defaultEmail,
   isSubmitting,
   onSubmit,
   onBack,
 }: {
+  defaultEmail?: string;
   isSubmitting: boolean;
   onSubmit: (email: string) => Promise<void>;
   onBack: () => void;
 }) {
   const form = useForm({
-    defaultValues: { email: "" },
+    defaultValues: { email: defaultEmail ?? "" },
     onSubmit: async ({ value }) => {
       await onSubmit(value.email);
     },

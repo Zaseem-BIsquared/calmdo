@@ -214,6 +214,11 @@ describe("PasswordResetForm", () => {
     });
   });
 
+  it("uses defaultEmail when provided", () => {
+    render(<PasswordResetForm onBack={mockOnBack} defaultEmail="prefilled@example.com" />);
+    expect(screen.getByPlaceholderText("Email")).toHaveValue("prefilled@example.com");
+  });
+
   it("calls onBack when back button is clicked on forgot step", async () => {
     render(<PasswordResetForm onBack={mockOnBack} />);
     const user = userEvent.setup();
