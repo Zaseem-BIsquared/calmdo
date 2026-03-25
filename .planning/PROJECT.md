@@ -96,4 +96,4 @@ Developer velocity — new features are faster to build because every file has a
 | Vertical slices over horizontal | Each phase delivers complete feature (schema+backend+frontend+tests); maintains 100% coverage | — Pending |
 
 ---
-*Last updated: 2026-03-10 after v2.0 milestone start*
+*Last updated: 2026-03-25 after Phase 03.1 completion — auth/tasks bug fixes verified*
