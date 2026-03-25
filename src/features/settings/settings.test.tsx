@@ -17,7 +17,7 @@ describe("SettingsRoute.beforeLoad", () => {
   });
 });
 
-test("renders user info with username", async ({ client, testClient, userId }) => {
+test("renders user info with username and lowercase hint", async ({ client, testClient, userId }) => {
   // Patch the existing user document (created by the test fixture)
   await testClient.run(async (ctx: any) => {
     await ctx.db.patch(userId, { username: "testuser123" });
@@ -27,6 +27,44 @@ test("renders user info with username", async ({ client, testClient, userId }) =
 
   await waitFor(() => {
     expect(screen.getByDisplayValue("testuser123")).toBeInTheDocument();
+  });
+
+  expect(
+    screen.getByText(/lowercase and alphanumeric/i),
+  ).toBeInTheDocument();
+});
+
+test("re-syncs username form when server data changes", async ({ client, testClient, userId }) => {
+  // Start with one username
+  await testClient.run(async (ctx: any) => {
+    await ctx.db.patch(userId, { username: "oldname" });
+  });
+
+  const { unmount } = renderWithRouter(<SettingsPage />, client);
+
+  // Verify initial value syncs via useEffect + form.reset()
+  await waitFor(() => {
+    expect(screen.getByDisplayValue("oldname")).toBeInTheDocument();
+  });
+
+  // User edits the field locally (dirty form)
+  const user = userEvent.setup();
+  const input = screen.getByPlaceholderText("Username");
+  await user.clear(input);
+  await user.type(input, "localedits");
+
+  expect(screen.getByDisplayValue("localedits")).toBeInTheDocument();
+
+  // Unmount and change server data
+  unmount();
+  await testClient.run(async (ctx: any) => {
+    await ctx.db.patch(userId, { username: "newname" });
+  });
+
+  // Re-render: useEffect fires on mount with new user data, form.reset() updates values
+  renderWithRouter(<SettingsPage />, client);
+  await waitFor(() => {
+    expect(screen.getByDisplayValue("newname")).toBeInTheDocument();
   });
 });
 

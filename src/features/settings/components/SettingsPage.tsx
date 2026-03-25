@@ -6,7 +6,7 @@ import { Button } from "@/ui/button";
 import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { api } from "~/convex/_generated/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "@tanstack/react-form";
 
 import * as validators from "@/utils/validators";
@@ -55,6 +55,12 @@ export function SettingsPage() {
     },
     /* v8 ignore stop */
   });
+
+  useEffect(() => {
+    if (user?.username) {
+      usernameForm.reset({ username: user.username });
+    }
+  }, [user?.username]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDeleteAccount = async () => {
     await deleteCurrentUserAccount({});
@@ -174,6 +180,9 @@ export function SettingsPage() {
               />
             )}
           />
+          <p className="text-xs text-primary/50">
+            Usernames are lowercase and alphanumeric only.
+          </p>
           {/* v8 ignore start -- branch depends on TanStack Form re-render timing */
           (usernameForm.state.fieldMeta.username?.errors?.length ?? 0) > 0 && (
             <p className="text-sm text-destructive dark:text-destructive-foreground">

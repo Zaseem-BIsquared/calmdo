@@ -81,6 +81,9 @@ export function UsernamePage() {
               />
             )}
           />
+          <p className="text-xs text-primary/50">
+            Usernames are lowercase and alphanumeric only.
+          </p>
         </div>
 
         <div className="flex flex-col">

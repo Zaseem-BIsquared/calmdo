@@ -6,7 +6,7 @@ import { api } from "~/convex/_generated/api";
 import { renderWithRouter } from "@/test-helpers";
 import { UsernamePage } from "./index";
 
-test("renders welcome form", async ({ client }) => {
+test("renders welcome form with lowercase hint", async ({ client }) => {
   renderWithRouter(<UsernamePage />, client);
 
   await waitFor(() => {
@@ -18,6 +18,9 @@ test("renders welcome form", async ({ client }) => {
   expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
   expect(
     screen.getByRole("button", { name: /continue/i }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(/lowercase and alphanumeric/i),
   ).toBeInTheDocument();
 });
 
