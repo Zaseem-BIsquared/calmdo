@@ -17,9 +17,11 @@
     "test:watch": "vitest",
     "test:e2e": "npx playwright test",
     "gen:feature": "plop feature",
+    "gen:schema": "plop schema",
+    "gen:backend": "plop backend",
+    "gen:frontend": "plop frontend",
     "gen:route": "plop route",
-    "gen:convex-function": "plop convex-function",
-    "gen:form": "plop form"
+    "gen:convex-function": "plop convex-function"
   },
   "dependencies": {
     "@auth/core": "^0.37.0",

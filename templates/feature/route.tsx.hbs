@@ -1,0 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { {{pascalCase name}}Page } from "@/features/{{name}}";
+import siteConfig from "~/site.config";
+
+export const Route = createFileRoute("/_app/_auth/dashboard/_layout/{{name}}")({
+  component: {{pascalCase name}}Page,
+  head: () => ({
+    meta: [{ title: `${siteConfig.siteTitle} - {{labelPlural}}` }],
+  }),
+  beforeLoad: () => ({
+    headerTitle: "{{labelPlural}}",
+    headerDescription: "Manage your {{lowerCase labelPlural}}.",
+  }),
+});
