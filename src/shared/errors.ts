@@ -19,6 +19,9 @@ export const ERRORS = {
     NOT_FOUND: "Task not found.",
     INVALID_STATUS_TRANSITION: "Invalid status transition.",
   },
+  projects: {
+    NOT_FOUND: "Project not found.",
+  },
   // Plugin errors go here:
   // admin: { ... }
 } as const;

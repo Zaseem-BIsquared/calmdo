@@ -21,6 +21,8 @@ import type * as otp_ResendOTP from "../otp/ResendOTP.js";
 import type * as otp_VerificationCodeEmail from "../otp/VerificationCodeEmail.js";
 import type * as password_PasswordResetEmail from "../password/PasswordResetEmail.js";
 import type * as password_ResendOTPPasswordReset from "../password/ResendOTPPasswordReset.js";
+import type * as projects_mutations from "../projects/mutations.js";
+import type * as projects_queries from "../projects/queries.js";
 import type * as tasks_mutations from "../tasks/mutations.js";
 import type * as tasks_queries from "../tasks/queries.js";
 import type * as testing_clearAll from "../testing/clearAll.js";
@@ -48,6 +50,8 @@ declare const fullApi: ApiFromModules<{
   "otp/VerificationCodeEmail": typeof otp_VerificationCodeEmail;
   "password/PasswordResetEmail": typeof password_PasswordResetEmail;
   "password/ResendOTPPasswordReset": typeof password_ResendOTPPasswordReset;
+  "projects/mutations": typeof projects_mutations;
+  "projects/queries": typeof projects_queries;
   "tasks/mutations": typeof tasks_mutations;
   "tasks/queries": typeof tasks_queries;
   "testing/clearAll": typeof testing_clearAll;

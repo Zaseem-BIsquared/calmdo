@@ -6,6 +6,9 @@ import {
   taskStatus,
   taskVisibility,
 } from "../src/shared/schemas/tasks";
+import { projectStatus } from "../src/shared/schemas/projects";
+
+
 
 const schema = defineSchema({
   ...authTables,
@@ -34,7 +37,15 @@ const schema = defineSchema({
     .index("by_assignee", ["assigneeId"])
     .index("by_visibility", ["visibility"])
     .index("by_creator", ["creatorId"])
-    .index("by_assignee_status", ["assigneeId", "status"]),
+    .index("by_assignee_status", ["assigneeId", "status"])
+    .index("by_project", ["projectId"]),
+  projects: defineTable({
+    name: v.string(),
+    status: zodToConvex(projectStatus),
+    creatorId: v.id("users"),
+  })
+    .index("by_status", ["status"])
+    .index("by_creator", ["creatorId"]),
   devEmails: defineTable({
     to: v.array(v.string()),
     subject: v.string(),
@@ -42,6 +53,7 @@ const schema = defineSchema({
     text: v.optional(v.string()),
     sentAt: v.number(),
   }).index("sentAt", ["sentAt"]),
+
 });
 
 export default schema;
