@@ -1,108 +1,130 @@
-// @generated-start imports
 import { describe, expect } from "vitest";
 import { api } from "../_generated/api";
 import { test } from "../test.setup";
-// @generated-end imports
 
-// @custom-start imports
-// @custom-end imports
+/** Helper: seed a task and return its ID */
+async function seedTask(testClient: any, userId?: string) {
+  return testClient.run(async (ctx: any) => {
+    const uid =
+      userId ?? (await ctx.db.insert("users", { name: "Seed" }));
+    return ctx.db.insert("tasks", {
+      title: "Parent Task",
+      priority: false,
+      status: "todo",
+      visibility: "private",
+      creatorId: uid,
+      assigneeId: uid,
+      position: 1,
+    });
+  });
+}
 
-// @generated-start test-list
-describe("list", () => {
-  test("returns Subtasks for authenticated user", async ({
+describe("listByTask", () => {
+  test("returns empty list for task with no subtasks", async ({
     client,
     userId,
     testClient,
   }) => {
-    // Create 2 records via the create mutation
-    await client.mutation(api.subtasks.mutations.create, {
-      title: "Subtask 1",
-    });
-    await client.mutation(api.subtasks.mutations.create, {
-      title: "Subtask 2",
+    const taskId = await seedTask(testClient, userId);
+
+    const result = await client.query(api.subtasks.queries.listByTask, {
+      taskId,
     });
 
-    const records = await client.query(api.subtasks.queries.list, {});
-    expect(records).toHaveLength(2);
+    expect(result.subtasks).toHaveLength(0);
+    expect(result.completionCount).toEqual({ done: 0, total: 0 });
   });
 
-  test("returns empty array when no Subtasks", async ({
-    client,
-  }) => {
-    const records = await client.query(api.subtasks.queries.list, {});
-    expect(records).toHaveLength(0);
-  });
-
-  test("returns empty when unauthenticated", async ({ testClient }) => {
-    const records = await testClient.query(api.subtasks.queries.list, {});
-    expect(records).toEqual([]);
-  });
-
-  test("returns records sorted by position ascending", async ({
+  test("returns subtasks sorted by position", async ({
     client,
     userId,
     testClient,
   }) => {
+    const taskId = await seedTask(testClient, userId);
+
     await testClient.run(async (ctx: any) => {
       await ctx.db.insert("subtasks", {
         title: "Second",
         status: "todo",
-        creatorId: userId,
+        taskId,
         position: 200,
+        creatorId: userId,
       });
       await ctx.db.insert("subtasks", {
         title: "First",
         status: "todo",
-        creatorId: userId,
+        taskId,
         position: 100,
+        creatorId: userId,
+      });
+      await ctx.db.insert("subtasks", {
+        title: "Third",
+        status: "todo",
+        taskId,
+        position: 300,
+        creatorId: userId,
       });
     });
 
-    const records = await client.query(api.subtasks.queries.list, {});
-    expect(records).toHaveLength(2);
-    expect(records[0].title).toBe("First");
-    expect(records[1].title).toBe("Second");
-  });
-});
-// @generated-end test-list
+    const result = await client.query(api.subtasks.queries.listByTask, {
+      taskId,
+    });
 
-// @generated-start test-get
-describe("get", () => {
-  test("returns a single Subtask", async ({
+    expect(result.subtasks).toHaveLength(3);
+    expect(result.subtasks[0].title).toBe("First");
+    expect(result.subtasks[1].title).toBe("Second");
+    expect(result.subtasks[2].title).toBe("Third");
+  });
+
+  test("returns correct completionCount", async ({
     client,
+    userId,
     testClient,
   }) => {
-    await client.mutation(api.subtasks.mutations.create, {
-      title: "Get test",
-    });
+    const taskId = await seedTask(testClient, userId);
 
-    const records = await testClient.run(async (ctx: any) =>
-      ctx.db.query("subtasks").collect(),
-    );
-
-    const record = await client.query(api.subtasks.queries.get, {
-      id: records[0]._id,
-    });
-    expect(record).not.toBeNull();
-    expect(record!.title).toBe("Get test");
-  });
-
-  test("returns null when unauthenticated", async ({ testClient }) => {
-    const recordId = await testClient.run(async (ctx: any) => {
-      const userId = await ctx.db.insert("users", { name: "Seed" });
-      return ctx.db.insert("subtasks", {
-        title: "Seed",
+    await testClient.run(async (ctx: any) => {
+      await ctx.db.insert("subtasks", {
+        title: "Todo",
         status: "todo",
-        creatorId: userId,
+        taskId,
         position: 1,
+        creatorId: userId,
+      });
+      await ctx.db.insert("subtasks", {
+        title: "Done",
+        status: "done",
+        taskId,
+        position: 2,
+        creatorId: userId,
+      });
+      await ctx.db.insert("subtasks", {
+        title: "Promoted",
+        status: "promoted",
+        taskId,
+        position: 3,
+        creatorId: userId,
       });
     });
 
-    const record = await testClient.query(api.subtasks.queries.get, {
-      id: recordId,
+    const result = await client.query(api.subtasks.queries.listByTask, {
+      taskId,
     });
-    expect(record).toBeNull();
+
+    expect(result.subtasks).toHaveLength(3);
+    // done + promoted both count as "done"
+    expect(result.completionCount).toEqual({ done: 2, total: 3 });
+  });
+
+  test("returns empty when unauthenticated", async ({ testClient }) => {
+    const taskId = await seedTask(testClient);
+
+    const result = await testClient.query(
+      api.subtasks.queries.listByTask,
+      { taskId },
+    );
+
+    expect(result.subtasks).toHaveLength(0);
+    expect(result.completionCount).toEqual({ done: 0, total: 0 });
   });
 });
-// @generated-end test-get
-

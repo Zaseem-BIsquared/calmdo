@@ -192,6 +192,79 @@ describe("remove", () => {
     );
     expect(remaining).toHaveLength(0);
   });
+
+  test("remove deletes associated subtasks", async ({
+    client,
+    userId,
+    testClient,
+  }) => {
+    await client.mutation(api.tasks.mutations.create, {
+      title: "Task with subtasks",
+    });
+    const tasks = await testClient.run(async (ctx: any) =>
+      ctx.db.query("tasks").collect(),
+    );
+    const taskId = tasks[0]._id;
+
+    // Create subtask via direct insert
+    await testClient.run(async (ctx: any) =>
+      ctx.db.insert("subtasks", {
+        title: "Child subtask",
+        status: "todo",
+        taskId,
+        position: 1,
+        creatorId: userId,
+      }),
+    );
+
+    const subtasksBefore = await testClient.run(async (ctx: any) =>
+      ctx.db.query("subtasks").collect(),
+    );
+    expect(subtasksBefore).toHaveLength(1);
+
+    await client.mutation(api.tasks.mutations.remove, { taskId });
+
+    const subtasksAfter = await testClient.run(async (ctx: any) =>
+      ctx.db.query("subtasks").collect(),
+    );
+    expect(subtasksAfter).toHaveLength(0);
+  });
+
+  test("remove deletes associated work logs", async ({
+    client,
+    userId,
+    testClient,
+  }) => {
+    await client.mutation(api.tasks.mutations.create, {
+      title: "Task with work logs",
+    });
+    const tasks = await testClient.run(async (ctx: any) =>
+      ctx.db.query("tasks").collect(),
+    );
+    const taskId = tasks[0]._id;
+
+    // Create work log via direct insert
+    await testClient.run(async (ctx: any) =>
+      ctx.db.insert("workLogs", {
+        body: "Logged work",
+        timeMinutes: 30,
+        taskId,
+        creatorId: userId,
+      }),
+    );
+
+    const logsBefore = await testClient.run(async (ctx: any) =>
+      ctx.db.query("workLogs").collect(),
+    );
+    expect(logsBefore).toHaveLength(1);
+
+    await client.mutation(api.tasks.mutations.remove, { taskId });
+
+    const logsAfter = await testClient.run(async (ctx: any) =>
+      ctx.db.query("workLogs").collect(),
+    );
+    expect(logsAfter).toHaveLength(0);
+  });
 });
 
 describe("updateStatus", () => {

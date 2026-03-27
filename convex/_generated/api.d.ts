@@ -23,12 +23,16 @@ import type * as password_PasswordResetEmail from "../password/PasswordResetEmai
 import type * as password_ResendOTPPasswordReset from "../password/ResendOTPPasswordReset.js";
 import type * as projects_mutations from "../projects/mutations.js";
 import type * as projects_queries from "../projects/queries.js";
+import type * as subtasks_mutations from "../subtasks/mutations.js";
+import type * as subtasks_queries from "../subtasks/queries.js";
 import type * as tasks_mutations from "../tasks/mutations.js";
 import type * as tasks_queries from "../tasks/queries.js";
 import type * as testing_clearAll from "../testing/clearAll.js";
 import type * as uploads_mutations from "../uploads/mutations.js";
 import type * as users_mutations from "../users/mutations.js";
 import type * as users_queries from "../users/queries.js";
+import type * as work_logs_mutations from "../work-logs/mutations.js";
+import type * as work_logs_queries from "../work-logs/queries.js";
 
 import type {
   ApiFromModules,
@@ -52,12 +56,16 @@ declare const fullApi: ApiFromModules<{
   "password/ResendOTPPasswordReset": typeof password_ResendOTPPasswordReset;
   "projects/mutations": typeof projects_mutations;
   "projects/queries": typeof projects_queries;
+  "subtasks/mutations": typeof subtasks_mutations;
+  "subtasks/queries": typeof subtasks_queries;
   "tasks/mutations": typeof tasks_mutations;
   "tasks/queries": typeof tasks_queries;
   "testing/clearAll": typeof testing_clearAll;
   "uploads/mutations": typeof uploads_mutations;
   "users/mutations": typeof users_mutations;
   "users/queries": typeof users_queries;
+  "work-logs/mutations": typeof work_logs_mutations;
+  "work-logs/queries": typeof work_logs_queries;
 }>;
 
 /**

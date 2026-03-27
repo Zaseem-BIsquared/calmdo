@@ -56,7 +56,23 @@ export const remove = mutation({
       .withIndex("by_project", (q) => q.eq("projectId", args.projectId))
       .collect();
 
-    await asyncMap(tasks, (task) => ctx.db.delete(task._id));
+    // Cascade: delete subtasks and work logs for each task, then the task
+    await asyncMap(tasks, async (task) => {
+      const subtasks = await ctx.db
+        .query("subtasks")
+        .withIndex("by_task", (q) => q.eq("taskId", task._id))
+        .collect();
+      await asyncMap(subtasks, (s) => ctx.db.delete(s._id));
+
+      const workLogs = await ctx.db
+        .query("workLogs")
+        .withIndex("by_task", (q) => q.eq("taskId", task._id))
+        .collect();
+      await asyncMap(workLogs, (w) => ctx.db.delete(w._id));
+
+      await ctx.db.delete(task._id);
+    });
+
     await ctx.db.delete(args.projectId);
   },
 });

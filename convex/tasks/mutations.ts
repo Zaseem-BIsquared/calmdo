@@ -4,6 +4,7 @@ import { v } from "convex/values";
 import { zCustomMutation } from "convex-helpers/server/zod4";
 import { NoOp } from "convex-helpers/server/customFunctions";
 import { zodToConvex } from "convex-helpers/server/zod4";
+import { asyncMap } from "convex-helpers";
 import {
   createTaskInput,
   taskStatus,
@@ -60,6 +61,20 @@ export const remove = mutation({
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     if (!userId) return;
+
+    // Cascade delete subtasks
+    const subtasks = await ctx.db
+      .query("subtasks")
+      .withIndex("by_task", (q) => q.eq("taskId", args.taskId))
+      .collect();
+    await asyncMap(subtasks, (s) => ctx.db.delete(s._id));
+
+    // Cascade delete work logs
+    const workLogs = await ctx.db
+      .query("workLogs")
+      .withIndex("by_task", (q) => q.eq("taskId", args.taskId))
+      .collect();
+    await asyncMap(workLogs, (w) => ctx.db.delete(w._id));
 
     await ctx.db.delete(args.taskId);
   },

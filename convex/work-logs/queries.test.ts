@@ -1,82 +1,128 @@
-// @generated-start imports
 import { describe, expect } from "vitest";
 import { api } from "../_generated/api";
 import { test } from "../test.setup";
-// @generated-end imports
 
-// @custom-start imports
-// @custom-end imports
+/** Helper: seed a task and return its ID */
+async function seedTask(testClient: any, userId?: string) {
+  return testClient.run(async (ctx: any) => {
+    const uid =
+      userId ?? (await ctx.db.insert("users", { name: "Seed" }));
+    return ctx.db.insert("tasks", {
+      title: "Parent Task",
+      priority: false,
+      status: "todo",
+      visibility: "private",
+      creatorId: uid,
+      assigneeId: uid,
+      position: 1,
+    });
+  });
+}
 
-// @generated-start test-list
-describe("list", () => {
-  test("returns Work Logs for authenticated user", async ({
+describe("listByTask", () => {
+  test("returns empty list and totalMinutes 0 for task with no work logs", async ({
     client,
     userId,
     testClient,
   }) => {
-    // Create 2 records via the create mutation
-    await client.mutation(api["work-logs"].mutations.create, {
-      body: "Work Log 1 content",
-    });
-    await client.mutation(api["work-logs"].mutations.create, {
-      body: "Work Log 2 content",
-    });
+    const taskId = await seedTask(testClient, userId);
 
-    const records = await client.query(api["work-logs"].queries.list, {});
-    expect(records).toHaveLength(2);
+    const result = await client.query(
+      api["work-logs"].queries.listByTask,
+      { taskId },
+    );
+
+    expect(result.entries).toHaveLength(0);
+    expect(result.totalMinutes).toBe(0);
   });
 
-  test("returns empty array when no Work Logs", async ({
+  test("returns entries for a task", async ({
     client,
+    userId,
+    testClient,
   }) => {
-    const records = await client.query(api["work-logs"].queries.list, {});
-    expect(records).toHaveLength(0);
+    const taskId = await seedTask(testClient, userId);
+
+    await client.mutation(api["work-logs"].mutations.create, {
+      body: "First entry",
+      timeMinutes: 30,
+      taskId,
+    });
+    await client.mutation(api["work-logs"].mutations.create, {
+      body: "Second entry",
+      timeMinutes: 60,
+      taskId,
+    });
+
+    const result = await client.query(
+      api["work-logs"].queries.listByTask,
+      { taskId },
+    );
+
+    expect(result.entries).toHaveLength(2);
+  });
+
+  test("calculates totalMinutes as sum of all timeMinutes values", async ({
+    client,
+    userId,
+    testClient,
+  }) => {
+    const taskId = await seedTask(testClient, userId);
+
+    await client.mutation(api["work-logs"].mutations.create, {
+      body: "Entry 1",
+      timeMinutes: 30,
+      taskId,
+    });
+    await client.mutation(api["work-logs"].mutations.create, {
+      body: "Entry 2",
+      timeMinutes: 60,
+      taskId,
+    });
+
+    const result = await client.query(
+      api["work-logs"].queries.listByTask,
+      { taskId },
+    );
+
+    expect(result.totalMinutes).toBe(90);
+  });
+
+  test("ignores entries with no timeMinutes in total calculation", async ({
+    client,
+    userId,
+    testClient,
+  }) => {
+    const taskId = await seedTask(testClient, userId);
+
+    await client.mutation(api["work-logs"].mutations.create, {
+      body: "With time",
+      timeMinutes: 45,
+      taskId,
+    });
+    await client.mutation(api["work-logs"].mutations.create, {
+      body: "Without time",
+      taskId,
+    });
+
+    const result = await client.query(
+      api["work-logs"].queries.listByTask,
+      { taskId },
+    );
+
+    expect(result.entries).toHaveLength(2);
+    expect(result.totalMinutes).toBe(45);
   });
 
   test("returns empty when unauthenticated", async ({ testClient }) => {
-    const records = await testClient.query(api["work-logs"].queries.list, {});
-    expect(records).toEqual([]);
-  });
+    const taskId = await seedTask(testClient);
 
-});
-// @generated-end test-list
-
-// @generated-start test-get
-describe("get", () => {
-  test("returns a single Work Log", async ({
-    client,
-    testClient,
-  }) => {
-    await client.mutation(api["work-logs"].mutations.create, {
-      body: "Get test content",
-    });
-
-    const records = await testClient.run(async (ctx: any) =>
-      ctx.db.query("work-logs").collect(),
+    const result = await testClient.query(
+      api["work-logs"].queries.listByTask,
+      { taskId },
     );
 
-    const record = await client.query(api["work-logs"].queries.get, {
-      id: records[0]._id,
-    });
-    expect(record).not.toBeNull();
-    expect(record!.body).toBe("Get test content");
-  });
-
-  test("returns null when unauthenticated", async ({ testClient }) => {
-    const recordId = await testClient.run(async (ctx: any) => {
-      const userId = await ctx.db.insert("users", { name: "Seed" });
-      return ctx.db.insert("work-logs", {
-        body: "Seed content",
-        timeMinutes: 0,
-        creatorId: userId,
-      });
-    });
-
-    const record = await testClient.query(api["work-logs"].queries.get, {
-      id: recordId,
-    });
-    expect(record).toBeNull();
+    expect(result.entries).toHaveLength(0);
+    expect(result.totalMinutes).toBe(0);
   });
 });
-// @generated-end test-get
-

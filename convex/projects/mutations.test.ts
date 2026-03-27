@@ -217,4 +217,80 @@ describe("remove", () => {
     );
     expect(project).not.toBeNull();
   });
+
+  test("remove cascades through tasks to subtasks and work logs", async ({
+    client,
+    userId,
+    testClient,
+  }) => {
+    // Create project
+    await client.mutation(api.projects.mutations.create, {
+      name: "Cascade Project",
+    });
+    const projects = await testClient.run(async (ctx: any) =>
+      ctx.db.query("projects").collect(),
+    );
+    const projectId = projects[0]._id;
+
+    // Create task in project
+    await testClient.run(async (ctx: any) => {
+      const taskId = await ctx.db.insert("tasks", {
+        title: "Project Task",
+        priority: false,
+        status: "todo",
+        visibility: "shared",
+        creatorId: userId,
+        assigneeId: userId,
+        projectId,
+        position: 1,
+      });
+
+      // Create subtask on that task
+      await ctx.db.insert("subtasks", {
+        title: "Child subtask",
+        status: "todo",
+        taskId,
+        position: 1,
+        creatorId: userId,
+      });
+
+      // Create work log on that task
+      await ctx.db.insert("workLogs", {
+        body: "Logged work",
+        timeMinutes: 30,
+        taskId,
+        creatorId: userId,
+      });
+    });
+
+    // Verify everything exists
+    const tasksBefore = await testClient.run(async (ctx: any) =>
+      ctx.db.query("tasks").collect(),
+    );
+    const subtasksBefore = await testClient.run(async (ctx: any) =>
+      ctx.db.query("subtasks").collect(),
+    );
+    const logsBefore = await testClient.run(async (ctx: any) =>
+      ctx.db.query("workLogs").collect(),
+    );
+    expect(tasksBefore).toHaveLength(1);
+    expect(subtasksBefore).toHaveLength(1);
+    expect(logsBefore).toHaveLength(1);
+
+    // Delete project — should cascade through everything
+    await client.mutation(api.projects.mutations.remove, { projectId });
+
+    const tasksAfter = await testClient.run(async (ctx: any) =>
+      ctx.db.query("tasks").collect(),
+    );
+    const subtasksAfter = await testClient.run(async (ctx: any) =>
+      ctx.db.query("subtasks").collect(),
+    );
+    const logsAfter = await testClient.run(async (ctx: any) =>
+      ctx.db.query("workLogs").collect(),
+    );
+    expect(tasksAfter).toHaveLength(0);
+    expect(subtasksAfter).toHaveLength(0);
+    expect(logsAfter).toHaveLength(0);
+  });
 });
