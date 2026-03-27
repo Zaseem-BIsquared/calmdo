@@ -75,8 +75,8 @@ Requirements for CalmDo Core milestone. Each maps to roadmap phases.
 
 - [x] **VIEW-01**: My Tasks view — tasks assigned to current user (quick tasks + project tasks)
 - [x] **VIEW-02**: Team Pool view — unassigned shared/project tasks available to grab
-- [ ] **VIEW-03**: Projects List view — all projects with status and task counts
-- [ ] **VIEW-04**: Project Detail view — tasks in a project with filters and status summary
+- [x] **VIEW-03**: Projects List view — all projects with status and task counts
+- [x] **VIEW-04**: Project Detail view — tasks in a project with filters and status summary
 - [ ] **VIEW-05**: Task Detail view — full task with subtasks, work logs, activity timeline
 - [x] **VIEW-06**: Sidebar navigation with My Tasks, Team Pool, Projects section with project list
 
