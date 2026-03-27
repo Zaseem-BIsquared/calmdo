@@ -40,20 +40,20 @@ Requirements for CalmDo Core milestone. Each maps to roadmap phases.
 
 ### Subtasks
 
-- [ ] **SUB-01**: User can add subtasks to a task with title and optional assignee
-- [ ] **SUB-02**: User can mark a subtask as done
-- [ ] **SUB-03**: User can edit a subtask's title and assignee
-- [ ] **SUB-04**: User can delete a subtask
-- [ ] **SUB-05**: User can reorder subtasks within a task (position field)
-- [ ] **SUB-06**: User can promote a subtask to a full task (subtask marked as "promoted" with link to new task)
-- [ ] **SUB-07**: Parent task shows subtask completion count (e.g., "3/5 done")
+- [x] **SUB-01**: User can add subtasks to a task with title and optional assignee
+- [x] **SUB-02**: User can mark a subtask as done
+- [x] **SUB-03**: User can edit a subtask's title and assignee
+- [x] **SUB-04**: User can delete a subtask
+- [x] **SUB-05**: User can reorder subtasks within a task (position field)
+- [x] **SUB-06**: User can promote a subtask to a full task (subtask marked as "promoted" with link to new task)
+- [x] **SUB-07**: Parent task shows subtask completion count (e.g., "3/5 done")
 
 ### Work Logs
 
-- [ ] **WLOG-01**: User can add a work log entry to any task (body text + optional time in minutes)
-- [ ] **WLOG-02**: User can edit their own work log entries
-- [ ] **WLOG-03**: User can delete their own work log entries
-- [ ] **WLOG-04**: Task detail shows total time logged across all work log entries
+- [x] **WLOG-01**: User can add a work log entry to any task (body text + optional time in minutes)
+- [x] **WLOG-02**: User can edit their own work log entries
+- [x] **WLOG-03**: User can delete their own work log entries
+- [x] **WLOG-04**: Task detail shows total time logged across all work log entries
 
 ### Activity Logs
 
