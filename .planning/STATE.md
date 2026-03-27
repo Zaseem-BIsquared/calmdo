@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CalmDo Core
-status: Phase complete — ready for verification
-last_updated: "2026-03-27T04:30:17.181Z"
+status: Ready to plan
+last_updated: "2026-03-27T04:32:56.062Z"
 progress:
   total_phases: 8
   completed_phases: 6
@@ -22,8 +22,8 @@ See: .planning/PROJECT.md (updated 2026-03-10)
 
 ## Current Position
 
-Phase: 04 (projects) — EXECUTING
-Plan: 2 of 2
+Phase: 05
+Plan: Not started
 
 ## Performance Metrics
 
