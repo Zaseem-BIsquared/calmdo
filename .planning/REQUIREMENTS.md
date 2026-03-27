@@ -30,13 +30,13 @@ Requirements for CalmDo Core milestone. Each maps to roadmap phases.
 
 ### Projects
 
-- [ ] **PROJ-01**: User can create a project with name and status (default: active)
-- [ ] **PROJ-02**: User can edit a project's name and status
-- [ ] **PROJ-03**: User can delete a project (cascades to its tasks and work logs)
-- [ ] **PROJ-04**: User can view a projects list filtered by status (active/on_hold/completed/archived)
-- [ ] **PROJ-05**: User can assign a task to a project (optional — tasks can exist without a project)
-- [ ] **PROJ-06**: User can view all tasks within a project, filtered by status/assignee/priority
-- [ ] **PROJ-07**: Project view shows task count by status
+- [x] **PROJ-01**: User can create a project with name and status (default: active)
+- [x] **PROJ-02**: User can edit a project's name and status
+- [x] **PROJ-03**: User can delete a project (cascades to its tasks and work logs)
+- [x] **PROJ-04**: User can view a projects list filtered by status (active/on_hold/completed/archived)
+- [x] **PROJ-05**: User can assign a task to a project (optional — tasks can exist without a project)
+- [x] **PROJ-06**: User can view all tasks within a project, filtered by status/assignee/priority
+- [x] **PROJ-07**: Project view shows task count by status
 
 ### Subtasks
 

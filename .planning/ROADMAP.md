@@ -150,7 +150,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Project backend: Zod schemas, Convex table, CRUD mutations (cascade delete), queries (list with status filter + task counts, detail with status summary), task mutation extensions (createInProject, assignToProject with visibility auto-flip)
+- [x] 04-01-PLAN.md — Project backend: Zod schemas, Convex table, CRUD mutations (cascade delete), queries (list with status filter + task counts, detail with status summary), task mutation extensions (createInProject, assignToProject with visibility auto-flip)
 - [ ] 04-02-PLAN.md — Project frontend: ProjectsPage (card grid, status filter tabs), ProjectDetailPage (task list, filters, summary bar, inline creation), routes, navigation wiring (static + dynamic projects section), i18n, tests
 
 ### Phase 5: Subtasks & Work Logs
