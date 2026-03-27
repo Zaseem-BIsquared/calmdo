@@ -104,7 +104,7 @@ export function ProjectCard({ project }: { project: ProjectWithCounts }) {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-destructive"
-              {...getButtonProps({
+              {...(getButtonProps({
                 onClick: doubleCheck
                   ? async (e: React.MouseEvent) => {
                       e.stopPropagation();
@@ -113,7 +113,7 @@ export function ProjectCard({ project }: { project: ProjectWithCounts }) {
                   : (e: React.MouseEvent) => {
                       e.stopPropagation();
                     },
-              })}
+              }) as any)}
             >
               {doubleCheck
                 ? `Delete? (${project.taskCounts.total} tasks will be deleted)`

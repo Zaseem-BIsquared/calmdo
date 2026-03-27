@@ -355,8 +355,6 @@ test("ProjectDetailPage name edit inline saves on Enter", async ({
     client,
   );
 
-  const user = userEvent.setup();
-
   await waitFor(() => {
     expect(screen.getByText("Editable Name")).toBeInTheDocument();
   });

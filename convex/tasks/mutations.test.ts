@@ -620,7 +620,6 @@ describe("assignToProject", () => {
 
   test("removes task from project and keeps shared when assignee differs from creator", async ({
     client,
-    userId,
     testClient,
   }) => {
     // Create project and task in project

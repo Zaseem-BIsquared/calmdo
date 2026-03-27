@@ -51,7 +51,7 @@ export function ProjectsPage() {
             /* v8 ignore start -- navigation requires real router */
             onClick={() =>
               navigate({
-                search: tab.value ? { status: tab.value } : {},
+                search: (tab.value ? { status: tab.value } : {}) as any,
               })
             }
             /* v8 ignore stop */

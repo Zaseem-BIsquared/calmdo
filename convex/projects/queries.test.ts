@@ -5,7 +5,6 @@ import { test } from "../test.setup";
 describe("list", () => {
   test("returns all projects when no status filter", async ({
     client,
-    testClient,
   }) => {
     await client.mutation(api.projects.mutations.create, { name: "Alpha" });
     await client.mutation(api.projects.mutations.create, { name: "Beta" });

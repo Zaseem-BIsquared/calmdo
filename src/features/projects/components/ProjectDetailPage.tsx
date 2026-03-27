@@ -161,13 +161,13 @@ export function ProjectDetailPage({ projectId }: { projectId: Id<"projects"> }) 
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-destructive"
-              {...getButtonProps({
+              {...(getButtonProps({
                 onClick: doubleCheck
                   ? async () => {
                       await removeProject({ projectId });
                     }
                   : undefined,
-              })}
+              }) as any)}
             >
               {doubleCheck
                 ? `Delete? (${tasks.length} tasks will be deleted)`
