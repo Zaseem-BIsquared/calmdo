@@ -190,7 +190,12 @@ Plans:
 **Depends on**: Phase 5, Phase 6
 **Planning input**: Agent must read the testing philosophy doc, audit all existing test files against it, and produce a concrete plan for what to rewrite, what to delete, and what to keep — before any implementation begins.
 **Success Criteria**: Derived during planning from the philosophy doc applied to this codebase's current test suite.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Backend test rewrite: MECE compliance for all 16 convex test files (naming, test matrix, seed patterns)
+- [ ] 07-02-PLAN.md — Utils/shared/UI test cleanup: light-touch pass, delete stubs, centralize nav tests, fix coverage config
+- [ ] 07-03-PLAN.md — Frontend feature test rewrite: MECE state decomposition, integration-first, findBy* patterns, remove route/nav duplicates
 
 ## Progress
 
@@ -209,8 +214,8 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6 -
 | 4. Projects | v2.0 | 0/2 | Planned | - |
 | 5. Subtasks & Work Logs | v2.0 | 0/? | Not started | - |
 | 6. Activity Logs & Search | v2.0 | 0/? | Not started | - |
-| 7. Frontend Test Alignment | v2.0 | 0/? | Not started | - |
+| 7. MECE Test Rewrite | v2.0 | 0/3 | Planned | - |
 
 ---
 *Roadmap created: 2026-03-10*
-*Last updated: 2026-03-26*
+*Last updated: 2026-03-27*
