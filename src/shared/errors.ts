@@ -21,8 +21,4 @@ export const ERRORS = {
   },
   // Plugin errors go here:
   // admin: { ... }
-  "test-gen": {
-    NOT_FOUND: "Test Item not found.",
-    INVALID_STATUS_TRANSITION: "Invalid status transition.",
-  },
 } as const;

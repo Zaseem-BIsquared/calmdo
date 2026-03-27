@@ -26,11 +26,6 @@ export const navItems: NavItem[] = [
     i18nKey: "tasks.nav.teamPool",
     to: "/dashboard/team-pool",
   },
-    {
-    label: "Test Items",
-    i18nKey: "test-gen.nav.test-gen",
-    to: "/dashboard/test-gen",
-  },
   {
     label: "Settings",
     i18nKey: "dashboard.nav.settings",
