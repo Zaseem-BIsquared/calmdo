@@ -57,10 +57,10 @@ Requirements for CalmDo Core milestone. Each maps to roadmap phases.
 
 ### Activity Logs
 
-- [ ] **ACTV-01**: System auto-logs task events: created, status_changed, assigned, unassigned, edited, deleted
-- [ ] **ACTV-02**: System auto-logs project events: created, status_changed, edited
-- [ ] **ACTV-03**: System auto-logs subtask events: created, completed, promoted
-- [ ] **ACTV-04**: Task detail shows a combined timeline of work logs + activity logs, grouped by date
+- [x] **ACTV-01**: System auto-logs task events: created, status_changed, assigned, unassigned, edited, deleted
+- [x] **ACTV-02**: System auto-logs project events: created, status_changed, edited
+- [x] **ACTV-03**: System auto-logs subtask events: created, completed, promoted
+- [x] **ACTV-04**: Task detail shows a combined timeline of work logs + activity logs, grouped by date
 
 ### Search & Filters
 

@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 Architecture Modernization** — Phase 1 (shipped 2026-03-09)
-- 📋 **v2.0 CalmDo Core** — Phases 2-6 (planned)
+- 📋 **v2.0 CalmDo Core** — Phases 2-7 (planned)
 
 ## Phases
 
@@ -32,6 +32,7 @@ See: `.planning/milestones/v1.0-ROADMAP.md` for full details.
 - [ ] **Phase 4: Projects** - Project CRUD with status lifecycle and project-task relationship
 - [ ] **Phase 5: Subtasks & Work Logs** - Child-of-task overlays with subtask promotion and time logging
 - [ ] **Phase 6: Activity Logs & Search** - Auto-generated audit trail, text search, and filter controls across all entities
+- [ ] **Phase 7: MECE Test Rewrite** - Rewrite all feature test suites: integration-first, backend-only for edge cases only, MECE state decomposition
 
 ## Phase Details
 
@@ -181,14 +182,21 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 06-01: TBD
+- [x] 06-01: TBD
 - [ ] 06-02: TBD
+
+### Phase 7: MECE Test Rewrite
+**Goal**: Rewrite all feature test suites to follow the [feather-testing-convex testing philosophy](https://github.com/siraj-samsudeen/feather-testing-convex/blob/main/TESTING-PHILOSOPHY.md)
+**Depends on**: Phase 5, Phase 6
+**Planning input**: Agent must read the testing philosophy doc, audit all existing test files against it, and produce a concrete plan for what to rewrite, what to delete, and what to keep — before any implementation begins.
+**Success Criteria**: Derived during planning from the philosophy doc applied to this codebase's current test suite.
+**Plans**: TBD
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6
-(Phase 03.2 upgrades generators before Phase 4 uses them; Phases 4 and 5 both depend on 3 but not each other; Phase 6 depends on 3, 4, and 5)
+Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6 -> 7
+(Phase 03.2 upgrades generators before Phase 4 uses them; Phases 4 and 5 both depend on 3 but not each other; Phase 6 depends on 3, 4, and 5; Phase 7 depends on 5 and 6)
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -201,6 +209,7 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6
 | 4. Projects | v2.0 | 0/2 | Planned | - |
 | 5. Subtasks & Work Logs | v2.0 | 0/? | Not started | - |
 | 6. Activity Logs & Search | v2.0 | 0/? | Not started | - |
+| 7. Frontend Test Alignment | v2.0 | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-03-10*
