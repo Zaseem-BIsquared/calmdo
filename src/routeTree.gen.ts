@@ -13,9 +13,9 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppAuthRouteImport } from './routes/_app/_auth'
 import { Route as AppLoginLayoutRouteImport } from './routes/_app/login/_layout'
+import { Route as AppDevMailboxRouteImport } from './routes/_app/dev/mailbox'
 import { Route as AppLoginLayoutIndexRouteImport } from './routes/_app/login/_layout.index'
 import { Route as AppAuthOnboardingLayoutRouteImport } from './routes/_app/_auth/onboarding/_layout'
-import { Route as AppDevMailboxRouteImport } from './routes/_app/dev/mailbox'
 import { Route as AppAuthDashboardLayoutRouteImport } from './routes/_app/_auth/dashboard/_layout'
 import { Route as AppAuthDashboardLayoutIndexRouteImport } from './routes/_app/_auth/dashboard/_layout.index'
 import { Route as AppAuthOnboardingLayoutUsernameRouteImport } from './routes/_app/_auth/onboarding/_layout.username'
@@ -23,6 +23,8 @@ import { Route as AppAuthDashboardLayoutTeamPoolRouteImport } from './routes/_ap
 import { Route as AppAuthDashboardLayoutTasksRouteImport } from './routes/_app/_auth/dashboard/_layout.tasks'
 import { Route as AppAuthDashboardLayoutSettingsRouteImport } from './routes/_app/_auth/dashboard/_layout.settings'
 import { Route as AppAuthDashboardLayoutSettingsIndexRouteImport } from './routes/_app/_auth/dashboard/_layout.settings.index'
+import { Route as AppAuthDashboardLayoutProjectsIndexRouteImport } from './routes/_app/_auth/dashboard/_layout.projects.index'
+import { Route as AppAuthDashboardLayoutProjectsProjectIdRouteImport } from './routes/_app/_auth/dashboard/_layout.projects.$projectId'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -42,6 +44,11 @@ const AppLoginLayoutRoute = AppLoginLayoutRouteImport.update({
   path: '/login',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDevMailboxRoute = AppDevMailboxRouteImport.update({
+  id: '/dev/mailbox',
+  path: '/dev/mailbox',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppLoginLayoutIndexRoute = AppLoginLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -51,11 +58,6 @@ const AppAuthOnboardingLayoutRoute = AppAuthOnboardingLayoutRouteImport.update({
   id: '/onboarding/_layout',
   path: '/onboarding',
   getParentRoute: () => AppAuthRoute,
-} as any)
-const AppDevMailboxRoute = AppDevMailboxRouteImport.update({
-  id: '/dev/mailbox',
-  path: '/dev/mailbox',
-  getParentRoute: () => AppRoute,
 } as any)
 const AppAuthDashboardLayoutRoute = AppAuthDashboardLayoutRouteImport.update({
   id: '/dashboard/_layout',
@@ -98,12 +100,24 @@ const AppAuthDashboardLayoutSettingsIndexRoute =
     path: '/',
     getParentRoute: () => AppAuthDashboardLayoutSettingsRoute,
   } as any)
+const AppAuthDashboardLayoutProjectsIndexRoute =
+  AppAuthDashboardLayoutProjectsIndexRouteImport.update({
+    id: '/projects/',
+    path: '/projects/',
+    getParentRoute: () => AppAuthDashboardLayoutRoute,
+  } as any)
+const AppAuthDashboardLayoutProjectsProjectIdRoute =
+  AppAuthDashboardLayoutProjectsProjectIdRouteImport.update({
+    id: '/projects/$projectId',
+    path: '/projects/$projectId',
+    getParentRoute: () => AppAuthDashboardLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dev/mailbox': typeof AppDevMailboxRoute
   '/login': typeof AppLoginLayoutRouteWithChildren
   '/dashboard': typeof AppAuthDashboardLayoutRouteWithChildren
-  '/dev/mailbox': typeof AppDevMailboxRoute
   '/onboarding': typeof AppAuthOnboardingLayoutRouteWithChildren
   '/login/': typeof AppLoginLayoutIndexRoute
   '/dashboard/settings': typeof AppAuthDashboardLayoutSettingsRouteWithChildren
@@ -111,6 +125,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/team-pool': typeof AppAuthDashboardLayoutTeamPoolRoute
   '/onboarding/username': typeof AppAuthOnboardingLayoutUsernameRoute
   '/dashboard/': typeof AppAuthDashboardLayoutIndexRoute
+  '/dashboard/projects/$projectId': typeof AppAuthDashboardLayoutProjectsProjectIdRoute
+  '/dashboard/projects/': typeof AppAuthDashboardLayoutProjectsIndexRoute
   '/dashboard/settings/': typeof AppAuthDashboardLayoutSettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -122,6 +138,8 @@ export interface FileRoutesByTo {
   '/dashboard/team-pool': typeof AppAuthDashboardLayoutTeamPoolRoute
   '/onboarding/username': typeof AppAuthOnboardingLayoutUsernameRoute
   '/dashboard': typeof AppAuthDashboardLayoutIndexRoute
+  '/dashboard/projects/$projectId': typeof AppAuthDashboardLayoutProjectsProjectIdRoute
+  '/dashboard/projects': typeof AppAuthDashboardLayoutProjectsIndexRoute
   '/dashboard/settings': typeof AppAuthDashboardLayoutSettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -129,9 +147,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
   '/_app/_auth': typeof AppAuthRouteWithChildren
+  '/_app/dev/mailbox': typeof AppDevMailboxRoute
   '/_app/login/_layout': typeof AppLoginLayoutRouteWithChildren
   '/_app/_auth/dashboard/_layout': typeof AppAuthDashboardLayoutRouteWithChildren
-  '/_app/dev/mailbox': typeof AppDevMailboxRoute
   '/_app/_auth/onboarding/_layout': typeof AppAuthOnboardingLayoutRouteWithChildren
   '/_app/login/_layout/': typeof AppLoginLayoutIndexRoute
   '/_app/_auth/dashboard/_layout/settings': typeof AppAuthDashboardLayoutSettingsRouteWithChildren
@@ -139,15 +157,17 @@ export interface FileRoutesById {
   '/_app/_auth/dashboard/_layout/team-pool': typeof AppAuthDashboardLayoutTeamPoolRoute
   '/_app/_auth/onboarding/_layout/username': typeof AppAuthOnboardingLayoutUsernameRoute
   '/_app/_auth/dashboard/_layout/': typeof AppAuthDashboardLayoutIndexRoute
+  '/_app/_auth/dashboard/_layout/projects/$projectId': typeof AppAuthDashboardLayoutProjectsProjectIdRoute
+  '/_app/_auth/dashboard/_layout/projects/': typeof AppAuthDashboardLayoutProjectsIndexRoute
   '/_app/_auth/dashboard/_layout/settings/': typeof AppAuthDashboardLayoutSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dev/mailbox'
     | '/login'
     | '/dashboard'
-    | '/dev/mailbox'
     | '/onboarding'
     | '/login/'
     | '/dashboard/settings'
@@ -155,6 +175,8 @@ export interface FileRouteTypes {
     | '/dashboard/team-pool'
     | '/onboarding/username'
     | '/dashboard/'
+    | '/dashboard/projects/$projectId'
+    | '/dashboard/projects/'
     | '/dashboard/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -166,15 +188,17 @@ export interface FileRouteTypes {
     | '/dashboard/team-pool'
     | '/onboarding/username'
     | '/dashboard'
+    | '/dashboard/projects/$projectId'
+    | '/dashboard/projects'
     | '/dashboard/settings'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/_app/_auth'
+    | '/_app/dev/mailbox'
     | '/_app/login/_layout'
     | '/_app/_auth/dashboard/_layout'
-    | '/_app/dev/mailbox'
     | '/_app/_auth/onboarding/_layout'
     | '/_app/login/_layout/'
     | '/_app/_auth/dashboard/_layout/settings'
@@ -182,6 +206,8 @@ export interface FileRouteTypes {
     | '/_app/_auth/dashboard/_layout/team-pool'
     | '/_app/_auth/onboarding/_layout/username'
     | '/_app/_auth/dashboard/_layout/'
+    | '/_app/_auth/dashboard/_layout/projects/$projectId'
+    | '/_app/_auth/dashboard/_layout/projects/'
     | '/_app/_auth/dashboard/_layout/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -220,6 +246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLoginLayoutRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/dev/mailbox': {
+      id: '/_app/dev/mailbox'
+      path: '/dev/mailbox'
+      fullPath: '/dev/mailbox'
+      preLoaderRoute: typeof AppDevMailboxRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/login/_layout/': {
       id: '/_app/login/_layout/'
       path: '/'
@@ -233,13 +266,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding'
       preLoaderRoute: typeof AppAuthOnboardingLayoutRouteImport
       parentRoute: typeof AppAuthRoute
-    }
-    '/_app/dev/mailbox': {
-      id: '/_app/dev/mailbox'
-      path: '/dev/mailbox'
-      fullPath: '/dev/mailbox'
-      preLoaderRoute: typeof AppDevMailboxRouteImport
-      parentRoute: typeof AppRoute
     }
     '/_app/_auth/dashboard/_layout': {
       id: '/_app/_auth/dashboard/_layout'
@@ -290,6 +316,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAuthDashboardLayoutSettingsIndexRouteImport
       parentRoute: typeof AppAuthDashboardLayoutSettingsRoute
     }
+    '/_app/_auth/dashboard/_layout/projects/': {
+      id: '/_app/_auth/dashboard/_layout/projects/'
+      path: '/projects'
+      fullPath: '/dashboard/projects/'
+      preLoaderRoute: typeof AppAuthDashboardLayoutProjectsIndexRouteImport
+      parentRoute: typeof AppAuthDashboardLayoutRoute
+    }
+    '/_app/_auth/dashboard/_layout/projects/$projectId': {
+      id: '/_app/_auth/dashboard/_layout/projects/$projectId'
+      path: '/projects/$projectId'
+      fullPath: '/dashboard/projects/$projectId'
+      preLoaderRoute: typeof AppAuthDashboardLayoutProjectsProjectIdRouteImport
+      parentRoute: typeof AppAuthDashboardLayoutRoute
+    }
   }
 }
 
@@ -313,6 +353,8 @@ interface AppAuthDashboardLayoutRouteChildren {
   AppAuthDashboardLayoutTasksRoute: typeof AppAuthDashboardLayoutTasksRoute
   AppAuthDashboardLayoutTeamPoolRoute: typeof AppAuthDashboardLayoutTeamPoolRoute
   AppAuthDashboardLayoutIndexRoute: typeof AppAuthDashboardLayoutIndexRoute
+  AppAuthDashboardLayoutProjectsProjectIdRoute: typeof AppAuthDashboardLayoutProjectsProjectIdRoute
+  AppAuthDashboardLayoutProjectsIndexRoute: typeof AppAuthDashboardLayoutProjectsIndexRoute
 }
 
 const AppAuthDashboardLayoutRouteChildren: AppAuthDashboardLayoutRouteChildren =
@@ -322,6 +364,10 @@ const AppAuthDashboardLayoutRouteChildren: AppAuthDashboardLayoutRouteChildren =
     AppAuthDashboardLayoutTasksRoute: AppAuthDashboardLayoutTasksRoute,
     AppAuthDashboardLayoutTeamPoolRoute: AppAuthDashboardLayoutTeamPoolRoute,
     AppAuthDashboardLayoutIndexRoute: AppAuthDashboardLayoutIndexRoute,
+    AppAuthDashboardLayoutProjectsProjectIdRoute:
+      AppAuthDashboardLayoutProjectsProjectIdRoute,
+    AppAuthDashboardLayoutProjectsIndexRoute:
+      AppAuthDashboardLayoutProjectsIndexRoute,
   }
 
 const AppAuthDashboardLayoutRouteWithChildren =

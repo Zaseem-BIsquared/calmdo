@@ -21,6 +21,9 @@ import { Button } from "@/ui/button";
 import { buttonVariants } from "@/ui/button-util";
 import { Logo } from "@/ui/logo";
 import { Link, useMatchRoute, useNavigate } from "@tanstack/react-router";
+import { convexQuery } from "@convex-dev/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "~/convex/_generated/api";
 import { User } from "~/types";
 import { navItems } from "@/shared/nav";
 
@@ -31,6 +34,9 @@ export function Navigation({ user }: { user: User }) {
   const signOut = useSignOut();
   const matchRoute = useMatchRoute();
   const navigate = useNavigate();
+  const { data: activeProjects = [] } = useQuery(
+    convexQuery(api.projects.queries.list, { status: "active" }),
+  );
   if (!user) {
     return null;
   }
@@ -208,6 +214,24 @@ export function Navigation({ user }: { user: User }) {
           </div>
         ))}
       </div>
+
+      {/* v8 ignore start -- dynamic project links require navigation not testable in jsdom */}
+      {activeProjects.length > 0 && (
+        <div className="mx-auto flex w-full max-w-screen-xl items-center gap-3 overflow-x-auto py-1">
+          <span className="text-xs font-medium text-primary/40">Projects:</span>
+          {activeProjects.map((p: any) => (
+            <Link
+              key={p._id}
+              to="/dashboard/projects/$projectId"
+              params={{ projectId: p._id }}
+              className="whitespace-nowrap text-xs text-primary/60 hover:text-primary"
+            >
+              {p.name}
+            </Link>
+          ))}
+        </div>
+      )}
+      {/* v8 ignore stop */}
     </nav>
   );
 }

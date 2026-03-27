@@ -1,0 +1,50 @@
+{
+  "nav": { "projects": "Projects" },
+  "page": {
+    "title": "Projects",
+    "description": "Manage your projects and their tasks.",
+    "empty": "No projects yet. Create one above!",
+    "emptyFiltered": "No {{status}} projects."
+  },
+  "detail": {
+    "backToProjects": "Back to Projects",
+    "notFound": "Project not found.",
+    "addTask": "Add a task...",
+    "noTasks": "No tasks in this project.",
+    "deleteConfirm": "Delete? ({{count}} tasks will be deleted)"
+  },
+  "form": {
+    "placeholder": "New project name...",
+    "submit": "Create"
+  },
+  "status": {
+    "all": "All",
+    "active": "Active",
+    "on_hold": "On Hold",
+    "completed": "Completed",
+    "archived": "Archived"
+  },
+  "card": {
+    "tasks": "{{count}} tasks",
+    "editName": "Edit name",
+    "delete": "Delete"
+  },
+  "filters": {
+    "status": "Status",
+    "assignee": "Assignee",
+    "allStatuses": "All statuses",
+    "allAssignees": "All assignees",
+    "me": "Me",
+    "unassigned": "Unassigned",
+    "highPriority": "High priority only"
+  },
+  "summary": {
+    "todo": "{{count}} todo",
+    "in_progress": "{{count}} in progress",
+    "done": "{{count}} done"
+  },
+  "taskForm": {
+    "projectLabel": "Project",
+    "noProject": "No project"
+  }
+}

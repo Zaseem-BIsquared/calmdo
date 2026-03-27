@@ -1,0 +1,50 @@
+{
+  "nav": { "projects": "Proyectos" },
+  "page": {
+    "title": "Proyectos",
+    "description": "Gestiona tus proyectos y sus tareas.",
+    "empty": "No hay proyectos. Crea uno arriba!",
+    "emptyFiltered": "No hay proyectos {{status}}."
+  },
+  "detail": {
+    "backToProjects": "Volver a Proyectos",
+    "notFound": "Proyecto no encontrado.",
+    "addTask": "Agregar tarea...",
+    "noTasks": "No hay tareas en este proyecto.",
+    "deleteConfirm": "Eliminar? ({{count}} tareas seran eliminadas)"
+  },
+  "form": {
+    "placeholder": "Nombre del proyecto...",
+    "submit": "Crear"
+  },
+  "status": {
+    "all": "Todos",
+    "active": "Activo",
+    "on_hold": "En Espera",
+    "completed": "Completado",
+    "archived": "Archivado"
+  },
+  "card": {
+    "tasks": "{{count}} tareas",
+    "editName": "Editar nombre",
+    "delete": "Eliminar"
+  },
+  "filters": {
+    "status": "Estado",
+    "assignee": "Asignado",
+    "allStatuses": "Todos los estados",
+    "allAssignees": "Todos",
+    "me": "Yo",
+    "unassigned": "Sin asignar",
+    "highPriority": "Solo alta prioridad"
+  },
+  "summary": {
+    "todo": "{{count}} pendientes",
+    "in_progress": "{{count}} en progreso",
+    "done": "{{count}} completadas"
+  },
+  "taskForm": {
+    "projectLabel": "Proyecto",
+    "noProject": "Sin proyecto"
+  }
+}
