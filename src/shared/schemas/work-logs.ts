@@ -1,18 +1,19 @@
-// @generated-start schema
 import { z } from "zod";
 
-export const BODY_MAX_LENGTH = 2000;
+export const WORK_LOG_BODY_MAX_LENGTH = 2000;
 
-export const createWorkLogsInput = z.object({
-  body: z.string().max(BODY_MAX_LENGTH),
-  timeMinutes: z.number().optional(),
+export const workLogBody = z
+  .string()
+  .min(1)
+  .max(WORK_LOG_BODY_MAX_LENGTH)
+  .trim();
+
+export const createWorkLogInput = z.object({
+  body: workLogBody,
+  timeMinutes: z.number().int().positive().optional(),
 });
 
-export const updateWorkLogsInput = z.object({
-  body: z.string().max(BODY_MAX_LENGTH).optional(),
-  timeMinutes: z.number().optional(),
+export const updateWorkLogInput = z.object({
+  body: workLogBody.optional(),
+  timeMinutes: z.number().int().positive().optional(),
 });
-// @generated-end schema
-
-// @custom-start validators
-// @custom-end validators

@@ -22,14 +22,14 @@ export const ERRORS = {
   projects: {
     NOT_FOUND: "Project not found.",
   },
-  // Plugin errors go here:
-  // admin: { ... }
   subtasks: {
     NOT_FOUND: "Subtask not found.",
-    INVALID_STATUS_TRANSITION: "Invalid status transition.",
+    ALREADY_PROMOTED: "Subtask has already been promoted.",
   },
-  "work-logs": {
-    NOT_FOUND: "Work Log not found.",
-    INVALID_STATUS_TRANSITION: "Invalid status transition.",
+  workLogs: {
+    NOT_FOUND: "Work log not found.",
+    NOT_OWNER: "You can only edit your own work logs.",
   },
+  // Plugin errors go here:
+  // admin: { ... }
 } as const;

@@ -7,12 +7,8 @@ import {
   taskVisibility,
 } from "../src/shared/schemas/tasks";
 import { projectStatus } from "../src/shared/schemas/projects";
+import { subtaskStatus } from "../src/shared/schemas/subtasks";
 
-
-
-import {
-  status,
-} from "../src/shared/schemas/subtasks";
 
 const schema = defineSchema({
   ...authTables,
@@ -57,27 +53,22 @@ const schema = defineSchema({
     text: v.optional(v.string()),
     sentAt: v.number(),
   }).index("sentAt", ["sentAt"]),
-
   subtasks: defineTable({
     title: v.string(),
-    status: zodToConvex(status),
-    userId: v.id("users"),
+    status: zodToConvex(subtaskStatus),
+    taskId: v.id("tasks"),
     position: v.number(),
+    promotedToTaskId: v.optional(v.id("tasks")),
+    creatorId: v.id("users"),
   })
-    .index("by_task", ["taskId"])
-    .index("by_userId", ["userId"])
-    .index("by_status", ["status"])
-    .index("by_taskId", ["taskId"]),
-
-  "work-logs": defineTable({
+    .index("by_task", ["taskId"]),
+  workLogs: defineTable({
     body: v.string(),
     timeMinutes: v.optional(v.number()),
-    userId: v.id("users"),
+    taskId: v.id("tasks"),
+    creatorId: v.id("users"),
   })
-    .index("by_task", ["taskId"])
-    .index("by_userId", ["userId"])
-    .index("by_taskId", ["taskId"]),
-
+    .index("by_task", ["taskId"]),
 });
 
 export default schema;

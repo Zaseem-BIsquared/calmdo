@@ -1,38 +1,23 @@
-// @generated-start imports
 import { query } from "@cvx/_generated/server";
 import { auth } from "@cvx/auth";
 import { v } from "convex/values";
-// @generated-end imports
 
-// @custom-start imports
-// @custom-end imports
-
-// @generated-start list
-export const list = query({
-  args: {},
-  handler: async (ctx) => {
-    const userId = await auth.getUserId(ctx);
-    if (!userId) return [];
-
-    const all = await ctx.db
-      .query("work-logs")
-      .withIndex("by_userId", (q) => q.eq("userId", userId))
-      .collect();
-    const filtered = all;
-    return filtered;
-  },
-});
-// @generated-end list
-
-// @generated-start get
-export const get = query({
-  args: { id: v.id("work-logs") },
+export const listByTask = query({
+  args: { taskId: v.id("tasks") },
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
-    if (!userId) return null;
+    if (!userId) return { entries: [], totalMinutes: 0 };
 
-    return await ctx.db.get(args.id);
+    const entries = await ctx.db
+      .query("workLogs")
+      .withIndex("by_task", (q) => q.eq("taskId", args.taskId))
+      .collect();
+
+    const totalMinutes = entries.reduce(
+      (sum, entry) => sum + (entry.timeMinutes ?? 0),
+      0,
+    );
+
+    return { entries, totalMinutes };
   },
 });
-// @generated-end get
-

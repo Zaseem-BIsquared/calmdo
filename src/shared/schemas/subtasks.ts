@@ -1,21 +1,21 @@
-// @generated-start schema
 import { z } from "zod";
 
-export const TITLE_MAX_LENGTH = 200;
+export const SUBTASK_TITLE_MAX_LENGTH = 200;
 
-export const STATUS_VALUES = ["todo", "done", "promoted"] as const;
-export const status = z.enum(STATUS_VALUES);
-export type Status = z.infer<typeof status>;
+export const SUBTASK_STATUS_VALUES = ["todo", "done", "promoted"] as const;
+export const subtaskStatus = z.enum(SUBTASK_STATUS_VALUES);
+export type SubtaskStatus = z.infer<typeof subtaskStatus>;
 
-export const createSubtasksInput = z.object({
-  title: z.string().max(TITLE_MAX_LENGTH).min(1).trim(),
-  status: status.optional(),
+export const subtaskTitle = z
+  .string()
+  .min(1)
+  .max(SUBTASK_TITLE_MAX_LENGTH)
+  .trim();
+
+export const createSubtaskInput = z.object({
+  title: subtaskTitle,
 });
 
-export const updateSubtasksInput = z.object({
-  title: z.string().max(TITLE_MAX_LENGTH).optional(),
+export const updateSubtaskInput = z.object({
+  title: subtaskTitle.optional(),
 });
-// @generated-end schema
-
-// @custom-start validators
-// @custom-end validators
