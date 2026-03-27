@@ -85,6 +85,31 @@ describe("update", () => {
     expect(updated.title).toBe("Updated");
   });
 
+  test("update without title does not change title", async ({
+    client,
+    userId,
+    testClient,
+  }) => {
+    const taskId = await seedTask(testClient, userId);
+    await client.mutation(api.subtasks.mutations.create, {
+      title: "Keep me",
+      taskId,
+    });
+
+    const records = await testClient.run(async (ctx: any) =>
+      ctx.db.query("subtasks").collect(),
+    );
+
+    await client.mutation(api.subtasks.mutations.update, {
+      subtaskId: records[0]._id,
+    });
+
+    const updated = await testClient.run(async (ctx: any) =>
+      ctx.db.get(records[0]._id),
+    );
+    expect(updated.title).toBe("Keep me");
+  });
+
   test("does nothing when unauthenticated", async ({ testClient }) => {
     const taskId = await seedTask(testClient);
     const subtaskId = await testClient.run(async (ctx: any) => {
@@ -289,6 +314,27 @@ describe("toggleDone", () => {
     );
     expect(record.status).toBe("todo");
   });
+
+  test("throws NOT_FOUND for nonexistent subtask", async ({
+    client,
+    userId,
+    testClient,
+  }) => {
+    const taskId = await seedTask(testClient, userId);
+    await client.mutation(api.subtasks.mutations.create, {
+      title: "Temp",
+      taskId,
+    });
+    const subtasks = await testClient.run(async (ctx: any) =>
+      ctx.db.query("subtasks").collect(),
+    );
+    const subtaskId = subtasks[0]._id;
+    await testClient.run(async (ctx: any) => ctx.db.delete(subtaskId));
+
+    await expect(
+      client.mutation(api.subtasks.mutations.toggleDone, { subtaskId }),
+    ).rejects.toThrow("Subtask not found");
+  });
 });
 
 describe("reorder", () => {
@@ -377,7 +423,6 @@ describe("promote", () => {
 
   test("new task inherits parent projectId", async ({
     client,
-    userId,
     testClient,
   }) => {
     // Create a project first

@@ -275,4 +275,25 @@ describe("remove", () => {
     );
     expect(record).not.toBeNull();
   });
+
+  test("throws NOT_FOUND for nonexistent ID", async ({
+    client,
+    userId,
+    testClient,
+  }) => {
+    const taskId = await seedTask(testClient, userId);
+    await client.mutation(api["work-logs"].mutations.create, {
+      body: "Temp",
+      taskId,
+    });
+    const records = await testClient.run(async (ctx: any) =>
+      ctx.db.query("workLogs").collect(),
+    );
+    const workLogId = records[0]._id;
+    await testClient.run(async (ctx: any) => ctx.db.delete(workLogId));
+
+    await expect(
+      client.mutation(api["work-logs"].mutations.remove, { workLogId }),
+    ).rejects.toThrow("Work log not found");
+  });
 });

@@ -1,5 +1,2 @@
-// @generated-start exports
-export { WorkLogsPage } from "./components/WorkLogsPage";
-// @generated-end exports
-// @custom-start exports
-// @custom-end exports
+// Work logs are accessed through the TaskDetailPanel, not as a standalone page.
+// Frontend components will be added in Plan 05-02.
