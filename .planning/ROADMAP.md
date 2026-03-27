@@ -162,11 +162,11 @@ Plans:
   2. User can promote a subtask to a full task (subtask marked as "promoted" with link to new task)
   3. User can add a work log entry to any task (body text + optional time in minutes), and edit/delete their own entries
   4. Task detail shows total time logged across all work log entries
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01-PLAN.md — Subtask & work log backend: Zod schemas, Convex tables, CRUD mutations (subtask create/update/remove/reorder/promote, work log create/update/remove with ownership), queries (listByTask with completion count, listByTask with total time), cascade delete updates
+- [ ] 05-02-PLAN.md — Subtask & work log frontend: Sheet UI primitive, TaskDetailPanel (side panel), SubtaskList (checklist with drag-reorder, promote), WorkLogForm/List (smart time parsing), route wiring (search params for deep linking), i18n
 
 ### Phase 6: Activity Logs & Search
 **Goal**: System provides an auto-generated audit trail and users can search/filter across all entities
