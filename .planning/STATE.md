@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CalmDo Core
-status: Ready to plan
-last_updated: "2026-03-27T04:32:56.062Z"
+status: Ready to execute
+last_updated: "2026-03-27T09:37:58.753Z"
 progress:
   total_phases: 8
   completed_phases: 6
-  total_plans: 18
-  completed_plans: 18
+  total_plans: 21
+  completed_plans: 19
 ---
 
 # Project State
@@ -18,12 +18,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-10)
 
 **Core value:** Developer velocity -- new features are faster to build because every file has a clear, predictable home
-**Current focus:** Phase 04 — projects
+**Current focus:** Phase 05 — subtasks-work-logs
 
 ## Current Position
 
-Phase: 05
-Plan: Not started
+Phase: 05 (subtasks-work-logs) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Plan: Not started
 | Phase Phase 03.2 P06 P06 | 23min | 2 tasks | 45 files |
 | Phase 04 P01 | 4min | 2 tasks | 10 files |
 | Phase 04 P02 | 13min | 2 tasks | 17 files |
+| Phase 05 P01 | 11min | 9 tasks | 28 files |
 
 ## Accumulated Context
 
