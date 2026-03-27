@@ -1,28 +1,34 @@
 import { mutation } from "@cvx/_generated/server";
 import { auth } from "@cvx/auth";
 import { v } from "convex/values";
-import { zCustomMutation } from "convex-helpers/server/zod4";
-import { NoOp } from "convex-helpers/server/customFunctions";
-import { createSubtaskInput } from "../../src/shared/schemas/subtasks";
 import { ERRORS } from "../../src/shared/errors";
+import { logActivity } from "@cvx/activity-logs/helpers";
 
-const zMutation = zCustomMutation(mutation, NoOp);
-
-export const create = zMutation({
-  args: createSubtaskInput.extend({
+export const create = mutation({
+  args: {
     taskId: v.id("tasks"),
-  }),
+    title: v.string(),
+  },
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     if (!userId) return;
 
-    return await ctx.db.insert("subtasks", {
+    const subtaskId = await ctx.db.insert("subtasks", {
       title: args.title,
       status: "todo",
       taskId: args.taskId,
       position: Date.now(),
       creatorId: userId,
     });
+
+    await logActivity(ctx, {
+      entityType: "subtask",
+      entityId: subtaskId,
+      action: "created",
+      actor: userId,
+    });
+
+    return subtaskId;
   },
 });
 
@@ -70,6 +76,15 @@ export const toggleDone = mutation({
 
     const newStatus = subtask.status === "todo" ? "done" : "todo";
     await ctx.db.patch(args.subtaskId, { status: newStatus });
+
+    if (newStatus === "done") {
+      await logActivity(ctx, {
+        entityType: "subtask",
+        entityId: args.subtaskId,
+        action: "completed",
+        actor: userId,
+      });
+    }
   },
 });
 
@@ -118,6 +133,14 @@ export const promote = mutation({
     await ctx.db.patch(args.subtaskId, {
       status: "promoted",
       promotedToTaskId: newTaskId,
+    });
+
+    await logActivity(ctx, {
+      entityType: "subtask",
+      entityId: args.subtaskId,
+      action: "promoted",
+      actor: userId,
+      metadata: { newTaskId },
     });
 
     return newTaskId;

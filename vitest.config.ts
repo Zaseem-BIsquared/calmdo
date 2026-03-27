@@ -65,6 +65,8 @@ export default defineConfig({
         "convex/env.ts",
         // Seed / init scripts
         "convex/init.ts",
+        // Activity logs has no user-facing mutations (created via helper from other mutations)
+        "convex/activity-logs/mutations.ts",
         // Auto-generated
         "convex/_generated/**",
         // Test infrastructure

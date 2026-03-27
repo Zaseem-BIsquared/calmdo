@@ -23,6 +23,16 @@ describe("create", () => {
     expect(tasks[0].creatorId).toBe(userId);
     expect(tasks[0].assigneeId).toBe(userId);
     expect(tasks[0].position).toBeTypeOf("number");
+
+    // Verify activity log was created
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    expect(logs).toHaveLength(1);
+    expect(logs[0].entityType).toBe("task");
+    expect(logs[0].entityId).toBe(tasks[0]._id);
+    expect(logs[0].action).toBe("created");
+    expect(logs[0].actor).toBe(userId);
   });
 
   test("creates a task with all fields specified", async ({
@@ -104,6 +114,17 @@ describe("update", () => {
     );
     expect(updated.title).toBe("Updated title");
     expect(updated.priority).toBe(false); // unchanged
+
+    // Verify activity log for edit
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const editLog = logs.find((l: any) => l.action === "edited");
+    expect(editLog).toBeDefined();
+    expect(editLog.entityType).toBe("task");
+    expect(editLog.entityId).toBe(taskId);
+    const metadata = JSON.parse(editLog.metadata);
+    expect(metadata.fields).toContain("title");
   });
 
   test("updates description and priority", async ({
@@ -130,6 +151,35 @@ describe("update", () => {
     expect(updated.description).toBe("New description");
     expect(updated.priority).toBe(true);
     expect(updated.title).toBe("Original"); // unchanged
+  });
+
+  test("does not log activity when no fields are changed", async ({
+    client,
+    testClient,
+  }) => {
+    await client.mutation(api.tasks.mutations.create, {
+      title: "No-op update",
+    });
+
+    const tasks = await testClient.run(async (ctx: any) =>
+      ctx.db.query("tasks").collect(),
+    );
+
+    // Clear existing activity logs (from create)
+    await testClient.run(async (ctx: any) => {
+      const logs = await ctx.db.query("activityLogs").collect();
+      for (const log of logs) await ctx.db.delete(log._id);
+    });
+
+    // Call update with no changed fields
+    await client.mutation(api.tasks.mutations.update, {
+      taskId: tasks[0]._id,
+    });
+
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    expect(logs).toHaveLength(0);
   });
 
   test("throws when task not found", async ({ client, testClient }) => {
@@ -191,6 +241,14 @@ describe("remove", () => {
       ctx.db.query("tasks").collect(),
     );
     expect(remaining).toHaveLength(0);
+
+    // Verify activity log for delete
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const deleteLog = logs.find((l: any) => l.action === "deleted");
+    expect(deleteLog).toBeDefined();
+    expect(deleteLog.entityType).toBe("task");
   });
 
   test("remove deletes associated subtasks", async ({
@@ -325,6 +383,17 @@ describe("updateStatus", () => {
       ctx.db.get(tasks[0]._id),
     );
     expect(updated.status).toBe("in_progress");
+
+    // Verify activity log for status change
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const statusLog = logs.find((l: any) => l.action === "status_changed");
+    expect(statusLog).toBeDefined();
+    expect(statusLog.entityType).toBe("task");
+    const metadata = JSON.parse(statusLog.metadata);
+    expect(metadata.from).toBe("todo");
+    expect(metadata.to).toBe("in_progress");
   });
 
   test("advances in_progress to done", async ({ client, testClient }) => {
@@ -477,6 +546,16 @@ describe("assign", () => {
     );
     expect(updated.assigneeId).toBe(otherUserId);
     expect(updated.visibility).toBe("shared");
+
+    // Verify activity log for assign
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const assignLog = logs.find((l: any) => l.action === "assigned");
+    expect(assignLog).toBeDefined();
+    expect(assignLog.entityType).toBe("task");
+    const metadata = JSON.parse(assignLog.metadata);
+    expect(metadata.assigneeId).toBe(otherUserId);
   });
 
   test("does not flip visibility when assigning to creator", async ({
@@ -528,6 +607,14 @@ describe("assign", () => {
     );
     expect(updated.assigneeId).toBeUndefined();
     expect(updated.visibility).toBe("shared");
+
+    // Verify activity log for unassign
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const unassignLog = logs.find((l: any) => l.action === "unassigned");
+    expect(unassignLog).toBeDefined();
+    expect(unassignLog.entityType).toBe("task");
   });
 
   test("unassigning keeps visibility as shared", async ({

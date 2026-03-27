@@ -1,0 +1,22 @@
+{
+  "actions": {
+    "created": "created",
+    "status_changed": "changed status",
+    "assigned": "assigned",
+    "unassigned": "unassigned",
+    "edited": "edited",
+    "deleted": "deleted",
+    "completed": "completed",
+    "promoted": "promoted to task"
+  },
+  "entityTypes": {
+    "task": "task",
+    "project": "project",
+    "subtask": "subtask"
+  },
+  "timeline": {
+    "empty": "No activity yet",
+    "today": "Today",
+    "yesterday": "Yesterday"
+  }
+}

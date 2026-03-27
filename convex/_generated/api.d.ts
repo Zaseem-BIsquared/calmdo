@@ -8,6 +8,8 @@
  * @module
  */
 
+import type * as activity_logs_helpers from "../activity-logs/helpers.js";
+import type * as activity_logs_queries from "../activity-logs/queries.js";
 import type * as auth from "../auth.js";
 import type * as auth_queries from "../auth/queries.js";
 import type * as devEmails_mutations from "../devEmails/mutations.js";
@@ -41,6 +43,8 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  "activity-logs/helpers": typeof activity_logs_helpers;
+  "activity-logs/queries": typeof activity_logs_queries;
   auth: typeof auth;
   "auth/queries": typeof auth_queries;
   "devEmails/mutations": typeof devEmails_mutations;

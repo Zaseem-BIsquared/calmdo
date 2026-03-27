@@ -7,6 +7,7 @@ import { zodToConvex } from "convex-helpers/server/zod4";
 import { asyncMap } from "convex-helpers";
 import { createProjectInput, projectStatus } from "../../src/shared/schemas/projects";
 import { ERRORS } from "../../src/shared/errors";
+import { logActivity } from "@cvx/activity-logs/helpers";
 
 const zMutation = zCustomMutation(mutation, NoOp);
 
@@ -16,11 +17,20 @@ export const create = zMutation({
     const userId = await auth.getUserId(ctx);
     if (!userId) return;
 
-    return await ctx.db.insert("projects", {
+    const projectId = await ctx.db.insert("projects", {
       name: args.name,
       status: "active",
       creatorId: userId,
     });
+
+    await logActivity(ctx, {
+      entityType: "project",
+      entityId: projectId,
+      action: "created",
+      actor: userId,
+    });
+
+    return projectId;
   },
 });
 
@@ -42,6 +52,26 @@ export const update = mutation({
     if (args.status !== undefined) patch.status = args.status;
 
     await ctx.db.patch(args.projectId, patch);
+
+    if (args.status !== undefined && args.status !== project.status) {
+      await logActivity(ctx, {
+        entityType: "project",
+        entityId: args.projectId,
+        action: "status_changed",
+        actor: userId,
+        metadata: { from: project.status, to: args.status },
+      });
+    }
+    const editedFields = Object.keys(patch).filter((k) => k !== "status");
+    if (editedFields.length > 0) {
+      await logActivity(ctx, {
+        entityType: "project",
+        entityId: args.projectId,
+        action: "edited",
+        actor: userId,
+        metadata: { fields: editedFields },
+      });
+    }
   },
 });
 
@@ -50,6 +80,13 @@ export const remove = mutation({
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     if (!userId) return;
+
+    await logActivity(ctx, {
+      entityType: "project",
+      entityId: args.projectId,
+      action: "deleted",
+      actor: userId,
+    });
 
     const tasks = await ctx.db
       .query("tasks")

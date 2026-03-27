@@ -8,7 +8,10 @@ import {
 } from "../src/shared/schemas/tasks";
 import { projectStatus } from "../src/shared/schemas/projects";
 import { subtaskStatus } from "../src/shared/schemas/subtasks";
-
+import {
+  activityLogEntityType,
+  activityLogAction,
+} from "../src/shared/schemas/activity-logs";
 
 const schema = defineSchema({
   ...authTables,
@@ -69,6 +72,15 @@ const schema = defineSchema({
     creatorId: v.id("users"),
   })
     .index("by_task", ["taskId"]),
+  activityLogs: defineTable({
+    entityType: zodToConvex(activityLogEntityType),
+    entityId: v.string(),
+    action: zodToConvex(activityLogAction),
+    actor: v.id("users"),
+    metadata: v.optional(v.string()),
+  })
+    .index("by_entity", ["entityType", "entityId"])
+    .index("by_actor", ["actor"]),
 });
 
 export default schema;

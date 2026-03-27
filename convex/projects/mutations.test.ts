@@ -19,6 +19,15 @@ describe("create", () => {
     expect(projects[0].name).toBe("My Project");
     expect(projects[0].status).toBe("active");
     expect(projects[0].creatorId).toBe(userId);
+
+    // Verify activity log was created
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    expect(logs).toHaveLength(1);
+    expect(logs[0].entityType).toBe("project");
+    expect(logs[0].entityId).toBe(projects[0]._id);
+    expect(logs[0].action).toBe("created");
   });
 
   test("does nothing when unauthenticated", async ({ testClient }) => {
@@ -57,6 +66,16 @@ describe("update", () => {
     );
     expect(updated.name).toBe("Updated");
     expect(updated.status).toBe("active"); // unchanged
+
+    // Verify activity log for edit
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const editLog = logs.find((l: any) => l.action === "edited");
+    expect(editLog).toBeDefined();
+    expect(editLog.entityType).toBe("project");
+    const metadata = JSON.parse(editLog.metadata);
+    expect(metadata.fields).toContain("name");
   });
 
   test("updates status only when specified", async ({
@@ -82,6 +101,17 @@ describe("update", () => {
     );
     expect(updated.status).toBe("on_hold");
     expect(updated.name).toBe("Status Project"); // unchanged
+
+    // Verify activity log for status change
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const statusLog = logs.find((l: any) => l.action === "status_changed");
+    expect(statusLog).toBeDefined();
+    expect(statusLog.entityType).toBe("project");
+    const metadata = JSON.parse(statusLog.metadata);
+    expect(metadata.from).toBe("active");
+    expect(metadata.to).toBe("on_hold");
   });
 
   test("does nothing when unauthenticated", async ({ testClient }) => {
@@ -198,6 +228,14 @@ describe("remove", () => {
       ctx.db.query("projects").collect(),
     );
     expect(remaining).toHaveLength(0);
+
+    // Verify activity log for delete
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const deleteLog = logs.find((l: any) => l.action === "deleted");
+    expect(deleteLog).toBeDefined();
+    expect(deleteLog.entityType).toBe("project");
   });
 
   test("does nothing when unauthenticated", async ({ testClient }) => {

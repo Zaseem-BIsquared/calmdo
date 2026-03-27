@@ -41,6 +41,15 @@ describe("create", () => {
     expect(records[0].taskId).toBe(taskId);
     expect(records[0].creatorId).toBe(userId);
     expect(records[0].position).toBeTypeOf("number");
+
+    // Verify activity log was created
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    expect(logs).toHaveLength(1);
+    expect(logs[0].entityType).toBe("subtask");
+    expect(logs[0].entityId).toBe(records[0]._id);
+    expect(logs[0].action).toBe("created");
   });
 
   test("does nothing when unauthenticated", async ({ testClient }) => {
@@ -231,6 +240,15 @@ describe("toggleDone", () => {
       ctx.db.get(records[0]._id),
     );
     expect(updated.status).toBe("done");
+
+    // Verify activity log for completed
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const completedLog = logs.find((l: any) => l.action === "completed");
+    expect(completedLog).toBeDefined();
+    expect(completedLog.entityType).toBe("subtask");
+    expect(completedLog.entityId).toBe(records[0]._id);
   });
 
   test("toggles done back to todo", async ({
@@ -490,6 +508,17 @@ describe("promote", () => {
     );
     expect(updated.status).toBe("promoted");
     expect(updated.promotedToTaskId).toBeDefined();
+
+    // Verify activity log for promoted
+    const logs = await testClient.run(async (ctx: any) =>
+      ctx.db.query("activityLogs").collect(),
+    );
+    const promotedLog = logs.find((l: any) => l.action === "promoted");
+    expect(promotedLog).toBeDefined();
+    expect(promotedLog.entityType).toBe("subtask");
+    expect(promotedLog.entityId).toBe(subtasks[0]._id);
+    const metadata = JSON.parse(promotedLog.metadata);
+    expect(metadata.newTaskId).toBeDefined();
   });
 
   test("rejects promoting already-promoted subtask", async ({

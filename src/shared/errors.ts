@@ -32,4 +32,7 @@ export const ERRORS = {
   },
   // Plugin errors go here:
   // admin: { ... }
+  activityLogs: {
+    NOT_FOUND: "Activity log not found.",
+  },
 } as const;

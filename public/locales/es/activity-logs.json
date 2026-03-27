@@ -1,0 +1,22 @@
+{
+  "actions": {
+    "created": "creado",
+    "status_changed": "cambio de estado",
+    "assigned": "asignado",
+    "unassigned": "desasignado",
+    "edited": "editado",
+    "deleted": "eliminado",
+    "completed": "completado",
+    "promoted": "promovido a tarea"
+  },
+  "entityTypes": {
+    "task": "tarea",
+    "project": "proyecto",
+    "subtask": "subtarea"
+  },
+  "timeline": {
+    "empty": "Sin actividad aun",
+    "today": "Hoy",
+    "yesterday": "Ayer"
+  }
+}

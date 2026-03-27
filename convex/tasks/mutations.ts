@@ -11,6 +11,7 @@ import {
   TASK_STATUS_VALUES,
 } from "../../src/shared/schemas/tasks";
 import { ERRORS } from "../../src/shared/errors";
+import { logActivity } from "@cvx/activity-logs/helpers";
 
 const zMutation = zCustomMutation(mutation, NoOp);
 
@@ -20,7 +21,7 @@ export const create = zMutation({
     const userId = await auth.getUserId(ctx);
     if (!userId) return;
 
-    await ctx.db.insert("tasks", {
+    const taskId = await ctx.db.insert("tasks", {
       title: args.title,
       description: args.description,
       priority: args.priority,
@@ -29,6 +30,13 @@ export const create = zMutation({
       creatorId: userId,
       assigneeId: userId,
       position: Date.now(),
+    });
+
+    await logActivity(ctx, {
+      entityType: "task",
+      entityId: taskId,
+      action: "created",
+      actor: userId,
     });
   },
 });
@@ -53,6 +61,17 @@ export const update = mutation({
     if (args.priority !== undefined) patch.priority = args.priority;
 
     await ctx.db.patch(args.taskId, patch);
+
+    const changedFields = Object.keys(patch);
+    if (changedFields.length > 0) {
+      await logActivity(ctx, {
+        entityType: "task",
+        entityId: args.taskId,
+        action: "edited",
+        actor: userId,
+        metadata: { fields: changedFields },
+      });
+    }
   },
 });
 
@@ -61,6 +80,13 @@ export const remove = mutation({
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     if (!userId) return;
+
+    await logActivity(ctx, {
+      entityType: "task",
+      entityId: args.taskId,
+      action: "deleted",
+      actor: userId,
+    });
 
     // Cascade delete subtasks
     const subtasks = await ctx.db
@@ -104,6 +130,14 @@ export const updateStatus = mutation({
     }
 
     await ctx.db.patch(args.taskId, { status: args.status });
+
+    await logActivity(ctx, {
+      entityType: "task",
+      entityId: args.taskId,
+      action: "status_changed",
+      actor: userId,
+      metadata: { from: task.status, to: args.status },
+    });
   },
 });
 
@@ -131,6 +165,23 @@ export const assign = mutation({
     }
 
     await ctx.db.patch(args.taskId, patch);
+
+    if (args.assigneeId) {
+      await logActivity(ctx, {
+        entityType: "task",
+        entityId: args.taskId,
+        action: "assigned",
+        actor: userId,
+        metadata: { assigneeId: args.assigneeId },
+      });
+    } else {
+      await logActivity(ctx, {
+        entityType: "task",
+        entityId: args.taskId,
+        action: "unassigned",
+        actor: userId,
+      });
+    }
   },
 });
 
@@ -143,7 +194,7 @@ export const createInProject = mutation({
     const userId = await auth.getUserId(ctx);
     if (!userId) return;
 
-    await ctx.db.insert("tasks", {
+    const taskId = await ctx.db.insert("tasks", {
       title: args.title,
       status: "todo",
       visibility: "shared",
@@ -152,6 +203,14 @@ export const createInProject = mutation({
       assigneeId: userId,
       projectId: args.projectId,
       position: Date.now(),
+    });
+
+    await logActivity(ctx, {
+      entityType: "task",
+      entityId: taskId,
+      action: "created",
+      actor: userId,
+      metadata: { projectId: args.projectId },
     });
   },
 });
@@ -182,6 +241,14 @@ export const assignToProject = mutation({
     }
 
     await ctx.db.patch(args.taskId, patch);
+
+    await logActivity(ctx, {
+      entityType: "task",
+      entityId: args.taskId,
+      action: "edited",
+      actor: userId,
+      metadata: { projectId: args.projectId ?? null },
+    });
   },
 });
 
