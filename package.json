@@ -46,6 +46,7 @@
     "@xixixao/uploadstuff": "^0.0.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "commander": "^14.0.3",
     "convex": "^1.32.0",
     "convex-helpers": "^0.1.114",
     "deepmerge": "^4.3.1",
