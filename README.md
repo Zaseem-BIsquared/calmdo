@@ -1,6 +1,6 @@
 # Feather Starter (Convex)
 
-A production-ready SaaS starter kit built with React 19, Convex, TanStack Router/Query/Form, Zod v4, Tailwind v4, and Stripe. Feature-folder architecture with shared validation, git-branch plugin system, CLI generators, and full i18n support.
+A production-ready SaaS starter kit built with React 19, Convex, TanStack Router/Query/Form, Zod v4, Tailwind v4, and i18n. Feature-folder architecture with shared validation, YAML-driven code generators, git-branch plugin system, and 100% test coverage.
 
 ## Architecture
 
@@ -17,10 +17,14 @@ graph TB
         subgraph FeatureFolders["Feature Folders"]
             Auth["auth/"]
             Onboarding["onboarding/"]
-            Billing["billing/"]
             Dashboard["dashboard/"]
-            Uploads["uploads/"]
+            Tasks["tasks/"]
+            Projects["projects/"]
+            Subtasks["subtasks/"]
+            WorkLogs["work-logs/"]
+            ActivityLogs["activity-logs/"]
             Settings["settings/"]
+            Uploads["uploads/"]
         end
 
         subgraph SharedLayer["Shared Layer"]
@@ -36,10 +40,16 @@ graph TB
     end
 
     subgraph Backend["convex/"]
-        BillingBE["billing/"]
+        TasksBE["tasks/"]
+        ProjectsBE["projects/"]
+        SubtasksBE["subtasks/"]
+        WorkLogsBE["work-logs/"]
+        ActivityLogsBE["activity-logs/"]
         OnboardingBE["onboarding/"]
         UsersBE["users/"]
         UploadsBE["uploads/"]
+        PasswordBE["password/"]
+        DevEmailsBE["devEmails/"]
         Schema["schema.ts"]
         AuthBE["auth.ts"]
         HTTP["http.ts"]
@@ -48,6 +58,7 @@ graph TB
     Features -.->|"api.*"| Backend
 
     subgraph Plugins["Plugin Branches"]
+        BillingPlugin["plugin/billing"]
         CmdPalette["plugin/ui-command-palette"]
         AdminPanel["plugin/feature-admin-panel"]
         InfraCI["plugin/infra-ci-github-actions"]
@@ -68,45 +79,57 @@ graph TB
 | Validation | Zod | 4.3+ (v4) |
 | Styling | Tailwind CSS | 4.2+ |
 | i18n | i18next + react-i18next | 23+ |
-| Payments | Stripe | 16+ |
 | Email | Resend + React Email | 6+ |
-| Testing | Vitest + Testing Library + convex-test | 4+ |
-| Generators | Plop.js | 4+ |
+| Testing | Vitest + Testing Library + feather-testing-convex | 4+ |
+| Generators | Plop.js (YAML-driven) | 4+ |
 
 ## Directory Structure
 
 ```
 feather-starter-convex/
   convex/                    # Convex backend
-    billing/                 #   Stripe integration, plans, subscriptions
+    tasks/                   #   Task CRUD, visibility rules, assignment, reorder
+    projects/                #   Project lifecycle, filtered views, task counts
+    subtasks/                #   Subtask CRUD, promotion to tasks, reorder
+    work-logs/               #   Time tracking entries on tasks
+    activity-logs/           #   Auto-generated audit trail
     onboarding/              #   Username setup mutation
     uploads/                 #   File upload mutations
     users/                   #   User queries and mutations
+    password/                #   Password reset email (Resend)
+    devEmails/               #   Dev email capture (queries + mutations)
     email/                   #   React Email templates
     otp/                     #   OTP email sender (Resend)
     auth.ts                  #   Auth configuration
     schema.ts                #   Database schema
-    http.ts                  #   HTTP routes (webhooks)
+    http.ts                  #   HTTP routes
+    test.setup.ts            #   Shared test fixture (createConvexTest)
   src/
     features/                # Feature folders
-      auth/                  #   Login UI (minimal -- login page is a route)
-      billing/               #   Checkout page, billing settings
+      auth/                  #   Login UI (email OTP, password, GitHub OAuth)
       dashboard/             #   Dashboard page, navigation shell
       onboarding/            #   Username setup page
-      settings/              #   Settings page (general + billing tabs)
+      tasks/                 #   Task list, detail, forms, filtered views
+      projects/              #   Project list, status lifecycle, task counts
+      subtasks/              #   Subtask management within tasks
+      work-logs/             #   Time tracking UI
+      activity-logs/         #   Audit trail display
+      settings/              #   Settings page (general tab)
       uploads/               #   File upload (embedded in settings)
     routes/                  # TanStack Router (thin wrappers)
       _app/_auth/dashboard/  #   Authenticated dashboard routes
       _app/login/            #   Public login route
     shared/                  # Cross-feature code
-      schemas/               #   Zod schemas (username, billing)
+      schemas/               #   Zod schemas (tasks, projects, subtasks, work-logs, activity-logs, username)
       errors.ts              #   Feature-grouped error constants
       nav.ts                 #   Data-driven navigation items
       hooks/                 #   Shared React hooks
       utils/                 #   Utility functions
     ui/                      # shadcn/ui components
-  templates/                 # Plop.js Handlebars templates
-  scripts/                   # Shell scripts
+  templates/                 # Plop.js Handlebars templates + defaults.yaml
+  scripts/                   # Setup and management scripts
+    create.sh                #   One-command project creation
+    setup.ts                 #   Interactive branding setup
     plugin.sh                #   Plugin management (list/preview/install)
   public/locales/            # i18n translation files (en/, es/)
 ```
@@ -114,22 +137,37 @@ feather-starter-convex/
 ## Features
 
 ### Auth
-Email OTP and GitHub OAuth login via `@convex-dev/auth`. The login page is a route-level component. Auth state is available throughout the app via `convex/users/queries.ts:getCurrentUser`.
+Email OTP, email + password, and GitHub OAuth login via `@convex-dev/auth`. The login page is a route-level component. Auth state is available throughout the app via `convex/users/queries.ts:getCurrentUser`.
 
 ### Onboarding
-Post-signup username selection with Zod-validated input (max 20 chars). Creates a Stripe customer on completion. Frontend in `src/features/onboarding/`, backend in `convex/onboarding/`.
-
-### Billing
-Stripe subscription billing with free/pro plans, monthly/yearly intervals, USD/EUR currencies. Includes checkout page, billing settings with plan display and cancellation. Backend handles webhook events for subscription lifecycle. See `convex/billing/` for all Stripe integration.
+Post-signup username selection with Zod-validated input (max 20 chars). Frontend in `src/features/onboarding/`, backend in `convex/onboarding/`.
 
 ### Dashboard
 Main authenticated area with data-driven navigation (tab bar from `src/shared/nav.ts`). The dashboard shell (`_layout.tsx`) wraps all authenticated routes.
 
+### Tasks
+Full task management with visibility rules (private vs shared/team pool), user assignment, status workflow (todo -> in_progress -> done), priority flags, and drag-reorder. Filtered views for "My Tasks" and "Team Pool". Backend in `convex/tasks/`.
+
+### Projects
+Project management with status lifecycle, filtered views, and automatic task counts. Tasks can be associated with a project. Backend in `convex/projects/`.
+
+### Subtasks
+Subtasks within tasks, with support for promotion to full tasks and drag-reorder. Backend in `convex/subtasks/`.
+
+### Work Logs
+Time tracking on tasks. Users can log time entries against tasks. Backend in `convex/work-logs/`.
+
+### Activity Logs
+Auto-generated audit trail that records changes across entities. Backend in `convex/activity-logs/`.
+
 ### Settings
-User profile settings with avatar upload, username editing, and billing tab. Uses TanStack Form with Zod validation. Avatar uploads use `@xixixao/uploadstuff` with Convex storage.
+User profile settings with avatar upload and username editing. Uses TanStack Form with Zod validation. Avatar uploads use `@xixixao/uploadstuff` with Convex storage.
 
 ### Uploads
 File upload functionality using Convex's built-in storage. Currently embedded in the settings feature for avatar uploads. Backend mutations in `convex/uploads/mutations.ts`.
+
+### Dev Mailbox
+In the dev environment, all emails (OTP codes, password resets) are captured to a `devEmails` table and viewable at `/dev/mailbox`. No external email service needed for local development.
 
 ## Getting Started
 
@@ -139,7 +177,21 @@ File upload functionality using Convex's built-in storage. Currently embedded in
 - npm
 - A Convex account (free at [convex.dev](https://convex.dev))
 
-### Setup
+### Quick Start (New Project)
+
+Use the create script for one-command project setup:
+
+```sh
+bash scripts/create.sh
+```
+
+Then run the interactive branding setup to customize the project name, colors, and metadata:
+
+```sh
+npx tsx scripts/setup.ts
+```
+
+### Manual Setup
 
 1. Install dependencies:
    ```sh
@@ -151,16 +203,12 @@ File upload functionality using Convex's built-in storage. Currently embedded in
    npx convex dev --once
    npx @convex-dev/auth
    ```
-   > **Note:** Do not use `--configure=new` — it overwrites `convex/tsconfig.json`, breaking path aliases ([upstream bug](https://github.com/get-convex/convex-js/issues/144)). If you already ran it, restore with `git restore convex/tsconfig.json`.
+   > **Note:** Do not use `--configure=new` -- it overwrites `convex/tsconfig.json`, breaking path aliases ([upstream bug](https://github.com/get-convex/convex-js/issues/144)). If you already ran it, restore with `git restore convex/tsconfig.json`.
 
 3. Configure environment variables in the Convex dashboard:
    ```sh
-   # Email (Resend)
+   # Email (Resend) -- required for OTP and password reset emails
    npx convex env set AUTH_RESEND_KEY re_...
-
-   # Stripe
-   npx convex env set STRIPE_SECRET_KEY sk_test_...
-   npx convex env set STRIPE_WEBHOOK_SECRET whsec_...
 
    # GitHub OAuth (optional)
    npx convex env set AUTH_GITHUB_ID ...
@@ -181,6 +229,7 @@ Plugins are git branches that add features to the starter kit. Each plugin branc
 
 | Plugin | Branch | What it adds |
 |--------|--------|-------------|
+| Billing | `plugin/billing` | Stripe subscription billing, checkout, plans, webhooks |
 | Command Palette | `plugin/ui-command-palette` | Cmd+K command palette with cmdk, keyboard navigation, i18n |
 | Admin Panel | `plugin/feature-admin-panel` | User management CRUD, role system, admin route guard |
 | CI Workflows | `plugin/infra-ci-github-actions` | Auto-rebase on main push, CI checks on plugin branches |
@@ -192,7 +241,7 @@ Plugins are git branches that add features to the starter kit. Each plugin branc
 bash scripts/plugin.sh list
 
 # Preview what a plugin changes
-bash scripts/plugin.sh preview plugin/ui-command-palette
+bash scripts/plugin.sh preview plugin/billing
 
 # Install a plugin (merges into current branch)
 bash scripts/plugin.sh install plugin/feature-admin-panel
@@ -215,32 +264,55 @@ Plugin extension points (append-only, minimal merge conflicts):
 
 ## Generators
 
-Four CLI generators scaffold new code following project conventions.
+Six CLI generators scaffold new code following project conventions. The feature generator reads from YAML spec files (`.gen.yaml`) to produce full CRUD features.
 
 > **Scripted/CI usage:** All generators support non-interactive mode by passing arguments after `--`:
 > ```sh
 > npm run gen:feature -- --name my-feature
+> npm run gen:schema -- --name my-feature
+> npm run gen:backend -- --name my-feature
+> npm run gen:frontend -- --name my-feature
 > npm run gen:route -- --name analytics --authRequired
-> npm run gen:route -- --name landing    # authRequired defaults to true
 > npm run gen:convex-function -- --domain billing --type mutation --name createInvoice
-> npm run gen:form -- --name create-task --feature dashboard
 > ```
 
-### Feature Generator
+### Feature Generator (YAML-Driven)
 
-Scaffolds a full feature with frontend components, hooks, tests, and Convex backend functions.
+Reads a `.gen.yaml` spec file and scaffolds a full CRUD feature with frontend components, backend functions, tests, routes, i18n, and schema. See `src/features/tasks/tasks.gen.yaml` for a complete example spec.
 
 ```sh
 npm run gen:feature
-# Prompts for: name (kebab-case)
-# Creates:
-#   src/features/{name}/components/{PascalName}Page.tsx
-#   src/features/{name}/hooks/use{PascalName}.ts
-#   src/features/{name}/index.ts
-#   src/features/{name}/{name}.test.tsx
-#   src/features/{name}/README.md
-#   convex/{name}/queries.ts
-#   convex/{name}/mutations.ts
+# Reads: src/features/{name}/{name}.gen.yaml
+# Creates: components, hooks, tests, backend queries/mutations, route, translations
+```
+
+Generator defaults are configured in `templates/defaults.yaml`.
+
+### Schema Generator
+
+Generates a Zod schema from the `.gen.yaml` spec.
+
+```sh
+npm run gen:schema
+# Creates: src/shared/schemas/{name}.ts
+```
+
+### Backend Generator
+
+Generates Convex queries and mutations from the `.gen.yaml` spec.
+
+```sh
+npm run gen:backend
+# Creates: convex/{name}/queries.ts, convex/{name}/mutations.ts
+```
+
+### Frontend Generator
+
+Generates React components from the `.gen.yaml` spec.
+
+```sh
+npm run gen:frontend
+# Creates: src/features/{name}/components/*.tsx, hooks, index.ts
 ```
 
 ### Route Generator
@@ -267,26 +339,18 @@ npm run gen:convex-function
 #   Skips if file already exists
 ```
 
-### Form Generator
-
-Generates a Zod validation schema and TanStack Form component.
-
-```sh
-npm run gen:form
-# Prompts for: name (kebab-case), feature (target feature folder)
-# Creates:
-#   src/shared/schemas/{name}.ts
-#   src/features/{feature}/components/{PascalName}Form.tsx
-```
-
 ## Shared Schemas
 
 Zod v4 schemas in `src/shared/schemas/` are the single source of truth for validation, shared between frontend forms and Convex mutations.
 
-| Schema | File | Exports |
+| Schema | File | Purpose |
 |--------|------|---------|
-| Username | `schemas/username.ts` | `username` schema, `USERNAME_MAX_LENGTH` |
-| Billing | `schemas/billing.ts` | `currency`, `interval`, `planKey` schemas with type exports |
+| Tasks | `schemas/tasks.ts` | Task creation/update validation |
+| Projects | `schemas/projects.ts` | Project creation/update validation |
+| Subtasks | `schemas/subtasks.ts` | Subtask creation/update validation |
+| Work Logs | `schemas/work-logs.ts` | Work log entry validation |
+| Activity Logs | `schemas/activity-logs.ts` | Activity log record validation |
+| Username | `schemas/username.ts` | Username validation, `USERNAME_MAX_LENGTH` |
 
 Convex mutations use `convex-helpers/server/zod4` (`zCustomMutation`, `zodToConvex`) to validate with the same Zod schemas.
 
@@ -294,18 +358,21 @@ Convex mutations use `convex-helpers/server/zod4` (`zCustomMutation`, `zodToConv
 
 Translations live in `public/locales/{lang}/{namespace}.json`. Supported languages: English (`en`), Spanish (`es`).
 
-Each feature has its own i18n namespace (e.g., `dashboard`, `billing`, `settings`). Components use `useTranslation("namespace")` to load translations.
+Each feature has its own i18n namespace (e.g., `dashboard`, `tasks`, `projects`, `settings`). Components use `useTranslation("namespace")` to load translations.
 
 To add a language: create new locale files in `public/locales/{lang}/` for each namespace.
 
 ## Testing
 
 ```sh
-npm test              # Run all tests
+npm test              # Run all tests (with coverage)
 npm run test:watch    # Watch mode
+npm run test:e2e      # Playwright E2E tests
 ```
 
-Tests are co-located with their features (`*.test.tsx` / `*.test.ts`). Frontend tests use Testing Library with a custom `renderWithRouter` helper. Backend tests use `convex-test` with the `feather-testing-convex` helper library.
+300+ tests across 35 test files with 100% coverage enforced. Pre-commit hooks (lefthook) run typecheck and full test suite -- commits are blocked if either fails.
+
+Tests are co-located with their features (`*.test.tsx` / `*.test.ts`). Frontend tests use Testing Library with a custom `renderWithRouter` helper. Backend tests use `feather-testing-convex` which provides an in-memory Convex backend with typed `mutation`, `query`, and `auth` helpers.
 
 Coverage excludes route files (thin wrappers) and barrel exports.
 
