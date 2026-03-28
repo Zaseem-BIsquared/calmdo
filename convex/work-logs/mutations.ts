@@ -1,17 +1,14 @@
 import { mutation } from "@cvx/_generated/server";
 import { auth } from "@cvx/auth";
 import { v } from "convex/values";
-import { zCustomMutation } from "convex-helpers/server/zod4";
-import { NoOp } from "convex-helpers/server/customFunctions";
-import { createWorkLogInput } from "../../src/shared/schemas/work-logs";
 import { ERRORS } from "../../src/shared/errors";
 
-const zMutation = zCustomMutation(mutation, NoOp);
-
-export const create = zMutation({
-  args: createWorkLogInput.extend({
+export const create = mutation({
+  args: {
     taskId: v.id("tasks"),
-  }),
+    body: v.string(),
+    timeMinutes: v.optional(v.number()),
+  },
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
     if (!userId) return;
