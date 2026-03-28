@@ -1,7 +1,7 @@
 # Feather DX Architecture — Design Document
 
 **Started:** 2026-03-28
-**Status:** Research complete, decisions pending
+**Status:** Research complete, key decisions made
 **Context:** Designing the developer experience for Feather as a framework (v3.0+)
 
 ## 1. The Vision
@@ -285,16 +285,38 @@ The generator handles individual entities at ~65-75% coverage but has **zero sup
 
 Reports: `.planning/design/GENERATOR-TEST-{TODO,CRM,INVENTORY}.md`
 
-## 8. Open Questions
+## 8. Decisions Made (2026-03-28)
 
-1. **YAML schema format** — What does `feather.yaml` actually look like? Need to design the full schema.
-2. **Generator implementation** — Extend existing Plop.js generators or build a new generation pipeline?
-3. **Schema reconciliation engine** — How to implement the diff/confirm/migrate workflow? Standalone tool or integrated into `feather` CLI?
-4. **Telemetry** — How to collect what users build (custom/ directory patterns) and surface errors without requiring accounts?
-5. **Bundle distribution** — Registry? npm packages? Git-based? How do users discover and install bundles?
-6. **Safe upstream updates** — Regeneration strategy: how to handle conflicts when user has modified generated code?
-7. **PR #8 integration** — Zaseem's setup script is the v1 of `feather start project`. How does it evolve?
-8. **Generator bug fixes** — 6+ blocking bugs found in stress tests need fixing before building on top
+| # | Question | Decision | Rationale |
+|---|----------|----------|-----------|
+| 1 | YAML schema format | **Hybrid: YAML for declarable, spec for custom** | Schema + permissions + status flow + audit + fetch_from + naming in YAML. Truly custom logic in spec. Matches 3-tier model. |
+| 2 | Generator pipeline | **Hybrid: Plop for scaffolding, AST for wiring** | Keep Handlebars templates for new files. Add AST-based wiring for modifying existing files (schema.ts, nav.ts). |
+| 3 | Excel reconciliation | **Build after YAML + generator fixes** | Fix generator pipeline first, then add Excel import as input layer. YAML is intermediate format. |
+| 4 | Document lifecycle | **Audit trail + period close (NOT Frappe Submit/Cancel/Amend)** | User (ex-KPMG): immutability ≠ auditability. Change tracking with period-close events, not per-document submit gates. See memory: `project_audit_trail_over_immutability.md` |
+| 5 | Bundle distribution | **Defer — focus on single-feature generation first** | Get individual features working perfectly before multi-feature bundles. |
+| 6 | Telemetry | **Both: build-tool telemetry + one-click error reporting** | Collect generator usage + error counts (opt-out). Plus zero-config error boundary with one-click reporting. |
+| 7 | Cross-entity UI | **Critical — every ERP feature needs master-detail views** | Generator must support line items, related records panels, aggregation headers. Without this, every feature needs manual UI. |
+| 8 | Immediate next step | **Design feather.yaml schema format** | The YAML format is the foundation everything else builds on. |
+
+### Meta-Model: The Quad (extending Glide's Golden Triangle)
+
+```
+DATA    — what exists (schema, relations, derived data, access rules)
+LAYOUT  — how it looks (views, components, visibility conditions)
+ACTIONS — what happens (side effects, workflows, schedules, integrations)
+REPORTS — what we learn (aggregations, analytics, dashboards)
+```
+
+Operations (Data + Layout + Actions) and Analytics (Reports) are two sides of the system coin.
+
+## 9. Open Questions (Remaining)
+
+1. **feather.yaml schema design** — Next immediate task. What does the full YAML format look like?
+2. **Cross-entity UI generation** — How to declare master-detail, related records, aggregation panels in YAML?
+3. **AST wiring layer** — What library? jscodeshift? ts-morph? Custom?
+4. **Safe upstream updates** — Regeneration strategy when user has modified generated code
+5. **PR #8 integration** — Zaseem's setup script evolving into `feather start project`
+6. **Generator bug fixes** — 10 blocking bugs fixed, secondary template quality issues in progress
 
 ## 7. Relationship to PR #8
 
