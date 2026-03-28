@@ -216,6 +216,18 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6 -
 | 6. Activity Logs & Search | v2.0 | 0/? | Not started | - |
 | 7. MECE Test Rewrite | v2.0 | 0/3 | Planned | - |
 
+## Backlog
+
+### Phase 999.1: Feather DX Architecture (BACKLOG)
+**Goal:** Design and implement the framework evolution: feather.yaml declarative config, generated/custom code split, LLM architect conversation (WHO/WHAT/WHERE/WHEN/HOW entity discovery + 8-dimension behavior overlay), feature/bundle/custom composability, safe upstream updates, telemetry
+**Design doc:** `.planning/design/FEATHER-DX-ARCHITECTURE.md`
+**Research status:** Complete — Frappe, Glide, WordPress, Laravel patterns studied; 8-dimension framework defined; user's prior thinking (Gemini notes) integrated
+**Requirements:** TBD
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd:review-backlog when ready)
+
 ---
 *Roadmap created: 2026-03-10*
-*Last updated: 2026-03-27*
+*Last updated: 2026-03-28*
