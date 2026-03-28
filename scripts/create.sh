@@ -27,27 +27,22 @@ cd "$PROJECT_DIR"
 
 # Set up upstream remote for receiving updates
 git remote rename origin upstream
-echo "Upstream remote set — pull updates with: git pull upstream main"
+echo "Upstream remote set. Pull updates later with: git pull upstream main"
 
 # Install dependencies
 echo ""
 echo "Installing dependencies..."
 npm install
 
-# Run interactive setup
+# Run interactive setup (branding + Convex init)
 echo ""
 npm run setup
 
 echo ""
-echo "────────────────────────────────────────"
+echo "Setup complete! Starting dev server..."
 echo ""
-echo "  Next steps:"
+echo "To receive bug fixes and updates later: git pull upstream main"
 echo ""
-echo "    cd $PROJECT_DIR"
-echo "    npm start"
-echo ""
-echo "  To receive bug fixes and updates:"
-echo "    git pull upstream main"
-echo ""
-echo "────────────────────────────────────────"
-echo ""
+
+# Start dev server automatically — no cd needed
+npm start
