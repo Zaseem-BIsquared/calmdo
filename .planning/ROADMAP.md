@@ -193,9 +193,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Backend test rewrite: MECE compliance for all 16 convex test files (naming, test matrix, seed patterns)
-- [ ] 07-02-PLAN.md — Utils/shared/UI test cleanup: light-touch pass, delete stubs, centralize nav tests, fix coverage config
-- [ ] 07-03-PLAN.md — Frontend feature test rewrite: MECE state decomposition, integration-first, findBy* patterns, remove route/nav duplicates
+- [x] 07-01-PLAN.md — Backend test rewrite: MECE compliance for all 16 convex test files (naming, test matrix, seed patterns)
+- [x] 07-02-PLAN.md — Utils/shared/UI test cleanup: light-touch pass, delete stubs, centralize nav tests, fix coverage config
+- [x] 07-03-PLAN.md — Frontend feature test rewrite: MECE state decomposition, integration-first, findBy* patterns, remove route/nav duplicates
 
 ## Progress
 
