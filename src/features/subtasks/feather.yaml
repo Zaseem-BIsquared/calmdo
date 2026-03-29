@@ -2,6 +2,8 @@ name: subtasks
 label: Subtask
 labelPlural: Subtasks
 
+kind: standard
+
 fields:
   title:
     type: string
@@ -11,14 +13,32 @@ fields:
     type: enum
     values: [todo, done, promoted]
     default: todo
+  promotedToTaskId:
+    type: reference
+    target: tasks
+    required: false
+    # Set when subtask is promoted to a full task
+  creatorId:
+    type: reference
+    target: users
+    required: true
+    # Auto-set to current user on creation
+  position:
+    type: number
+    required: true
+    # Managed by orderable behavior
 
 timestamps: false
+
+identity:
+  type: auto-increment
 
 behaviors:
   assignable: false
   orderable: true
   softDelete: false
   auditTrail: true
+  immutable: false
 
 access:
   scope: owner
@@ -32,12 +52,25 @@ views:
   defaultView: list
   enabledViews: [list]
 
+operations:
+  create: true
+  read: true
+  update: true
+  delete: true
+
 relationships:
   task:
     type: belongs_to
     target: tasks
     required: true
     column: taskId
+
+detailView:  # TODO: generator pending
+  layout: inline
+  parentContext: task
+
+hooks:  # TODO: generator pending
+  onPromote: custom/subtasks/hooks/onPromote
 
 indexes:
   - name: by_task
