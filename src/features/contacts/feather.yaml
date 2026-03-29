@@ -1,0 +1,76 @@
+name: contacts
+label: Contact
+labelPlural: Contacts
+
+kind: standard
+
+fields:
+  name:
+    type: string
+    required: true
+    max: 200
+  email:
+    type: email
+    max: 200
+  company:
+    type: string
+    max: 200
+  status:
+    type: enum
+    values: [lead, active, inactive]
+    default: lead
+    filterable: true
+  phone:
+    type: string
+    max: 50
+
+timestamps: false
+
+identity:
+  type: auto-increment
+
+behaviors:
+  assignable: false
+  orderable: false
+  softDelete: false
+  auditTrail: false
+  immutable: false
+
+access:
+  scope: owner
+  permissions:
+    create: authenticated
+    read: owner
+    update: owner
+    delete: owner
+
+views:
+  defaultView: table
+  enabledViews: [list, table]
+  filteredViews:
+    - name: leads
+      label: Leads
+      filter: { status: lead }
+      navEntry: false
+    - name: active-contacts
+      label: Active
+      filter: { status: active }
+      navEntry: false
+
+operations:
+  create: true
+  read: true
+  update: true
+  delete: true
+
+search: true  # TODO: generator pending
+searchFields: [name, email, company]
+
+detailView:  # TODO: generator pending
+  layout: panels
+
+indexes:
+  - name: by_userId
+    fields: [userId]
+  - name: by_status
+    fields: [status]
