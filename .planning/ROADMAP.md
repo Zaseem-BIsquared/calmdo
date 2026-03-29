@@ -253,7 +253,7 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6 -
 | 999.6 Bundle Distribution | Backlog | 0/? | Not started | - |
 | 999.7 Telemetry | Backlog | 0/? | Not started | - |
 | 999.8 Search | Backlog | 0/? | Not started | - |
-| 999.10 E2E, Bugs & Docs Debt | Backlog | 0/? | Not started | - |
+| 999.10 E2E, Bugs & Docs Debt | Backlog | 1/2 | In Progress|  |
 
 ## Backlog
 
@@ -387,7 +387,11 @@ Plans:
 - **Barrel export gaps:** Fix placeholder barrel exports in subtasks/, work-logs/, activity-logs/
 - **Phase 03.2.1.1 status:** Reconcile roadmap status with actual `feather.yaml` files that already exist
 **Note:** All original 999.10 items (6 DX/UX bugs) were fixed in Phase 03.1 — phase repurposed for remaining gaps.
-**Plans:** 0 (estimated 2-3)
+**Plans:** 1/2 plans executed
+
+Plans:
+- [ ] 999.10-01-PLAN.md — E2E test verification and CalmDo feature E2E tests
+- [x] 999.10-02-PLAN.md — Bug fixes, barrel export cleanup, and documentation updates
 
 ---
 *Roadmap created: 2026-03-10*
