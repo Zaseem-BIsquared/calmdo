@@ -64,8 +64,8 @@ tasks.ts, projects.ts, subtasks.ts, work-logs.ts, activity-logs.ts, username.ts
 
 ## Adding a New Entity
 
-1. **Spec file** — create `src/features/{name}/{name}.gen.yaml` defining fields, behaviors, views, relationships, indexes (see `src/features/tasks/tasks.gen.yaml` for reference)
-2. **Generator** — run `npm run gen:feature` which reads the `.gen.yaml` and generates schema, backend, frontend, route, tests, and i18n files
+1. **Spec file** — create `src/features/{name}/feather.yaml` defining fields, behaviors, views, relationships, indexes (see `src/features/tasks/feather.yaml` for reference)
+2. **Generator** — run `npm run gen:feature` which reads the `feather.yaml` and generates schema, backend, frontend, route, tests, and i18n files
 3. **Zod schema** — generated at `src/shared/schemas/{name}.ts`, review and adjust
 4. **Schema table** — update `convex/schema.ts` with `zodToConvex()` to derive Convex validators from Zod schemas (don't duplicate validation logic)
 5. **Wiring (manual):**
@@ -78,7 +78,7 @@ tasks.ts, projects.ts, subtasks.ts, work-logs.ts, activity-logs.ts, username.ts
 
 | Command | Purpose |
 |---------|---------|
-| `npm run gen:feature` | Full CRUD feature from `.gen.yaml` spec |
+| `npm run gen:feature` | Full CRUD feature from `feather.yaml` spec |
 | `npm run gen:schema` | Zod schema + update `convex/schema.ts` |
 | `npm run gen:backend` | Convex mutations, queries, and tests |
 | `npm run gen:frontend` | Frontend components, route, and wiring |
@@ -128,7 +128,7 @@ Dev environment: OTP and password-reset emails are intercepted and stored in `de
 
 ## Testing Patterns
 
-- 300+ tests across 35 test files, 100% coverage enforced by pre-commit hook
+- 489 tests across 59 test files, 100% coverage enforced by pre-commit hook
 - Backend tests: `convex/{name}/*.test.ts` using `feather-testing-convex` with `test` fixture from `@cvx/test.setup`
 - Frontend tests: `src/features/{name}/{name}.test.tsx` using Testing Library with `renderWithRouter` from `@/test-helpers` and `ConvexTestClient` from `feather-testing-convex`
 - Tests are co-located with source (not in a separate `tests/` directory)

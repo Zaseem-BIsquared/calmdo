@@ -10,8 +10,8 @@ Requirements for CalmDo Core milestone. Each maps to roadmap phases.
 ### Auth & DX Infrastructure
 
 - [x] **AUTH-01**: User can sign up and sign in with email + password (in addition to existing OTP and GitHub OAuth)
-- [ ] **AUTH-02**: User can reset password via email link
-- [ ] **DX-01**: Dev mailbox captures all emails sent during development, viewable at a dev route (like Phoenix's /dev/mailbox)
+- [x] **AUTH-02**: User can reset password via email link
+- [x] **DX-01**: Dev mailbox captures all emails sent during development, viewable at a dev route (like Phoenix's /dev/mailbox)
 - [x] **DX-02**: Lefthook pre-commit hook enforces 100% test coverage on every commit
 - [x] **DX-03**: Playwright E2E tests using feather-testing-core and feather-testing-convex cover all user-facing flows
 
@@ -77,7 +77,7 @@ Requirements for CalmDo Core milestone. Each maps to roadmap phases.
 - [x] **VIEW-02**: Team Pool view — unassigned shared/project tasks available to grab
 - [x] **VIEW-03**: Projects List view — all projects with status and task counts
 - [x] **VIEW-04**: Project Detail view — tasks in a project with filters and status summary
-- [ ] **VIEW-05**: Task Detail view — full task with subtasks, work logs, activity timeline
+- [x] **VIEW-05**: Task Detail view — full task with subtasks, work logs, activity timeline
 - [x] **VIEW-06**: Sidebar navigation with My Tasks, Team Pool, Projects section with project list
 
 ## Future Requirements
@@ -130,13 +130,62 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmapper) | | |
+| AUTH-01 | Phase 2 | Complete |
+| AUTH-02 | Phase 2, 03.1 | Complete |
+| DX-01 | Phase 2 | Complete |
+| DX-02 | Phase 2 | Complete |
+| DX-03 | Phase 2 | Complete |
+| TASK-01 | Phase 3 | Complete |
+| TASK-02 | Phase 3 | Complete |
+| TASK-03 | Phase 3 | Complete |
+| TASK-04 | Phase 3 | Complete |
+| TASK-05 | Phase 3 | Complete |
+| TASK-06 | Phase 3 | Complete |
+| TASK-07 | Phase 3 | Complete |
+| TASK-08 | Phase 3 | Complete |
+| TASK-09 | Phase 3 | Complete |
+| TASK-10 | Phase 3 | Complete |
+| PROJ-01 | Phase 4 | Complete |
+| PROJ-02 | Phase 4 | Complete |
+| PROJ-03 | Phase 4 | Complete |
+| PROJ-04 | Phase 4 | Complete |
+| PROJ-05 | Phase 4 | Complete |
+| PROJ-06 | Phase 4 | Complete |
+| PROJ-07 | Phase 4 | Complete |
+| SUB-01 | Phase 5 | Complete |
+| SUB-02 | Phase 5 | Complete |
+| SUB-03 | Phase 5 | Complete |
+| SUB-04 | Phase 5 | Complete |
+| SUB-05 | Phase 5 | Complete |
+| SUB-06 | Phase 5 | Complete |
+| SUB-07 | Phase 5 | Complete |
+| WLOG-01 | Phase 5 | Complete |
+| WLOG-02 | Phase 5 | Complete |
+| WLOG-03 | Phase 5 | Complete |
+| WLOG-04 | Phase 5 | Complete |
+| ACTV-01 | Phase 6 | Complete |
+| ACTV-02 | Phase 6 | Complete |
+| ACTV-03 | Phase 6 | Complete |
+| ACTV-04 | Phase 6 | Complete |
+| SRCH-01 | Phase 999.8 | Planned |
+| SRCH-02 | Phase 999.8 | Planned |
+| SRCH-03 | Phase 999.8 | Planned |
+| SRCH-04 | Phase 999.8 | Planned |
+| SRCH-05 | Phase 999.8 | Planned |
+| SRCH-06 | Phase 999.8 | Planned |
+| VIEW-01 | Phase 3 | Complete |
+| VIEW-02 | Phase 3 | Complete |
+| VIEW-03 | Phase 4 | Complete |
+| VIEW-04 | Phase 4 | Complete |
+| VIEW-05 | Phase 5 | Complete |
+| VIEW-06 | Phase 3 | Complete |
 
 **Coverage:**
-- v2.0 requirements: 40 total
-- Mapped to phases: 0
-- Unmapped: 40 ⚠️
+- v2.0 requirements: 46 total
+- Mapped to phases: 46
+- Complete: 40
+- Planned: 6 (SRCH-01 through SRCH-06 in Phase 999.8)
 
 ---
 *Requirements defined: 2026-03-10*
-*Last updated: 2026-03-10 after initial definition*
+*Last updated: 2026-03-29*

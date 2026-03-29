@@ -264,7 +264,7 @@ Plugin extension points (append-only, minimal merge conflicts):
 
 ## Generators
 
-Six CLI generators scaffold new code following project conventions. The feature generator reads from YAML spec files (`.gen.yaml`) to produce full CRUD features.
+Six CLI generators scaffold new code following project conventions. The feature generator reads from YAML spec files (`feather.yaml`) to produce full CRUD features.
 
 > **Scripted/CI usage:** All generators support non-interactive mode by passing arguments after `--`:
 > ```sh
@@ -278,11 +278,11 @@ Six CLI generators scaffold new code following project conventions. The feature 
 
 ### Feature Generator (YAML-Driven)
 
-Reads a `.gen.yaml` spec file and scaffolds a full CRUD feature with frontend components, backend functions, tests, routes, i18n, and schema. See `src/features/tasks/tasks.gen.yaml` for a complete example spec.
+Reads a `feather.yaml` spec file and scaffolds a full CRUD feature with frontend components, backend functions, tests, routes, i18n, and schema. See `src/features/tasks/feather.yaml` for a complete example spec.
 
 ```sh
 npm run gen:feature
-# Reads: src/features/{name}/{name}.gen.yaml
+# Reads: src/features/{name}/feather.yaml
 # Creates: components, hooks, tests, backend queries/mutations, route, translations
 ```
 
@@ -290,7 +290,7 @@ Generator defaults are configured in `templates/defaults.yaml`.
 
 ### Schema Generator
 
-Generates a Zod schema from the `.gen.yaml` spec.
+Generates a Zod schema from the `feather.yaml` spec.
 
 ```sh
 npm run gen:schema
@@ -299,7 +299,7 @@ npm run gen:schema
 
 ### Backend Generator
 
-Generates Convex queries and mutations from the `.gen.yaml` spec.
+Generates Convex queries and mutations from the `feather.yaml` spec.
 
 ```sh
 npm run gen:backend
@@ -308,7 +308,7 @@ npm run gen:backend
 
 ### Frontend Generator
 
-Generates React components from the `.gen.yaml` spec.
+Generates React components from the `feather.yaml` spec.
 
 ```sh
 npm run gen:frontend
@@ -370,7 +370,7 @@ npm run test:watch    # Watch mode
 npm run test:e2e      # Playwright E2E tests
 ```
 
-300+ tests across 35 test files with 100% coverage enforced. Pre-commit hooks (lefthook) run typecheck and full test suite -- commits are blocked if either fails.
+489 tests across 59 test files with 100% coverage enforced. Pre-commit hooks (lefthook) run typecheck and full test suite -- commits are blocked if either fails.
 
 Tests are co-located with their features (`*.test.tsx` / `*.test.ts`). Frontend tests use Testing Library with a custom `renderWithRouter` helper. Backend tests use `feather-testing-convex` which provides an in-memory Convex backend with typed `mutation`, `query`, and `auth` helpers.
 

@@ -1,2 +1,4 @@
-// Subtasks are accessed through the TaskDetailPanel, not as a standalone page.
-// Frontend components will be added in Plan 05-02.
+// Subtask components (SubtaskList, SubtaskItem) live in src/features/tasks/components/
+// because subtasks are rendered within the TaskDetailPanel, not as a standalone page.
+// The feather.yaml spec and backend (convex/subtasks/) define the data model.
+export {};
