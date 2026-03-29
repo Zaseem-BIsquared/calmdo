@@ -37,6 +37,7 @@ behaviors:
   orderable: true
   softDelete: false
   auditTrail: false
+  immutable: false
 
 access:
   scope: custom
@@ -101,3 +102,5 @@ indexes:
     fields: [creatorId]
   - name: by_assignee_status
     fields: [assigneeId, status]
+  - name: by_project
+    fields: [projectId]
