@@ -246,7 +246,7 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6 -
 | 7. MECE Test Rewrite | v2.0 | 3/3 | Complete | 2026-03-28 |
 | 999.1 Feather DX Architecture | Backlog | 6/6 | Complete | 2026-03-28 |
 | 999.9 Test Quality Audit | Backlog | 1/3 | In Progress|  |
-| 999.2 feather start project | Backlog | 0/? | Not started | - |
+| 999.2 feather start project | Backlog | 0/4 | Planned | - |
 | 999.3 LLM Architect Conversation | Backlog | 0/? | Not started | - |
 | 999.4 Integration Gaps | Backlog | 0/? | Not started | - |
 | 999.5 Excel-to-System Pipeline | Backlog | 0/? | Not started | - |
@@ -295,7 +295,13 @@ Plans:
 - Generates root `feather.yaml`, clones template, applies branding, provisions auth keys
 - Runs `npm install` + `npx convex dev --once` to confirm
 - Addresses todo `dx-local-auth-keys-provisioning`
-**Plans:** 0 (estimated 3-4)
+**Plans:** 4
+
+Plans:
+- [ ] 999.2-01-PLAN.md — Base branch strip script and CI workflow
+- [ ] 999.2-02-PLAN.md — Auth provider templates and conditional configuration
+- [ ] 999.2-03-PLAN.md — Create-feather wizard — project scaffolding with interactive prompts
+- [ ] 999.2-04-PLAN.md — feather add command and end-to-end integration tests
 
 ### Phase 999.3: LLM Architect Conversation (BACKLOG)
 **Goal:** Developer describes business domain in plain English, LLM produces validated `feather.yaml` with entities, relationships, and behavioral specs
