@@ -30,7 +30,7 @@ See: `.planning/milestones/v1.0-ROADMAP.md` for full details.
 - [x] **Phase 03.1: Verification Bug Fixes** (INSERTED) - Fix all issues found during Phase 2+3 UAT: auth flow bugs, task unassign visibility, dev mailbox fixes, and UX polish (completed 2026-03-25)
 - [x] **Phase 03.2: CRUD Generator Upgrade** (INSERTED) - Upgrade Plop.js generators to produce fully working CRUD features; generator output is a runnable feature that agents then customize (completed 2026-03-27)
 - [x] **Phase 03.2.1: Generator Test Philosophy Upgrade** (INSERTED) - Upgrade generator test templates to follow testing philosophy; integration-first, MECE, property-based (completed 2026-03-28)
-- [ ] **Phase 03.2.1.1: Create feather.yaml specs** (INSERTED) - Create feather.yaml specs for projects, subtasks, work-logs, activity-logs
+- [x] **Phase 03.2.1.1: Create feather.yaml specs** (INSERTED) - Create feather.yaml specs for projects, subtasks, work-logs, activity-logs (completed 2026-03-29)
 - [x] **Phase 4: Projects** - Project CRUD with status lifecycle and project-task relationship (completed 2026-03-28)
 - [x] **Phase 5: Subtasks & Work Logs** - Child-of-task overlays with subtask promotion and time logging (completed 2026-03-28)
 - [x] **Phase 6: Activity Logs & Search** - Auto-generated audit trail, text search, and filter controls across all entities (completed 2026-03-28)
@@ -127,11 +127,11 @@ Plans:
 **Goal:** Upgrade all feature YAML specs to complete, aspirational feather.yaml contracts for all 8 entities (5 CalmDo + 3 examples), merge old gen.yaml files, delete old files
 **Requirements**: TBD
 **Depends on:** Phase 03.2.1
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
-- [ ] 03.2.1.1-01-PLAN.md — CalmDo feather.yaml specs: tasks reconciliation, projects, subtasks, work-logs, activity-logs
-- [ ] 03.2.1.1-02-PLAN.md — Example app feather.yaml specs (todos, tickets, contacts) + gen.yaml cleanup
+- [x] 03.2.1.1-01-PLAN.md — CalmDo feather.yaml specs: tasks reconciliation, projects, subtasks, work-logs, activity-logs
+- [x] 03.2.1.1-02-PLAN.md — Example app feather.yaml specs (todos, tickets, contacts) + gen.yaml cleanup
 
 ### Phase 03.1: Verification Bug Fixes (INSERTED)
 
@@ -239,7 +239,7 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6 -
 | 03.1 Verification Bug Fixes | v2.0 | 2/2 | Complete | 2026-03-25 |
 | 03.2 CRUD Generator Upgrade | v2.0 | 6/6 | Complete | 2026-03-27 |
 | 03.2.1 Generator Test Philosophy | v2.0 | — | Complete (inline) | 2026-03-28 |
-| 03.2.1.1 Create feather.yaml specs | v2.0 | 0/2 | Planned | - |
+| 03.2.1.1 Create feather.yaml specs | v2.0 | 2/2 | Complete   | 2026-03-29 |
 | 4. Projects | v2.0 | 2/2 | Complete | 2026-03-28 |
 | 5. Subtasks & Work Logs | v2.0 | 2/2 | Complete | 2026-03-28 |
 | 6. Activity Logs & Search | v2.0 | 1/1 | Complete | 2026-03-28 |
