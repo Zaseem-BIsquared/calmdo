@@ -247,7 +247,7 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6 -
 | 999.1 Feather DX Architecture | Backlog | 6/6 | Complete | 2026-03-28 |
 | 999.9 Test Quality Audit | Backlog | 3/3 | Complete    | 2026-03-29 |
 | 999.2 feather start project | Backlog | 0/4 | Planned | - |
-| 999.3 LLM Architect Conversation | Backlog | 0/? | Not started | - |
+| 999.3 LLM Architect Conversation | Backlog | 0/4 | Planned | - |
 | 999.4 Integration Gaps | Backlog | 0/? | Not started | - |
 | 999.5 Excel-to-System Pipeline | Backlog | 0/? | Not started | - |
 | 999.6 Bundle Distribution | Backlog | 0/? | Not started | - |
@@ -308,11 +308,18 @@ Plans:
 **Depends on:** Phase 999.2
 **Scope:**
 - 4-phase conversation: Entity Discovery → Schema + CRUD → Behavior Overlay (8 dimensions) → Validation
-- `@anthropic-ai/sdk` for streaming conversation with tool use
+- Claude Code skill (`/feather:architect`) — no API SDK needed, skill IS the conversation engine
 - Conversation state persisted as JSON in `.feather/conversations/` (resumable)
+- Web preview dashboard (ER diagram, YAML display, sample data, validation status)
 - Quad meta-model (Data + Layout + Actions + Reports) structures the conversation
 - Output: validated feather.yaml files ready for `feather generate`
-**Plans:** 0 (estimated 4-5)
+**Plans:** 4
+
+Plans:
+- [ ] 999.3-01-PLAN.md — Conversation state checkpoint system (JSON schema, persistence, resume)
+- [ ] 999.3-02-PLAN.md — Claude Code skill + YAML generator + sample data helpers
+- [ ] 999.3-03-PLAN.md — Web preview dashboard (ER diagram, YAML display, auto-refresh)
+- [ ] 999.3-04-PLAN.md — Integration testing with CalmDo domain end-to-end
 
 ### Phase 999.4: 999.1 Integration Gaps (BACKLOG)
 **Goal:** Wire architecturally validated foundations into real code generation pipeline
