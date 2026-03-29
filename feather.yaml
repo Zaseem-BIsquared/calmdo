@@ -3,11 +3,16 @@ version: 2.0.0
 branding:
   appName: CalmDo
 features:
+  # CalmDo core features
   - tasks
   - projects
   - subtasks
   - workLogs
   - activityLogs
+  # Example apps
+  - todos
+  - tickets
+  - contacts
 settings:
   i18n:
     languages: [en, es]
