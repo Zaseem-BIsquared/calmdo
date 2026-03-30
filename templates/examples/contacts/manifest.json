@@ -1,0 +1,25 @@
+{
+  "name": "contacts",
+  "label": "Contacts",
+  "description": "Multi-field entity — contact management with search",
+  "complexity": "intermediate",
+  "files": {
+    "frontend": "src/features/contacts/",
+    "backend": "convex/contacts/",
+    "schema": "src/shared/schemas/contacts.ts",
+    "route": "src/routes/_app/_auth/dashboard/_layout.contacts.tsx",
+    "locales": [
+      "public/locales/en/contacts.json",
+      "public/locales/es/contacts.json"
+    ]
+  },
+  "wiring": {
+    "schemaTable": "contacts",
+    "navEntry": {
+      "label": "Contacts",
+      "i18nKey": "contacts.nav.contacts",
+      "to": "/dashboard/contacts"
+    },
+    "i18nNamespace": "contacts"
+  }
+}

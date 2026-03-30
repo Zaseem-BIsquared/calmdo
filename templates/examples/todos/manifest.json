@@ -1,0 +1,25 @@
+{
+  "name": "todos",
+  "label": "Todos",
+  "description": "Simple CRUD example — todo list with completion tracking",
+  "complexity": "simple",
+  "files": {
+    "frontend": "src/features/todos/",
+    "backend": "convex/todos/",
+    "schema": "src/shared/schemas/todos.ts",
+    "route": "src/routes/_app/_auth/dashboard/_layout.todos.tsx",
+    "locales": [
+      "public/locales/en/todos.json",
+      "public/locales/es/todos.json"
+    ]
+  },
+  "wiring": {
+    "schemaTable": "todos",
+    "navEntry": {
+      "label": "Todos",
+      "i18nKey": "todos.nav.todos",
+      "to": "/dashboard/todos"
+    },
+    "i18nNamespace": "todos"
+  }
+}

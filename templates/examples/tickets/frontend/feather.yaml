@@ -1,0 +1,82 @@
+name: tickets
+label: Ticket
+labelPlural: Tickets
+
+kind: standard
+
+fields:
+  title:
+    type: string
+    required: true
+    max: 200
+  description:
+    type: text
+    max: 5000
+  status:
+    type: enum
+    values: [open, in_progress, resolved, closed]
+    default: open
+    filterable: true
+    transitions:  # TODO: generator pending
+      open: [in_progress]
+      in_progress: [resolved, open]
+      resolved: [closed, open]
+      # closed is terminal
+  priority:
+    type: enum
+    values: [low, medium, high, critical]
+    default: medium
+    filterable: true
+
+timestamps: false
+
+identity:
+  type: auto-increment
+
+behaviors:
+  assignable: true
+  orderable: true
+  softDelete: false
+  auditTrail: false
+  immutable: false
+
+access:
+  scope: owner
+  permissions:
+    create: authenticated
+    read: owner
+    update: owner
+    delete: owner
+
+views:
+  defaultView: list
+  enabledViews: [list]
+  filteredViews:
+    - name: open-tickets
+      label: Open Tickets
+      filter: { status: open }
+      navEntry: false
+    - name: my-tickets
+      label: My Tickets
+      filter: { assigneeId: $currentUser }
+      navEntry: false
+
+operations:
+  create: true
+  read: true
+  update: true
+  delete: true
+
+detailView:  # TODO: generator pending
+  layout: panels
+
+hooks:  # TODO: generator pending
+  onStatusChange: custom/tickets/hooks/onStatusChange
+
+indexes:
+  - name: by_userId
+    fields: [userId]
+  - name: by_status
+    fields: [status]
+  - name: by_priority
+    fields: [priority]

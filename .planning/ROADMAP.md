@@ -298,10 +298,10 @@ Plans:
 **Plans:** 4
 
 Plans:
-- [ ] 999.2-01-PLAN.md — Base branch strip script and CI workflow
-- [ ] 999.2-02-PLAN.md — Auth provider templates and conditional configuration
-- [ ] 999.2-03-PLAN.md — Create-feather wizard — project scaffolding with interactive prompts
-- [ ] 999.2-04-PLAN.md — feather add command and end-to-end integration tests
+- [x] 999.2-01-PLAN.md — Base branch strip script and CI workflow
+- [x] 999.2-02-PLAN.md — Auth provider templates and conditional configuration
+- [x] 999.2-03-PLAN.md — Create-feather wizard — project scaffolding with interactive prompts
+- [x] 999.2-04-PLAN.md — feather add command and end-to-end integration tests
 
 ### Phase 999.3: LLM Architect Conversation (BACKLOG)
 **Goal:** Developer describes business domain in plain English, LLM produces validated `feather.yaml` with entities, relationships, and behavioral specs

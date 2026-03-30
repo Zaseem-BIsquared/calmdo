@@ -22,7 +22,8 @@
     "gen:backend": "plop backend",
     "gen:frontend": "plop frontend",
     "gen:route": "plop route",
-    "gen:convex-function": "plop convex-function"
+    "gen:convex-function": "plop convex-function",
+    "create": "tsx scripts/create/index.ts"
   },
   "dependencies": {
     "@auth/core": "^0.37.0",

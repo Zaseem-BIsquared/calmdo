@@ -4,6 +4,8 @@ import { validateCommand } from "./commands/validate";
 import { generateCommand } from "./commands/generate";
 import { updateCommand } from "./commands/update";
 import { initCommand } from "./commands/init";
+import { addCommand } from "./commands/add";
+import { removeCommand } from "./commands/remove";
 
 const program = new Command();
 
@@ -18,5 +20,7 @@ program.addCommand(validateCommand);
 program.addCommand(generateCommand);
 program.addCommand(updateCommand);
 program.addCommand(initCommand);
+program.addCommand(addCommand);
+program.addCommand(removeCommand);
 
 program.parse();

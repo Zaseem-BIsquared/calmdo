@@ -1,0 +1,37 @@
+name: Update Base Branch
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  update-base:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Strip feature code
+        run: npx tsx scripts/strip-to-base.ts
+
+      - name: Verify stripped project typechecks
+        run: npm run typecheck
+
+      - name: Commit and push to base branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B base
+          git add -A
+          git commit -m "chore: auto-generate base branch from main ($(git rev-parse --short HEAD~1))" || true
+          git push origin base --force

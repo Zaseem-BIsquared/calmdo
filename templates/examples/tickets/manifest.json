@@ -1,0 +1,25 @@
+{
+  "name": "tickets",
+  "label": "Tickets",
+  "description": "Status transitions and priority — support ticket tracker",
+  "complexity": "intermediate",
+  "files": {
+    "frontend": "src/features/tickets/",
+    "backend": "convex/tickets/",
+    "schema": "src/shared/schemas/tickets.ts",
+    "route": "src/routes/_app/_auth/dashboard/_layout.tickets.tsx",
+    "locales": [
+      "public/locales/en/tickets.json",
+      "public/locales/es/tickets.json"
+    ]
+  },
+  "wiring": {
+    "schemaTable": "tickets",
+    "navEntry": {
+      "label": "Tickets",
+      "i18nKey": "tickets.nav.tickets",
+      "to": "/dashboard/tickets"
+    },
+    "i18nNamespace": "tickets"
+  }
+}
