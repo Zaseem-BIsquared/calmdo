@@ -23,6 +23,7 @@ export default defineConfig({
     environmentMatchGlobs: [
       ["convex/**", "edge-runtime"],
       ["generators/**", "node"],
+      ["lib/**", "node"],
     ],
     server: {
       deps: {
