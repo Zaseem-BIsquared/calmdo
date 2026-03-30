@@ -5,16 +5,26 @@
  * frontend components (page, views, form, item, etc.), route, locales,
  * and auto-wires all shared files.
  *
+ * When FEATHER_USE_PIPELINE !== "false", the pipeline (templates/pipeline/generate.ts)
+ * handles rendering + wiring. The old Plop actions are kept as fallback.
+ *
  * @typedef {import('./utils/types.ts').FeatureConfig} FeatureConfig
  */
 
 import fs from "node:fs";
 import path from "node:path";
+import YAML from "yaml";
 import {
   loadFeatureYaml,
   resolveDefaults,
   writeResolvedYaml,
 } from "./utils/yaml-resolver.js";
+
+/**
+ * Whether to use the pipeline for code generation.
+ * Set FEATHER_USE_PIPELINE=false to fall back to old Plop actions.
+ */
+const usePipeline = process.env.FEATHER_USE_PIPELINE !== "false";
 
 /**
  * Parse Rails-style field definitions (D-08).
@@ -72,7 +82,7 @@ function pascalCase(str) {
 }
 
 /**
- * Build the list of smartAdd actions for all feature files.
+ * Build the list of smartAdd actions for all feature files (legacy fallback).
  * @param {FeatureConfig} config - Resolved feature config
  * @returns {Array<Record<string, unknown>>}
  */
@@ -243,11 +253,49 @@ function buildActions(config) {
 }
 
 /**
+ * Build a pipeline-based action list.
+ * Writes feather.yaml to the feature directory, then calls generateFeature()
+ * from the pipeline. This is the unified path for both interactive and YAML modes.
+ *
+ * @param {FeatureConfig} config - Resolved feature config
+ * @param {string} yamlPath - Path to the feather.yaml file
+ * @returns {Array<Record<string, unknown>>}
+ */
+function buildPipelineActions(config, yamlPath) {
+  return [
+    {
+      type: "pipelineGenerate",
+      yamlPath,
+      featureName: config.name,
+    },
+  ];
+}
+
+/**
  * Feature generator definition for Plop.
  * @param {import('plop').NodePlopAPI} plop
  * @returns {import('plop').PlopGeneratorConfig}
  */
 export default function featureGenerator(plop) {
+  // Register the pipeline action type
+  plop.setActionType("pipelineGenerate", async (answers, config) => {
+    const { generateFeature } = await import(
+      "../templates/pipeline/generate.ts"
+    );
+    const projectRoot = process.cwd();
+    const result = await generateFeature({
+      yamlPath: config.yamlPath,
+      projectRoot,
+      outputMode: "legacy",
+    });
+
+    if (!result.success) {
+      throw new Error(`Pipeline generation failed: ${result.errors.join("; ")}`);
+    }
+
+    return `Pipeline generated ${result.scaffolded.files.length} files for ${result.featureName}`;
+  });
+
   return {
     description: "Generate a full CRUD feature from YAML definition",
     prompts: [
@@ -291,10 +339,11 @@ export default function featureGenerator(plop) {
     actions: (data) => {
       /** @type {Record<string, unknown>} */
       let featureConfig;
+      let yamlFullPath;
 
       if (data.yamlPath) {
         // Load from YAML file
-        const yamlFullPath = path.resolve(process.cwd(), data.yamlPath);
+        yamlFullPath = path.resolve(process.cwd(), data.yamlPath);
         featureConfig = loadFeatureYaml(yamlFullPath);
       } else {
         // Build from interactive wizard answers
@@ -305,12 +354,16 @@ export default function featureGenerator(plop) {
           fields: parseFieldsRaw(data.fieldsRaw),
         };
 
-        // Write the gen.yaml for future re-runs
+        // Write the feather.yaml for future re-runs and pipeline consumption
         const yamlDir = path.resolve(
           process.cwd(),
           `src/features/${data.name}`,
         );
         fs.mkdirSync(yamlDir, { recursive: true });
+        yamlFullPath = path.join(yamlDir, "feather.yaml");
+        writeResolvedYaml(featureConfig, yamlFullPath);
+
+        // Also write the gen.yaml for backward compatibility
         writeResolvedYaml(
           featureConfig,
           path.join(yamlDir, `${data.name}.gen.yaml`),
@@ -330,6 +383,12 @@ export default function featureGenerator(plop) {
       // Spread resolved config into data so templates can access all fields
       Object.assign(data, resolved);
 
+      if (usePipeline) {
+        // Pipeline path: single generateFeature() call handles rendering + wiring
+        return buildPipelineActions(resolved, yamlFullPath);
+      }
+
+      // Legacy fallback: individual Plop actions
       return buildActions(resolved);
     },
   };
