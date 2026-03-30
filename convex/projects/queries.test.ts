@@ -5,9 +5,13 @@
 // | 2 | list         | status='active' filter | returns only active projects                    |
 // | 3 | list         | with tasks             | taskCounts { total, todo, in_progress, done }   |
 // | 4 | list         | unauthenticated        | returns empty array                             |
-// | 5 | getWithTasks | project with tasks     | returns project + tasks + statusSummary         |
-// | 6 | getWithTasks | nonexistent project    | returns null                                    |
-// | 7 | getWithTasks | unauthenticated        | returns null                                    |
+// | 5 | search       | unauthenticated        | returns empty array                             |
+// | 6 | search       | empty search term      | returns empty array                             |
+// | 7 | search       | matching name          | returns matching projects                       |
+// | 8 | search       | with limit             | respects limit parameter                        |
+// | 9 | getWithTasks | project with tasks     | returns project + tasks + statusSummary         |
+// |10 | getWithTasks | nonexistent project    | returns null                                    |
+// |11 | getWithTasks | unauthenticated        | returns null                                    |
 
 import { describe, expect } from "vitest";
 import { api } from "../_generated/api";
@@ -107,6 +111,49 @@ describe("list", () => {
   test("returns empty array when unauthenticated", async ({ testClient }) => {
     const projects = await testClient.query(api.projects.queries.list, {});
     expect(projects).toEqual([]);
+  });
+});
+
+describe("search", () => {
+  test("returns empty array when unauthenticated", async ({ testClient }) => {
+    const results = await testClient.query(api.projects.queries.search, {
+      searchTerm: "test",
+    });
+    expect(results).toEqual([]);
+  });
+
+  test("returns empty array for empty search term", async ({ client }) => {
+    const results = await client.query(api.projects.queries.search, {
+      searchTerm: "",
+    });
+    expect(results).toEqual([]);
+  });
+
+  test("returns matching projects by name", async ({ client }) => {
+    await client.mutation(api.projects.mutations.create, {
+      name: "Marketing Campaign",
+    });
+    await client.mutation(api.projects.mutations.create, {
+      name: "Engineering Sprint",
+    });
+    const results = await client.query(api.projects.queries.search, {
+      searchTerm: "Marketing",
+    });
+    expect(results.length).toBe(1);
+    expect(results[0].name).toBe("Marketing Campaign");
+  });
+
+  test("respects limit parameter", async ({ client }) => {
+    for (let i = 0; i < 5; i++) {
+      await client.mutation(api.projects.mutations.create, {
+        name: `Project ${i}`,
+      });
+    }
+    const results = await client.query(api.projects.queries.search, {
+      searchTerm: "Project",
+      limit: 2,
+    });
+    expect(results.length).toBeLessThanOrEqual(2);
   });
 });
 

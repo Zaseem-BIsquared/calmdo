@@ -50,14 +50,22 @@ const schema = defineSchema({
     .index("by_visibility", ["visibility"])
     .index("by_creator", ["creatorId"])
     .index("by_assignee_status", ["assigneeId", "status"])
-    .index("by_project", ["projectId"]),
+    .index("by_project", ["projectId"])
+    .searchIndex("search_title", {
+      searchField: "title",
+      filterFields: ["status", "assigneeId", "projectId", "priority"],
+    }),
   projects: defineTable({
     name: v.string(),
     status: zodToConvex(projectStatus),
     creatorId: v.id("users"),
   })
     .index("by_status", ["status"])
-    .index("by_creator", ["creatorId"]),
+    .index("by_creator", ["creatorId"])
+    .searchIndex("search_name", {
+      searchField: "name",
+      filterFields: ["status"],
+    }),
   devEmails: defineTable({
     to: v.array(v.string()),
     subject: v.string(),

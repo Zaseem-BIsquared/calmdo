@@ -36,6 +36,21 @@ export const list = query({
   },
 });
 
+export const search = query({
+  args: { searchTerm: v.string(), limit: v.optional(v.number()) },
+  handler: async (ctx, args) => {
+    const userId = await auth.getUserId(ctx);
+    if (!userId) return [];
+    if (!args.searchTerm.trim()) return [];
+    return ctx.db
+      .query("projects")
+      .withSearchIndex("search_name", (q) =>
+        q.search("name", args.searchTerm),
+      )
+      .take(args.limit ?? 10);
+  },
+});
+
 export const getWithTasks = query({
   args: { projectId: v.id("projects") },
   handler: async (ctx, args) => {
