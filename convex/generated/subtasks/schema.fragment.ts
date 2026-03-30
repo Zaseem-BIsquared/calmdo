@@ -9,5 +9,4 @@ export const subtasksTable = defineTable({
   promotedToTaskId: v.optional(v.id("tasks")),
   creatorId: v.id("users"),
   position: v.number(),
-  creatorId: v.id("users"),
 });

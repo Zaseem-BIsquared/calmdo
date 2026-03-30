@@ -80,13 +80,15 @@ function generateSchemaStub(config: FeatureYaml): string {
     })
     .join("\n");
 
+  const hasCreatorId = "creatorId" in config.fields;
+  const creatorIdLine = hasCreatorId ? "" : "  creatorId: v.id(\"users\"),\n";
+
   return `${generatedHeader(config.name)}import { defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export const ${config.name}Table = defineTable({
 ${fieldEntries}
-  creatorId: v.id("users"),
-});
+${creatorIdLine}});
 `;
 }
 
