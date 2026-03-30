@@ -28,13 +28,6 @@ export function ProjectsPage() {
 
   return (
     <div className="flex h-full w-full flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold text-primary">Projects</h1>
-        <p className="text-sm text-primary/60">
-          Manage your projects and their tasks.
-        </p>
-      </div>
-
       <ProjectForm />
 
       {/* Status filter tabs */}

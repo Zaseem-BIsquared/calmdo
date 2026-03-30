@@ -333,11 +333,7 @@ describe("listFiltered", () => {
     expect(high[0].title).toBe("High");
   });
 
-  test("filters by assignee 'me'", async ({
-    client,
-    userId,
-    testClient,
-  }) => {
+  test("filters by assignee 'me'", async ({ client, userId, testClient }) => {
     // create mutation assigns to current user by default
     await client.mutation(api.tasks.mutations.create, { title: "My task" });
 
@@ -384,6 +380,8 @@ describe("listFiltered", () => {
     expect(unassigned.length).toBe(1);
     expect(unassigned[0].title).toBe("Unassigned");
   });
+
+  // TODO: add test "filters by assignee 'other user'"
 
   test("filters by projectId", async ({ client }) => {
     const projectId = await client.mutation(api.projects.mutations.create, {

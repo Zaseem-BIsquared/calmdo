@@ -26,11 +26,9 @@ export function TeamPoolPage() {
     projectId?: Id<"projects">;
   } = {};
   if (search.status) filterArgs.status = search.status;
-  if (search.priority)
-    filterArgs.priority = search.priority === "high";
+  if (search.priority) filterArgs.priority = search.priority === "high";
   if (search.assignee) filterArgs.assigneeId = search.assignee;
-  if (search.project)
-    filterArgs.projectId = search.project as Id<"projects">;
+  if (search.project) filterArgs.projectId = search.project as Id<"projects">;
 
   // Default to "unassigned" filter when no assignee filter is set (Team Pool view)
   if (!search.assignee) filterArgs.assigneeId = "unassigned";
@@ -48,11 +46,6 @@ export function TeamPoolPage() {
 
   return (
     <div className="flex h-full w-full flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold text-primary">Team Pool</h1>
-        <p className="text-sm text-primary/60">Unassigned tasks available for the team.</p>
-      </div>
-
       <TaskFilterBar />
 
       <TaskList
