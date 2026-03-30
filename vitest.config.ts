@@ -135,25 +135,6 @@ export default defineConfig({
         "src/features/subtasks/components/**",
         "src/features/work-logs/components/**",
 
-        // --- Deferred: generated example apps (Phase 03.2.1.1 will regenerate) ---
-        "convex/todos/**",
-        "convex/tickets/**",
-        "convex/contacts/**",
-        "src/features/contacts/components/**",
-        "src/features/todos/components/TodosDetailPage.tsx",
-        "src/features/todos/components/TodosLoadingSkeleton.tsx",
-        "src/features/todos/components/TodosListView.tsx",
-        "src/features/todos/components/TodosForm.tsx",
-        "src/features/todos/components/TodosItem.tsx",
-        "src/features/todos/components/TodosFilterBar.tsx",
-        "src/features/tickets/components/TicketsDetailPage.tsx",
-        "src/features/tickets/components/TicketsLoadingSkeleton.tsx",
-        "src/features/tickets/components/TicketsListView.tsx",
-        "src/features/tickets/components/TicketsForm.tsx",
-        "src/features/tickets/components/TicketsStatusBadge.tsx",
-        "src/features/tickets/components/TicketsItem.tsx",
-        "src/features/tickets/components/TicketsFilterBar.tsx",
-
         // --- Generator infrastructure (Phase 999.1 scope) ---
         "bin/**",
         "templates/**",

@@ -2,13 +2,11 @@ export const ERRORS = {
   auth: {
     EMAIL_NOT_SENT: "Unable to send email.",
     USER_NOT_CREATED: "Unable to create user.",
-    SOMETHING_WENT_WRONG:
-      "Something went wrong while trying to authenticate.",
+    SOMETHING_WENT_WRONG: "Something went wrong while trying to authenticate.",
   },
   onboarding: {
     USERNAME_ALREADY_EXISTS: "Username already exists.",
-    SOMETHING_WENT_WRONG:
-      "Something went wrong while trying to onboard.",
+    SOMETHING_WENT_WRONG: "Something went wrong while trying to onboard.",
   },
   common: {
     UNKNOWN: "Unknown error.",
@@ -34,17 +32,5 @@ export const ERRORS = {
   // admin: { ... }
   activityLogs: {
     NOT_FOUND: "Activity log not found.",
-  },
-  todos: {
-    NOT_FOUND: "Todo not found.",
-    INVALID_STATUS_TRANSITION: "Invalid status transition.",
-  },
-  tickets: {
-    NOT_FOUND: "Ticket not found.",
-    INVALID_STATUS_TRANSITION: "Invalid status transition.",
-  },
-  contacts: {
-    NOT_FOUND: "Contact not found.",
-    INVALID_STATUS_TRANSITION: "Invalid status transition.",
   },
 } as const;
