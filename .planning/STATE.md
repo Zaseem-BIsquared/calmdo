@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CalmDo Core
 status: Ready to execute
-last_updated: "2026-03-30T03:50:01.995Z"
+last_updated: "2026-03-30T04:03:07.238Z"
 progress:
   total_phases: 21
   completed_phases: 15
   total_plans: 56
-  completed_plans: 47
+  completed_plans: 48
 ---
 
 # Project State
@@ -23,7 +23,7 @@ See: .planning/PROJECT.md (updated 2026-03-10)
 ## Current Position
 
 Phase: 999.4 (999-1-integration-gaps-backlog) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 All 4 plans executed: strip script, auth templates, create wizard, feather add/remove
 
 ### Roadmap Evolution
@@ -66,6 +66,7 @@ All 4 plans executed: strip script, auth templates, create wizard, feather add/r
 | Phase 999.10 P02 | 5min | 4 tasks | 8 files |
 | Phase 999.3 P01-04 | 16 min | 14 tasks | 12 files |
 | Phase 999.4 P01 | 25min | 5 tasks | 6 files |
+| Phase 999.4 P02 | 11min | 5 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -110,6 +111,8 @@ Recent:
 - [Phase 06]: Activity logs use camelCase activityLogs table, entityId as v.string() for multi-table references, inline logActivity helper pattern — Consistent with existing workLogs/devEmails conventions; v.string() needed because entityId references tasks, projects, and subtasks tables
 - [Phase 999.4]: Use standalone Handlebars instance with registerStandaloneHelpers() to avoid Plop coupling
 - [Phase 999.4]: hasTransitions is alias for hasEnumTransitions (status-badge.tsx.hbs uses both)
+- [Phase 999.4]: Conditional imports in panel templates (useMutation, Plus) via {{#unless readonly}} — avoids unused imports in generated readonly panels
+- [Phase 999.4]: renderCrossEntityPanels() as separate exported function in render.ts — clean separation from renderFeatureTemplates, ScaffoldOptions.relatedYamls optional for backward compat
 
 ### Pending Todos
 
