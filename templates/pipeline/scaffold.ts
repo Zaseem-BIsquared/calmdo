@@ -1,6 +1,8 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { pascalCase } from "change-case";
 import type { FeatureYaml } from "../schema/feather-yaml.schema";
+import { renderFeatureTemplates } from "./render";
 
 // ── Scaffold types ───────────────────────────────────────────────────────────
 
@@ -48,72 +50,53 @@ function generatedHeader(featureName: string): string {
   return `${GENERATED_HEADER}${featureName}/\n\n`;
 }
 
-// ── File templates (minimal stubs for pipeline verification) ─────────────────
-// These will be replaced by Plop Handlebars templates in production.
-// For now, they demonstrate the scaffold → wire pipeline structure.
+// ── Output key → absolute path mapping ──────────────────────────────────────
 
-function generateSchemaStub(config: FeatureYaml): string {
-  const fieldEntries = Object.entries(config.fields)
-    .map(([name, field]) => {
-      const fieldType = field.type;
-      switch (fieldType) {
-        case "string":
-        case "text":
-        case "email":
-        case "url":
-          return `  ${name}: v.${field.required ? "" : "optional(v."}string()${field.required ? "" : ")"},`;
-        case "number":
-        case "currency":
-        case "percentage":
-          return `  ${name}: v.${field.required ? "" : "optional(v."}number()${field.required ? "" : ")"},`;
-        case "boolean":
-          return `  ${name}: v.${field.required ? "" : "optional(v."}boolean()${field.required ? "" : ")"},`;
-        case "date":
-          return `  ${name}: v.${field.required ? "" : "optional(v."}number()${field.required ? "" : ")"},`;
-        case "enum":
-          return `  ${name}: v.string(),`;
-        case "reference":
-          return `  ${name}: v.${field.required ? "" : "optional(v."}id("${field.target || "unknown"}")${field.required ? "" : ")"},`;
-        default:
-          return `  ${name}: v.string(),`;
-      }
-    })
-    .join("\n");
+/**
+ * Map a template output key to an absolute file path.
+ *
+ * Keys come from renderFeatureTemplates():
+ *  - "schema.fragment.ts"          → backendDir/schema.fragment.ts
+ *  - "mutations.ts"                → backendDir/mutations.ts
+ *  - "queries.ts"                  → backendDir/queries.ts
+ *  - "mutations.test.ts"           → backendDir/mutations.test.ts
+ *  - "queries.test.ts"             → backendDir/queries.test.ts
+ *  - "components/XxxPage.tsx"      → frontendDir/components/XxxPage.tsx
+ *  - "hooks/useXxx.ts"             → frontendDir/hooks/useXxx.ts
+ *  - "index.ts"                    → frontendDir/index.ts
+ *  - "xxx.test.tsx"                → frontendDir/xxx.test.tsx
+ *  - "README.md"                   → frontendDir/README.md
+ *  - "locales/en/xxx.json"         → projectRoot/public/locales/en/xxx.json
+ *  - "locales/es/xxx.json"         → projectRoot/public/locales/es/xxx.json
+ */
+function resolveOutputPath(
+  outputKey: string,
+  frontendDir: string,
+  backendDir: string,
+  projectRoot: string,
+): string {
+  // Backend files
+  const backendKeys = [
+    "schema.fragment.ts",
+    "mutations.ts",
+    "queries.ts",
+    "mutations.test.ts",
+    "queries.test.ts",
+  ];
 
-  return `${generatedHeader(config.name)}import { defineTable } from "convex/server";
-import { v } from "convex/values";
+  if (backendKeys.includes(outputKey)) {
+    return path.join(backendDir, outputKey);
+  }
 
-export const ${config.name}Table = defineTable({
-${fieldEntries}
-  creatorId: v.id("users"),
-});
-`;
-}
+  // Locale files live in public/locales/
+  if (outputKey.startsWith("locales/")) {
+    // "locales/en/todos.json" → "public/locales/en/todos.json"
+    const relLocale = outputKey.replace(/^locales\//, "");
+    return path.join(projectRoot, "public", "locales", relLocale);
+  }
 
-function generateComponentStub(config: FeatureYaml): string {
-  const pascalName =
-    config.name.charAt(0).toUpperCase() + config.name.slice(1);
-  return `${generatedHeader(config.name)}export function ${pascalName}Page() {
-  return <div>${config.label} Page</div>;
-}
-`;
-}
-
-function generateBarrelStub(config: FeatureYaml): string {
-  const pascalName =
-    config.name.charAt(0).toUpperCase() + config.name.slice(1);
-  return `${generatedHeader(config.name)}export { ${pascalName}Page } from "./components/${pascalName}Page";
-`;
-}
-
-function generateMutationsStub(config: FeatureYaml): string {
-  return `${generatedHeader(config.name)}// Mutations for ${config.label}
-`;
-}
-
-function generateQueriesStub(config: FeatureYaml): string {
-  return `${generatedHeader(config.name)}// Queries for ${config.label}
-`;
+  // Everything else lives under frontendDir
+  return path.join(frontendDir, outputKey);
 }
 
 // ── Main scaffold function ───────────────────────────────────────────────────
@@ -133,34 +116,35 @@ export async function scaffoldFeature(
     options.outputMode,
   );
 
-  const files: Array<{ path: string; content: string }> = [
-    // Backend
-    {
-      path: path.join(backendDir, "schema.fragment.ts"),
-      content: generateSchemaStub(config),
-    },
-    {
-      path: path.join(backendDir, "mutations.ts"),
-      content: generateMutationsStub(config),
-    },
-    {
-      path: path.join(backendDir, "queries.ts"),
-      content: generateQueriesStub(config),
-    },
-    // Frontend
-    {
-      path: path.join(
-        frontendDir,
-        "components",
-        `${config.name.charAt(0).toUpperCase() + config.name.slice(1)}Page.tsx`,
-      ),
-      content: generateComponentStub(config),
-    },
-    {
-      path: path.join(frontendDir, "index.ts"),
-      content: generateBarrelStub(config),
-    },
-  ];
+  // Locate templates/feature/ directory relative to this file
+  const templateDir = path.resolve(
+    path.dirname(new URL(import.meta.url).pathname),
+    "..",
+    "feature",
+  );
+
+  // Render all templates
+  const rendered = renderFeatureTemplates(config, templateDir);
+
+  // Build file list with absolute paths
+  const files: Array<{ path: string; content: string }> = [];
+
+  for (const [outputKey, content] of rendered) {
+    const filePath = resolveOutputPath(
+      outputKey,
+      frontendDir,
+      backendDir,
+      options.projectRoot,
+    );
+
+    // Prepend generated header when in generated mode
+    const finalContent =
+      options.outputMode === "generated"
+        ? generatedHeader(config.name) + content
+        : content;
+
+    files.push({ path: filePath, content: finalContent });
+  }
 
   if (options.dryRun) {
     return {
@@ -169,7 +153,7 @@ export async function scaffoldFeature(
     };
   }
 
-  // Write files
+  // Write files to disk
   for (const file of files) {
     const dir = path.dirname(file.path);
     fs.mkdirSync(dir, { recursive: true });
@@ -181,3 +165,6 @@ export async function scaffoldFeature(
     outputDir: frontendDir,
   };
 }
+
+// Re-export for test introspection
+export { pascalCase };
