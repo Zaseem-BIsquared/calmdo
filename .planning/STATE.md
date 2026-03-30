@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CalmDo Core
 status: Ready to execute
-last_updated: "2026-03-29T12:50:32.668Z"
+last_updated: "2026-03-30T00:52:48.904Z"
 progress:
   total_phases: 21
   completed_phases: 12
-  total_plans: 48
-  completed_plans: 36
+  total_plans: 51
+  completed_plans: 37
 ---
 
 # Project State
@@ -18,12 +18,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-10)
 
 **Core value:** Developer velocity -- new features are faster to build because every file has a clear, predictable home
-**Current focus:** Phase 999.10 — e2e-verification-bug-fixes-docs-debt-backlog
+**Current focus:** Phase 999.2 — feather-start-project-first-run-dx-backlog
 
 ## Current Position
 
-Phase: 999.10 (e2e-verification-bug-fixes-docs-debt-backlog) — EXECUTING
-Plan: 2 of 2
+Phase: 999.2 (feather-start-project-first-run-dx-backlog) — EXECUTING
+Plan: 2 of 4
 
 ### Roadmap Evolution
 

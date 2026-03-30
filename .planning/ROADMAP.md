@@ -252,7 +252,7 @@ Phases execute in numeric order: 2 -> 02.1 -> 3 -> 03.1 -> 03.2 -> 4 -> 5 -> 6 -
 | 999.5 Excel-to-System Pipeline | Backlog | 0/? | Not started | - |
 | 999.6 Bundle Distribution | Backlog | 0/? | Not started | - |
 | 999.7 Telemetry | Backlog | 0/? | Not started | - |
-| 999.8 Search | Backlog | 0/2 | Planned | - |
+| 999.8 Search | Backlog | 1/2 | In Progress|  |
 | 999.10 E2E, Bugs & Docs Debt | Backlog | 1/2 | In Progress|  |
 
 ## Backlog
@@ -381,10 +381,10 @@ Plans:
 - Project list filtering by status
 - Combined search results view
 **Note:** Phase 6 was "Activity Logs & Search" but search was never built. These 6 requirements (SRCH-01 to SRCH-06) are carried forward here.
-**Plans:** 2
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 999.8-01-PLAN.md — Search indexes, filtered queries, and search queries (Wave 1)
+- [x] 999.8-01-PLAN.md — Search indexes, filtered queries, and search queries (Wave 1)
 - [ ] 999.8-02-PLAN.md — Filter bar, global search, URL params, and frontend tests (Wave 2)
 
 ### Phase 999.10: E2E Verification, Bug Fixes & Docs Debt (BACKLOG)
