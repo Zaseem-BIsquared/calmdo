@@ -132,4 +132,27 @@ describe("feather generate", () => {
     );
     expect(fs.existsSync(yamlPath)).toBe(true);
   });
+
+  it("dry-run produces >= 20 files from Handlebars rendering (not 5 stubs)", async () => {
+    const yamlPath = path.join(tempDir, "todos.yaml");
+    fs.writeFileSync(
+      yamlPath,
+      `name: todos\nlabel: Todo\nlabelPlural: Todos\nfields:\n  title:\n    type: string\n    required: true\n`,
+    );
+
+    const result = await generateAction(
+      undefined,
+      { fromYaml: yamlPath, dryRun: true },
+      tempDir,
+    );
+
+    expect(result.success).toBe(true);
+    // Count "Would create" lines — each file produces one line
+    const wouldCreateCount = (result.message.match(/Would create/g) || []).length;
+    expect(wouldCreateCount).toBeGreaterThanOrEqual(20);
+
+    // Verify no files were written to disk
+    const genDir = path.join(tempDir, "src", "generated", "todos");
+    expect(fs.existsSync(genDir)).toBe(false);
+  });
 });
