@@ -11,4 +11,10 @@ export const Route = createFileRoute("/_app/_auth/dashboard/_layout/tasks")({
     headerTitle: "My Tasks",
     headerDescription: "Your assigned tasks across all projects.",
   }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    status: (search.status as string) || undefined,
+    priority: (search.priority as string) || undefined,
+    assignee: (search.assignee as string) || undefined,
+    project: (search.project as string) || undefined,
+  }),
 });

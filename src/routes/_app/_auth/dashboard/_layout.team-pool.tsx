@@ -13,4 +13,10 @@ export const Route = createFileRoute(
     headerTitle: "Team Pool",
     headerDescription: "Unassigned tasks available for the team.",
   }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    status: (search.status as string) || undefined,
+    priority: (search.priority as string) || undefined,
+    assignee: (search.assignee as string) || undefined,
+    project: (search.project as string) || undefined,
+  }),
 });

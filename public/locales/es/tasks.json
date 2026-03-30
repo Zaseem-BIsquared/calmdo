@@ -33,5 +33,20 @@
     "confirmDelete": "Estas seguro?",
     "grab": "Tomar",
     "assign": "Asignar"
+  },
+  "filters": {
+    "status": "Estado",
+    "allStatus": "Todos los estados",
+    "priority": "Prioridad",
+    "allPriority": "Toda prioridad",
+    "highPriority": "Alta prioridad",
+    "normal": "Normal",
+    "assignee": "Asignado",
+    "allAssignees": "Todos los asignados",
+    "assignedToMe": "Asignados a mi",
+    "unassigned": "Sin asignar",
+    "project": "Proyecto",
+    "allProjects": "Todos los proyectos",
+    "clearFilters": "Limpiar filtros"
   }
 }

@@ -26,6 +26,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "~/convex/_generated/api";
 import { User } from "~/types";
 import { navItems } from "@/shared/nav";
+import { GlobalSearchBox } from "./GlobalSearchBox";
 
 const DASHBOARD_PATH = "/dashboard" as const;
 const SETTINGS_PATH = "/dashboard/settings" as const;
@@ -107,6 +108,8 @@ export function Navigation({ user }: { user: User }) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+
+        <GlobalSearchBox />
 
         <div className="flex h-10 items-center gap-3">
           <Link

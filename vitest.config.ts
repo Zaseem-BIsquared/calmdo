@@ -123,9 +123,12 @@ export default defineConfig({
         "src/features/tasks/components/TaskForm.tsx",
         "src/features/tasks/components/TasksPage.tsx",
         "src/features/tasks/components/TeamPoolPage.tsx",
+        "src/features/tasks/components/TaskFilterBar.tsx",
         "src/features/projects/components/ProjectDetailPage.tsx",
         "src/features/projects/components/ProjectCard.tsx",
         "src/features/dashboard/components/Navigation.tsx",
+        "src/features/dashboard/components/GlobalSearchBox.tsx",
+        "src/features/dashboard/components/SearchResultsDropdown.tsx",
 
         // --- Generated scaffold components (replaced or not yet customized) ---
         "src/features/subtasks/components/**",

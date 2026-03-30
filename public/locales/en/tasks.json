@@ -33,5 +33,20 @@
     "confirmDelete": "Are you sure?",
     "grab": "Grab",
     "assign": "Assign"
+  },
+  "filters": {
+    "status": "Status",
+    "allStatus": "All Status",
+    "priority": "Priority",
+    "allPriority": "All Priority",
+    "highPriority": "High Priority",
+    "normal": "Normal",
+    "assignee": "Assignee",
+    "allAssignees": "All Assignees",
+    "assignedToMe": "Assigned to Me",
+    "unassigned": "Unassigned",
+    "project": "Project",
+    "allProjects": "All Projects",
+    "clearFilters": "Clear filters"
   }
 }
