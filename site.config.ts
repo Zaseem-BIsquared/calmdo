@@ -2,9 +2,9 @@
  * Centralized site configuration, add whatever you need here.
  */
 export default {
-  siteTitle: "Feather Starter",
+  siteTitle: "Calmdo",
   siteDescription:
-    "A lightweight, production-ready starter template powered by Convex and React.",
+    "A minimal Task manager app",
   siteUrl: "",
   siteImage: "/images/og-image.png",
   favicon: "/favicon.ico",

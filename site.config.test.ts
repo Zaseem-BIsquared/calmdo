@@ -9,7 +9,7 @@ import siteConfig from "./site.config";
 describe("site.config", () => {
   test("exports configuration object with all required fields", () => {
     expect(typeof siteConfig).toBe("object");
-    expect(siteConfig.siteTitle).toBe("Feather Starter");
+    expect(siteConfig.siteTitle).toBe("Calmdo");
     expect(typeof siteConfig.siteDescription).toBe("string");
     expect(siteConfig).toHaveProperty("siteUrl");
     expect(siteConfig).toHaveProperty("siteImage");
