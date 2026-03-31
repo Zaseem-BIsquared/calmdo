@@ -1,4 +1,8 @@
 /**
+ * @deprecated This file is superseded by the pipeline wiring in templates/pipeline/wire.ts.
+ * It is kept as a legacy fallback for Plop when FEATHER_USE_PIPELINE=false.
+ * New wiring logic should go in templates/pipeline/wire.ts (ts-morph based).
+ *
  * Auto-wiring Plop actions for shared files.
  * Registers custom action types that modify schema.ts, nav.ts, errors.ts, i18n.ts,
  * and create locale JSON files.

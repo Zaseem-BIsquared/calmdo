@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CalmDo Core
 status: Ready to execute
-last_updated: "2026-03-30T04:03:07.238Z"
+last_updated: "2026-03-31T01:23:54.032Z"
 progress:
   total_phases: 21
   completed_phases: 15
   total_plans: 56
-  completed_plans: 48
+  completed_plans: 49
 ---
 
 # Project State
@@ -22,8 +22,8 @@ See: .planning/PROJECT.md (updated 2026-03-10)
 
 ## Current Position
 
-Phase: 999.4 (999-1-integration-gaps-backlog) — EXECUTING
-Plan: 3 of 4
+Phase: 999.4 (999-1-integration-gaps-backlog) — COMPLETE
+Plan: 4 of 4
 All 4 plans executed: strip script, auth templates, create wizard, feather add/remove
 
 ### Roadmap Evolution
@@ -67,6 +67,8 @@ All 4 plans executed: strip script, auth templates, create wizard, feather add/r
 | Phase 999.3 P01-04 | 16 min | 14 tasks | 12 files |
 | Phase 999.4 P01 | 25min | 5 tasks | 6 files |
 | Phase 999.4 P02 | 11min | 5 tasks | 10 files |
+| Phase 999.4 | P03 | ~30min | 6 tasks | 20 files |
+| Phase 999.4 | P04 | 270s | 5 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -113,6 +115,7 @@ Recent:
 - [Phase 999.4]: hasTransitions is alias for hasEnumTransitions (status-badge.tsx.hbs uses both)
 - [Phase 999.4]: Conditional imports in panel templates (useMutation, Plus) via {{#unless readonly}} — avoids unused imports in generated readonly panels
 - [Phase 999.4]: renderCrossEntityPanels() as separate exported function in render.ts — clean separation from renderFeatureTemplates, ScaffoldOptions.relatedYamls optional for backward compat
+- [Phase 999.4]: FEATHER_USE_PIPELINE env var for Plop-to-pipeline toggle (default: pipeline)
 
 ### Pending Todos
 

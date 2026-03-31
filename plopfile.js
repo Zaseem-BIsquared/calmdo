@@ -32,6 +32,24 @@ export default function (plop) {
   plop.setGenerator("backend", backendGenerator(plop));
   plop.setGenerator("frontend", frontendGenerator(plop));
 
+  // ─── YAML-first generator (skips interactive wizard) ────────────
+  plop.setGenerator("feature-from-yaml", {
+    description: "Generate a full CRUD feature directly from a feather.yaml file",
+    prompts: [
+      {
+        type: "input",
+        name: "yamlPath",
+        message: "Path to feather.yaml file:",
+        validate: (v) => (v && v.trim().length > 0) || "YAML path is required",
+      },
+    ],
+    actions: (data) => {
+      // Delegate to the feature generator with yamlPath pre-filled
+      const featureGen = plop.getGenerator("feature");
+      return featureGen.actions(data);
+    },
+  });
+
   // ─── Existing generators (unchanged per D-02) ─────────────────────
 
   plop.setGenerator("route", {
