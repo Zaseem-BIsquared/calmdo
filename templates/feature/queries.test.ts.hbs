@@ -280,7 +280,7 @@ describe("get", () => {
 {{#each views.filteredViews}}
 // @generated-start test-{{camelCase this.name}}
 describe("{{camelCase this.name}}", () => {
-  test("returns only matching {{../lowerCase ../labelPlural}}", async ({
+  test("returns only matching {{lowerCase ../labelPlural}}", async ({
     client,
     userId,
     testClient,

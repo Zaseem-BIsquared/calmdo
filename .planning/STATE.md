@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: CalmDo Core
-status: Executing Phase 999.4
-last_updated: "2026-03-30T03:06:15.150Z"
+status: Ready to plan
+last_updated: "2026-03-31T01:43:17.627Z"
 progress:
   total_phases: 21
-  completed_phases: 15
+  completed_phases: 16
   total_plans: 56
-  completed_plans: 46
+  completed_plans: 50
 ---
 
 # Project State
@@ -18,12 +18,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-10)
 
 **Core value:** Developer velocity -- new features are faster to build because every file has a clear, predictable home
-**Current focus:** Phase 999.4 — 999.1 Integration Gaps
+**Current focus:** Phase 999.4 — 999-1-integration-gaps-backlog
 
 ## Current Position
 
-Phase: 999.4 (999.1 Integration Gaps) — EXECUTING
-Plan: 1 of 4
+Phase: 999.5
+Plan: Not started
 All 4 plans executed: strip script, auth templates, create wizard, feather add/remove
 
 ### Roadmap Evolution
@@ -65,6 +65,10 @@ All 4 plans executed: strip script, auth templates, create wizard, feather add/r
 | Phase 999.9 P03 | 3min | 5 tasks | 10 files |
 | Phase 999.10 P02 | 5min | 4 tasks | 8 files |
 | Phase 999.3 P01-04 | 16 min | 14 tasks | 12 files |
+| Phase 999.4 P01 | 25min | 5 tasks | 6 files |
+| Phase 999.4 P02 | 11min | 5 tasks | 10 files |
+| Phase 999.4 | P03 | ~30min | 6 tasks | 20 files |
+| Phase 999.4 | P04 | 270s | 5 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -107,6 +111,11 @@ Recent:
 - [Phase 03.2]: Use @root.property for deeply nested Handlebars contexts (Plop scope resolution unreliable past 2 levels)
 - [Phase 03.2]: Add apiPath/errorsPath helpers for bracket notation with kebab-case feature names
 - [Phase 06]: Activity logs use camelCase activityLogs table, entityId as v.string() for multi-table references, inline logActivity helper pattern — Consistent with existing workLogs/devEmails conventions; v.string() needed because entityId references tasks, projects, and subtasks tables
+- [Phase 999.4]: Use standalone Handlebars instance with registerStandaloneHelpers() to avoid Plop coupling
+- [Phase 999.4]: hasTransitions is alias for hasEnumTransitions (status-badge.tsx.hbs uses both)
+- [Phase 999.4]: Conditional imports in panel templates (useMutation, Plus) via {{#unless readonly}} — avoids unused imports in generated readonly panels
+- [Phase 999.4]: renderCrossEntityPanels() as separate exported function in render.ts — clean separation from renderFeatureTemplates, ScaffoldOptions.relatedYamls optional for backward compat
+- [Phase 999.4]: FEATHER_USE_PIPELINE env var for Plop-to-pipeline toggle (default: pipeline)
 
 ### Pending Todos
 
