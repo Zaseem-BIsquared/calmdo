@@ -54,6 +54,7 @@ function generatedHeader(featureName: string): string {
 
 function generateSchemaStub(config: FeatureYaml): string {
   const fieldEntries = Object.entries(config.fields)
+    .filter(([name]) => name !== "creatorId") // always appended below
     .map(([name, field]) => {
       const fieldType = field.type;
       switch (fieldType) {

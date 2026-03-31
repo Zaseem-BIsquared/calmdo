@@ -7,5 +7,4 @@ export const workLogsTable = defineTable({
   body: v.string(),
   timeMinutes: v.optional(v.number()),
   creatorId: v.id("users"),
-  creatorId: v.id("users"),
 });
